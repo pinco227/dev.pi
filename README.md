@@ -123,6 +123,11 @@
   - #### **Admin panel**
     - Hidden dashboard and buttons, only accessible when logged as admin.
 
+## Database
+  All the information in the database is only in relation with showcased developer. Therefore database used for this project is the document-based database **MongoDB** as a relational database is not needed.
+  - ### Schema
+    ![DB Schema](https://github.com/pinco227/dev.pi/blob/main/docs/db_schema.png)
+
 ## Technologies used
 - Workspace
   * [Ubuntu20.04](https://ubuntu.com/) as Operating System
