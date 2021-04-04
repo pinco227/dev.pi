@@ -29,7 +29,17 @@
 ## UX
 
 - ### Goals
+  - The main goal is to get clients/contracts (job offers).
+  - Expand online presence.
+  - Present previous work (portofolio).
+  - Present biography, skills, education, experience, links and CV.
+  - Receive feedback/testimonials from clients/collaborators.
 - ### Users Needs
+  - Need to learn about the showcased developer.
+  - Need of an up to date portofolio with previews and source code (where applicable).
+  - Need of an up to date list of skills, education, experience.
+  - Need to be able to download resume.
+  - Need to be able to contact the developer if interested.
 - ### User Scenarios
   - #### As a user I need:
 - ### Structure
