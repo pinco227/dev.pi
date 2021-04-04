@@ -41,7 +41,31 @@
   - Need to be able to download resume.
   - Need to be able to contact the developer if interested.
 - ### User Scenarios
-  - #### As a user I need:
+  - #### As a potential employer/recruiter I need:
+    - To learn about the candidate's professional profile without having to click too many times and look too deep.
+    - To be able to download the candidate's CV for print/file purposes.
+    - To learn about the developer's current status and availability.
+    - To be able to contact the candidate to further asses and discuss eventual contract/employment.
+    - To see candidate's education, previous work experience and projects (including written code).
+    - To find candidate's other relevant social profiles, for a deeper insight (linkedin, github).
+    - To find more about the person behind the title, to understand how he got into software development, how passionate and motivated he is.
+    - To find what other people say about the developer (testimonials).
+  - #### As a potential collaborator I need:
+    - To be able to explore developer's work, written code and skillset to understand if he is fit to my project idea.
+    - To learn about the developer, personally, to see if he is compatible to work with.
+    - To be able to contact the developer.
+    - To connect with developer on other relevant social platforms.
+  - #### As a user (of any kind) I need:
+    - To easily understand the purpose of the website.
+    - To easily navigate throughout the website on any device/platform.
+    - To be able to write a testimonial
+  - #### As the developer I need:
+    - To be able to add, update and delete skills, education, work experience, portofolio projects and links.
+    - To be able to update my current status, availability and contact information.
+    - To be able to post, edit and delete personal blogs.
+    - To be able to manage (approve, remove) user's testimonials.
+    - To be able to update hero name, short bio, photo and CV.
+    - To be able to update website's metadata and admin password.
 - ### Structure
 - ### Skeleton
   - ### Initial wireframes
@@ -62,9 +86,25 @@
   - #### Iconography
 
 ## Features
-Website's features are presented in an importance order.
-- ### Feature
-    Description
+- ### Initial features
+  - #### **Navigation Bar**
+    - Allows users to navigate through the website. The navigation will be fixed to top and visible all the time. Links will be collapsed on small screens.
+  - #### **Landing Page**
+    - ***Hero*** featuring a title (dev's name), a short bio, current status and availability and two *Call-to-Action* buttons: **Download CV** and **Learn more**.
+    - ***Skillset*** section where dev's skills will be presented as progress bars.
+    - ***Education*** section.
+    - ***Work Experience*** section.
+    - ***Tetimonials***.
+  - #### **Projects Page**
+    - Projects will be listed on a different page, as a detailed gallery, with quick access links and link to an individual project page for each.
+  - #### **Blog**
+    - Blogs will be presented on a different page, with further individual page for each post.
+  - #### **Contact Page**
+    - Contact details, social links and a contact form.
+  - #### **Write Testimonial**
+    - Individual page with a simple form to write testimonials, accessible to all users.
+  - #### **Admin panel**
+    - Hidden dashboard and buttons, only accessible when logged as admin.
 
 ## Technologies used
 - Workspace
