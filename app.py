@@ -16,6 +16,16 @@ app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 
+mongo = PyMongo(app)
+settings = mongo.db.settings.find_one(
+    {"_id": ObjectId('606a3310d5c7c22eeee180f6')})
+
+
+@app.route('/')
+@app.route("/home")
+def home():
+    return render_template("landing.html", settings=settings)
+
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
