@@ -78,17 +78,17 @@
 - ### Skeleton
   - ### Initial wireframes
     - Client Side:
-      - Landing page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/landing_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/landing_desktop.png)
-      - Projects page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/projects_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/projects_desktop.png)
-      - Project details [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/project_details_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/project_details_desktop.png)
-      - Blogs page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/blog_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/blog_desktop.png)
-      - Blog Post page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/blog_post_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/blog_post_desktop.png)
-      - Contact page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/contact_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/contact_desktop.png)
+      - Landing page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/landing_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/landing_desktop.png)
+      - Projects page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/projects_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/projects_desktop.png)
+      - Project details [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/project_details_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/project_details_desktop.png)
+      - Blogs page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/blog_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/blog_desktop.png)
+      - Blog Post page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/blog_post_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/blog_post_desktop.png)
+      - Contact page [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/contact_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/contact_desktop.png)
     - Admin access:
-      - Dashboard [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/dashboard_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/dashboard_desktop.png)
-      - Get Items (list) [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/get_items_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/get_items_desktop.png) (universal wireframe for all items stored in database)
-      - Create/Update (item) [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/create_update_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/create_update_desktop.png) (universal wireframe for all items stored in database)
-      - Settings [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/settings_mobile.png) / [desktop](https://github.com/pinco227/dublin-hills/blob/main/docs/wireframes/settings_desktop.png)
+      - Dashboard [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/dashboard_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/dashboard_desktop.png)
+      - Get Items (list) [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/get_items_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/get_items_desktop.png) (universal wireframe for all items stored in database)
+      - Create/Update (item) [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/create_update_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/create_update_desktop.png) (universal wireframe for all items stored in database)
+      - Settings [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/settings_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/settings_desktop.png)
   - ### Improvements
     - #### **Client Side**:
       - #### Improved section:
