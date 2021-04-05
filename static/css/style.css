@@ -22,10 +22,36 @@ body {
     background-color: var(--main-bg-color);
 }
 
+/*------------------------------------------ HEADINGS */
+
+h1, h2 {
+    text-align: center;
+}
+
+.section-title {
+    margin: 1rem 0 2rem 0;
+}
+
+/*------------------------------------------ UTILS */
+
 .bg-accent {
     background-color: var(--accent);
     background: linear-gradient(90deg, var(--accent) 0%, var(--accent-dark) 100%);
 }
+
+.gradient-light {
+    stop-color: var(--accent);
+}
+
+.gradient-dark {
+    stop-color: var(--accent-dark);
+}
+
+.fill-dark {
+    fill: var(--accent-dark);
+}
+
+/*------------------------------------------ KEYFRAMES */
 
 /* HOVER.CSS Pulse Grow */
 
@@ -42,6 +68,8 @@ body {
         transform: scale(1.1);
     }
 }
+
+/*------------------------------------------ BUTTONS */
 
 .btn {
     display: inline-block;
@@ -186,7 +214,6 @@ body {
 .hero {
     position: relative;
     color: var(--text-light);
-    margin-bottom: 3rem;
 }
 
 .hero .hero-img {
@@ -197,7 +224,7 @@ body {
 .hero-social {
     position: absolute;
     left: 50%;
-    bottom: -2rem;
+    bottom: -4.5rem;
     transform: translateX(-50%);
     display: flex;
     flex-direction: row;
@@ -246,6 +273,20 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+/*------------------------------------------ SKILLS */
+
+#skills .separator {
+    margin-bottom: 3rem;
+}
+
+.skill-container {
+    padding: .5rem;
+}
+
+.progress {
+    background-color: var(--accent-light);
 }
 
 /*------------------------------------------ FOOTER */

@@ -33,7 +33,8 @@ def context_processor():
 @app.route('/')
 @app.route("/home")
 def home():
-    return render_template("landing.html")
+    skills = mongo.db.skills.find()
+    return render_template("landing.html", skills=skills)
 
 
 if __name__ == "__main__":
