@@ -1,11 +1,16 @@
 :root {
     --accent: #168fd6;
+    --accent-hover: #1a9ce9;
     --accent-light: #ccdde8;
+    --accent-light-hover: #d3eaf9;
     --accent-dark: #044488;
+    --accent-dark-hover: #023060;
     --text-light: #fffcf6;
     --text-dark: #044488;
     --main-bg-color: #edece8;
 }
+
+/*------------------------------------------ DOCUMENT */
 
 html, body {
     overflow-x: hidden;
@@ -22,8 +27,148 @@ body {
     background: linear-gradient(90deg, var(--accent) 0%, var(--accent-dark) 100%);
 }
 
-.navbar * {
+/* HOVER.CSS Pulse Grow */
+
+@-webkit-keyframes hvr-pulse-grow {
+    to {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+}
+
+@keyframes hvr-pulse-grow {
+    to {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+}
+
+.btn {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+
+.btn:hover, .btn:focus, .btn:active {
+    -webkit-animation-name: hvr-pulse-grow;
+    animation-name: hvr-pulse-grow;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    animation-direction: alternate;
+}
+
+.btn-accent {
+    color: var(--main-bg-color);
+    background-color: var(--accent);
+    border-color: var(--accent-dark);
+}
+
+.btn-accent:hover {
     color: var(--text-light);
+    background-color: var(--accent-hover);
+    border-color: var(--accent-dark);
+}
+
+.btn-accent-light {
+    color: var(--text-dark);
+    background-color: var(--accent-light);
+    border-color: var(--accent-light);
+}
+
+.btn-accent-light:hover {
+    color: var(--accent-dark-hover);
+    background-color: var(--accent-light-hover);
+    border-color: var(--accent-light);
+}
+
+.btn-light {
+    color: var(--text-dark);
+    background-color: var(--main-bg-color);
+    border-color: var(--main-bg-color);
+}
+
+.btn-light:hover {
+    color: var(--accent-dark-hover);
+    background-color: var(--text-light);
+    border-color: var(--main-bg-color);
+}
+
+.btn-dark {
+    color: var(--main-bg-color);
+    background-color: var(--accent-dark);
+    border-color: var(--accent-dark);
+}
+
+.btn-dark:hover {
+    color: var(--text-light);
+    background-color: var(--accent-dark-hover);
+    border-color: var(--accent-dark);
+}
+
+/*------------------------------------------ HEADER */
+
+/* HOVER.CSS Grow */
+
+.navbar-brand {
+    color: var(--text-light);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+}
+
+.navbar-brand:hover, .navbar-brand:focus, .navbar-brand:active {
+    color: var(--text-light);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+/* HOVER.CSS Sweep to top */
+
+.nav-link {
+    color: var(--text-light);
+    position: relative;
+    -webkit-transition-property: color;
+    transition-property: color;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.nav-link:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--main-bg-color);
+    -webkit-transform: scaleY(0);
+    transform: scaleY(0);
+    -webkit-transform-origin: 50% 100%;
+    transform-origin: 50% 100%;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+.nav-link:hover, .nav-link:focus, .nav-link:active {
+    color: var(--accent-dark);
+}
+
+.nav-link:hover:before, .nav-link:focus:before, .nav-link:active:before {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
 }
 
 .navbar-toggler {
@@ -35,6 +180,8 @@ body {
 .navbar-toggler:focus {
     box-shadow: none;
 }
+
+/*------------------------------------------ HERO */
 
 .hero {
     position: relative;
@@ -68,6 +215,30 @@ body {
     color: var(--accent-dark);
     font-size: 2rem;
     margin: 0 1rem 0 1rem;
+    -webkit-transition-property: background-color;
+    transition-property: background-color;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+}
+
+.hero-social div:hover, .hero-social div:focus, .hero-social div:active {
+    background-color: var(--text-light);
+    -webkit-animation-name: hvr-pulse-grow;
+    animation-name: hvr-pulse-grow;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    animation-direction: alternate;
+}
+
+.hero-social div a {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .hero-social div i {
@@ -77,10 +248,14 @@ body {
     transform: translate(-50%, -50%);
 }
 
+/*------------------------------------------ FOOTER */
+
 footer {
     background-color: var(--accent-dark);
     color: var(--text-light);
 }
+
+/*------------------------------------------ MEDIA QUERIES */
 
 @media (max-width: 767px) {
     .offcanvas-collapse {
