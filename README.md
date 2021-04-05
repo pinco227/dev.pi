@@ -14,6 +14,7 @@
       - [Improvements](#improvements)
     - [Design Choices](#design-choices)
   - [Features](#features)
+  - [Database](#database)
   - [Technologies used](#technologies-used)
   - [Testing](#testing)
   - [Deployment](#deployment)
@@ -22,7 +23,7 @@
 
 ## Demo
 
-### [Live website](#)
+### [Live website](https://dev-pi.herokuapp.com/)
 
 (( Website screenshots here ))
 
@@ -153,36 +154,71 @@
     | ***[Link to test on TEST.md](#)*** | :heavy_check_mark: |
 
 ## Deployment
-- ### Heroku
-  Deployment steps
 - ### Forking the GitHub Repository
-  By forking the GitHub Repository we make a copy of the original repository on our GitHub account to view and/or make changes without affecting the original repository by using the following steps:
+  By forking the GitHub Repository you make a copy of the original repository on your GitHub account to view and/or make changes without affecting the original repository by using the following steps:
   1. Log in to GitHub and locate the [Dev.PI repository](https://github.com/pinco227/dev.pi).
   2. At the top right of the Repository just above the "Settings" Button on the menu, locate and click the "**Fork**" Button.
   3. You should now have a copy of the original repository in your GitHub account.
-- ### Making a Local Clone
-  1. Log in to GitHub and locate the [Dev.PI repository](https://github.com/pinco227/dev.pi).
+- ### Local Machine
+  1. Log in to GitHub and locate the [Dev.PI repository](https://github.com/pinco227/dev.pi) (or the forked repo into your profile).
   2. At the top of the Repository just above the list of files, locate and click the "**Code**" dropdown.
   3. To clone the repository using HTTPS, under "**Clone**", make sure "**HTTPS**" is selected and copy the link.
   4. Open Git Bash.
   5. Change the current working directory to the location where you want the cloned directory to be made.
   6. Type ```git clone```, and then paste the URL you copied in Step 3.
-    ```
-    $ git clone https://github.com/pinco227/dev.pi.git
-    ```
+      ```bash
+      git clone https://github.com/pinco227/dev.pi.git
+      ```
   7. Press Enter. Your local clone will be created.
-    ```
-    $ git clone https://github.com/pinco227/dev.pi.git
-    Cloning into 'dev.pi'...
-    remote: Enumerating objects: 408, done.
-    remote: Counting objects: 100% (408/408), done.
-    remote: Compressing objects: 100% (258/258), done.
-    remote: Total 408 (delta 156), reused 368 (delta 116), pack-reused 0
-    Receiving objects: 100% (408/408), 24.92 MiB | 15.71 MiB/s, done.
-    Resolving deltas: 100% (156/156), done.
-    ```
-  Click [Here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
-  
+      ```bash
+      $ git clone https://github.com/pinco227/dev.pi.git
+      Cloning into 'dev.pi'...
+      remote: Enumerating objects: 408, done.
+      remote: Counting objects: 100% (408/408), done.
+      remote: Compressing objects: 100% (258/258), done.
+      remote: Total 408 (delta 156), reused 368 (delta 116), pack-reused 0
+      Receiving objects: 100% (408/408), 24.92 MiB | 15.71 MiB/s, done.
+      Resolving deltas: 100% (156/156), done.
+      ```
+      > Click [Here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
+  7. Create a [MongoDB](https://www.mongodb.com/) account, project, cluster and database.
+  8. Create `env.py` file and include the following code (note that the values should be replaced with your own db credentials)
+      ```python
+      import os
+
+      os.environ.setdefault("IP", "0.0.0.0")
+      os.environ.setdefault("PORT", "5000")
+      os.environ.setdefault("SECRET_KEY", "<secret_key>")
+      os.environ.setdefault("MONGO_URI", "<mongo_uri>")
+      os.environ.setdefault("MONGO_DBNAME", "<db_name>")
+      ```
+      > Make sure you add this file to **.gitignore** file so it will not be published.
+  9. Install required `python` packages by running the following command into terminal:
+      ```bash
+      pip3 install -r requirements.txt
+      ```
+  10. Run app bu typing the following into terminal:
+      ```bash
+      python3 app.py
+      ```
+  11. Browse app by accessing [0.0.0.0:5000](0.0.0.0:5000) into a browser.
+- ### Heroku
+  1. Make sure the `requirements.txt` and `Procfile` are created. If not, type the followings into terminal:
+      ```bash
+      pip3 freeze --local > requirements.txt
+      ```
+      and
+      ```bash
+      echo web: python app.py > Procfile
+      ```
+  2. Commit and push changes to forked repository.
+  3. Create a [Heroku](https://heroku.com) account and click **New** on top right of the dashboard to **Create a new app**.
+  4. Within the newly created app go to **Settings** tab and press **Reveal Config Vars**. Here you can add the variables initially stored into local `env.py` file: IP, PORT, SECRET_KEY, MONGO_URI, MONGO_DBNAME.
+  5. Go to **Deploy** tab and under the **Deployment method** click on the **Github** icon.
+  6. Right under this section, type the `dev.pi` and search for the forked repository into your GitHub account. Select the right repository and click **Connect**.
+  7. Under the **Automatic deploys** section, click **Enable Automatic Deploys**. The deployment will be now automatic with every github `push` command.
+  8. Under the **Manual deploy** section, click **Deploy Branch** for initial deploy.
+  9. You can now browse the deployed app by clicking **Open app** button on top right of the dashboard.
 
 ## Credits
 - ### Content
