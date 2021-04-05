@@ -201,7 +201,7 @@
       ```bash
       python3 app.py
       ```
-  11. Browse app by accessing [0.0.0.0:5000](0.0.0.0:5000) into a browser.
+  11. Browse app by accessing [0.0.0.0:5000](http://0.0.0.0:5000) into a browser.
 - ### Heroku
   1. Make sure the `requirements.txt` and `Procfile` are created. If not, type the followings into terminal:
       ```bash

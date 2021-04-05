@@ -1,6 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-hero {{ settings._id }}<br>
+<section id="hero" class="bg-accent">
+    <div class="container-xl">
+        <div class="row align-items-center g-5 py-5 hero">
+            <div class="col-12 col-md-5">
+                <img src="bootstrap-themes.png" class="hero-img d-block mx-lg-auto img-fluid" alt="Bootstrap Themes"
+                    width="700" height="500" loading="lazy">
+            </div>
+            <div class="col-12 col-md-7">
+                <h1 class="display-5 fw-bold lh-1 mb-3">{{ settings.name }}</h1>
+                <div class="row">
+                    <div class="col-4 col-md-3">Current status:</div>
+                    <div class="col-8 col-md-9">{{ settings.status }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 col-md-3">Availability:</div>
+                    <div class="col-8 col-md-9">{{ settings.availability }}</div>
+                </div>
+                <p class="lead">{{ settings.bio }}</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Learn More</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg px-4">Download CV</button>
+                </div>
+            </div>
+            <div class="hero-social">
+                <div><i class="bi bi-github"></i></div>
+                <div><i class="bi bi-linkedin"></i></div>
+                <div><i class="bi bi-facebook"></i></div>
+                <div><i class="bi bi-instagram"></i></div>
+            </div>
+        </div>
+    </div>
+</section>
 skills <br>
 education <br>
 experience <br>

@@ -1,0 +1,49 @@
+:root {
+    --accent: rgba(55, 163, 255, 1);
+    --accent-light: rgba(55, 163, 255, .5);
+    --accent-dark: rgba(46, 136, 213, 1);
+}
+
+.bg-accent {
+    background-color: #37a3ff;
+    background: linear-gradient(90deg, rgba(46, 136, 213, 1) 0%, rgba(55, 163, 255, 1) 50%, rgba(46, 136, 213, 1) 100%);
+}
+
+.hero {
+    position: relative;
+    color: white;
+}
+
+.hero .hero-img {
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.hero-social {
+    position: absolute;
+    left: 50%;
+    bottom: -2rem;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    width: auto;
+}
+
+.hero-social div {
+    position: relative;
+    text-align: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: white;
+    color: var(--accent-dark);
+    font-size: 2rem;
+    margin: 0 1rem 0 1rem;
+}
+
+.hero-social div i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
