@@ -33,9 +33,10 @@ def context_processor():
 @app.route('/')
 @app.route("/home")
 def home():
-    skills = mongo.db.skills.find()
-    education = mongo.db.education.find()
-    return render_template("landing.html", skills=skills, education=education)
+    skills = list(mongo.db.skills.find())
+    education = list(mongo.db.education.find())
+    experience = list(mongo.db.experience.find())
+    return render_template("landing.html", skills=skills, education=education, experience=experience)
 
 
 if __name__ == "__main__":
