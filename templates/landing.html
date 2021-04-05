@@ -2,9 +2,9 @@
 {% block content %}
 <section id="hero" class="bg-accent">
     <div class="container-xl">
-        <div class="row align-items-center g-5 py-5 hero">
-            <div class="col-12 col-md-5">
-                <img src="bootstrap-themes.png" class="hero-img d-block mx-lg-auto img-fluid" alt="Bootstrap Themes"
+        <div class="row align-items-center justify-content-center g-5 py-5 hero">
+            <div class="col-10 col-md-5">
+                <img src="{{ settings.photo }}" class="hero-img d-block mx-lg-auto img-fluid" alt="Bootstrap Themes"
                     width="700" height="500" loading="lazy">
             </div>
             <div class="col-12 col-md-7">
@@ -19,8 +19,8 @@
                 </div>
                 <p class="lead">{{ settings.bio }}</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Learn More</button>
-                    <button type="button" class="btn btn-outline-secondary btn-lg px-4">Download CV</button>
+                    <a href="#" class="btn btn-primary btn-lg px-4 me-md-2">Learn More</a>
+                    <a href="{{ settings.cv }}" class="btn btn-outline-secondary btn-lg px-4">Download CV</a>
                 </div>
             </div>
             <div class="hero-social">

@@ -1,22 +1,50 @@
 :root {
-    --accent: rgba(55, 163, 255, 1);
-    --accent-light: rgba(55, 163, 255, .5);
-    --accent-dark: rgba(46, 136, 213, 1);
+    --accent: #168fd6;
+    --accent-light: #ccdde8;
+    --accent-dark: #044488;
+    --text-light: #fffcf6;
+    --text-dark: #044488;
+    --main-bg-color: #edece8;
+}
+
+html, body {
+    overflow-x: hidden;
+    /* Prevent scroll on narrow devices */
+}
+
+body {
+    padding-top: 56px;
+    background-color: var(--main-bg-color);
 }
 
 .bg-accent {
-    background-color: #37a3ff;
-    background: linear-gradient(90deg, rgba(46, 136, 213, 1) 0%, rgba(55, 163, 255, 1) 50%, rgba(46, 136, 213, 1) 100%);
+    background-color: var(--accent);
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-dark) 100%);
+}
+
+.navbar * {
+    color: var(--text-light);
+}
+
+.navbar-toggler {
+    border: 0;
+    font-size: 2rem;
+    color: var(--main-bg-color);
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
 }
 
 .hero {
     position: relative;
-    color: white;
+    color: var(--text-light);
+    margin-bottom: 3rem;
 }
 
 .hero .hero-img {
     border-radius: 50%;
-    border: 2px solid white;
+    border: 2px solid var(--text-light);
 }
 
 .hero-social {
@@ -32,10 +60,11 @@
 .hero-social div {
     position: relative;
     text-align: center;
+    min-width: 4rem;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
-    background-color: white;
+    background-color: var(--main-bg-color);
     color: var(--accent-dark);
     font-size: 2rem;
     margin: 0 1rem 0 1rem;
@@ -46,4 +75,29 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+footer {
+    background-color: var(--accent-dark);
+    color: var(--text-light);
+}
+
+@media (max-width: 767px) {
+    .offcanvas-collapse {
+        position: fixed;
+        top: 56px;
+        bottom: 0;
+        left: 100%;
+        width: 100%;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        overflow-y: auto;
+        visibility: hidden;
+        background-color: var(--accent-dark);
+        transition: transform .3s ease-in-out, visibility .3s ease-in-out;
+    }
+    .offcanvas-collapse.open {
+        visibility: visible;
+        transform: translateX(-100%);
+    }
 }
