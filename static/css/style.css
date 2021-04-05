@@ -20,9 +20,18 @@ html, body {
 body {
     padding-top: 56px;
     background-color: var(--main-bg-color);
+    color: var(--accent-dark-hover);
+}
+
+section {
+    margin-bottom: 3rem;
 }
 
 /*------------------------------------------ HEADINGS */
+
+h1, h2, h3, h4, h5 {
+    color: var(--accent-dark);
+}
 
 h1, h2 {
     text-align: center;
@@ -49,6 +58,14 @@ h1, h2 {
 
 .fill-dark {
     fill: var(--accent-dark);
+}
+
+.fill-accent {
+    fill: var(--accent);
+}
+
+.fill-bg-color {
+    fill: var(--main-bg-color)
 }
 
 /*------------------------------------------ KEYFRAMES */
@@ -211,6 +228,10 @@ h1, h2 {
 
 /*------------------------------------------ HERO */
 
+#hero {
+    margin-bottom: 0;
+}
+
 .hero {
     position: relative;
     color: var(--text-light);
@@ -219,6 +240,11 @@ h1, h2 {
 .hero .hero-img {
     border-radius: 50%;
     border: 2px solid var(--text-light);
+}
+
+.hero .hero-title {
+    color: var(--text-light);
+    text-align: left;
 }
 
 .hero-social {
@@ -289,6 +315,48 @@ h1, h2 {
     background-color: var(--accent-light);
 }
 
+/*------------------------------------------ EDUCATION */
+
+#education {
+    background-color: var(--accent-light);
+}
+
+#education .section-title {
+    margin-top: -1.5rem;
+}
+
+.card-education {
+    border-top-right-radius: 50ch;
+    border-bottom-right-radius: 50ch;
+}
+
+.card-education .card-left {
+    text-align: center;
+    padding: 1rem;
+    color: var(--accent-light-hover);
+    border-top-right-radius: 50ch;
+    border-bottom-right-radius: 50ch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-education .card-left i {
+    font-size: 2rem;
+}
+
+.card-education .card-left h4 {
+    color: var(--text-light);
+}
+
+.card-education .card-subtitle {
+    margin-bottom: .5rem;
+}
+
+.card-education .card-body {
+    padding: 1rem 2rem;
+}
+
 /*------------------------------------------ FOOTER */
 
 footer {
@@ -315,5 +383,18 @@ footer {
     .offcanvas-collapse.open {
         visibility: visible;
         transform: translateX(-100%);
+    }
+    .card-education {
+        border-radius: 0.25rem;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+    .card-education .card-left {
+        border-radius: 0.25rem;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+    .card-education .card-body {
+        padding: 1rem 1rem;
     }
 }
