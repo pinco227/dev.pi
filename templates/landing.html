@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<!-- HERO SECTION -->
 <section id="hero" class="bg-accent">
     <div class="container-xl">
         <div class="row align-items-center justify-content-center g-5 py-5 hero">
@@ -32,6 +33,7 @@
         </div>
     </div>
 </section>
+<!-- SKILLS SECTION -->
 <section id="skills">
     <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
     <svg class="separator" width="100%" height="60" viewBox="0.1 0.1 180 40" preserveAspectRatio="none">
@@ -52,7 +54,7 @@
         <h2 class="section-title">Skills</h2>
         <div class="row">
             {% for skill in skills %}
-                <div class="col-6">
+                <div class="col-12 col-sm-6">
                     <div class="skill-container">
                         <span class="skill-label">{{ skill.name }}</span>
                         <div class="progress">
@@ -64,6 +66,7 @@
         </div>
     </div>
 </section>
+<!-- EDUCATION SECTION -->
 <section id="education">
     <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
     <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
@@ -97,6 +100,7 @@
         {% endfor %}
     </div>
 </section>
+<!-- EXPERIENCE SECTION -->
 <section id="experience">
     <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
     <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
@@ -129,5 +133,53 @@
         {% endfor %}
     </div>
 </section>
-testimonials <br>
+<!-- TESTIMONIALS SECTION -->
+<section id="testimonials">
+    <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+    <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
+    preserveAspectRatio="none">
+        <g class="separator" transform="translate(-9.2218046,-83.494585)">
+            <path class="fill-dark"
+                d="M 9.484815,89.716055 H 209.81018 V 126.90507 L 110.46368,93.705147 9.579391,127.39334 Z" />
+            <path class="fill-bg-color"
+                d="M 9.3544335,83.626877 H 209.68181 V 120.29057 L 110.46368,93.705147 9.4490103,120.77195 Z" />
+        </g>
+    </svg>
+    <div class="container-xl">
+        <h2 class="section-title">Testimonials</h2>
+            <div class="card card-testimonials mb-3 w-100">
+                <div class="card-body">
+                    <div id="carousel-testimonials" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                        {% for testimonial in testimonials %}
+                            {% if loop.index0 == 0 %}
+                                <div class="carousel-item active">
+                            {% else %}
+                                <div class="carousel-item">
+                            {% endif %}
+                                <figure class="text-center">
+                                    <blockquote class="blockquote">
+                                        <p>{{ testimonial.text }}</p>
+                                    </blockquote>
+                                    <figcaption class="blockquote-footer">
+                                        {{ testimonial.author }} - <cite>{{ testimonial.role }}</cite>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <div class="carousel-indicators">
+                            {% for testimonial in testimonials %}
+                                {% if loop.index0 == 0 %}
+                                    <button type="button" data-bs-target="#carousel-testimonials" data-bs-slide-to="0" class="active" aria-current="true" aria-label="{{ testimonial.author }}"></button>
+                                {% else %}
+                                    <button type="button" data-bs-target="#carousel-testimonials" data-bs-slide-to="{{ loop.index0 }}" aria-label="{{ testimonial.author }}"></button>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
 {% endblock content %}

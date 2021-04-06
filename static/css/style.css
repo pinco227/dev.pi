@@ -410,6 +410,46 @@ h1, h2 {
     padding: 1rem 2rem;
 }
 
+/*------------------------------------------ TESTIMONIALS */
+
+#testimonials {
+    background-color: var(--accent);
+    color: var(--accent-light-hover);
+}
+
+#testimonials .section-title {
+    margin-top: -1rem;
+    color: var(--text-light);
+}
+
+.card-testimonials {
+    border-radius: 50ch;
+}
+
+.card-testimonials .card-body {
+    padding: 1.5rem;
+}
+
+.card-testimonials .blockquote {
+    color: var(--accent-dark);
+}
+
+.card-testimonials .blockquote-footer {
+    color: var(--accent-hover);
+    margin-top: 0;
+}
+
+#carousel-testimonials .carousel-indicators {
+    position: relative;
+    margin: 0;
+}
+
+#carousel-testimonials .carousel-indicators [data-bs-target] {
+    width: 2rem;
+    height: .5rem;
+    background-color: var(--accent-dark);
+}
+
 /*------------------------------------------ FOOTER */
 
 footer {
@@ -462,5 +502,8 @@ footer {
     }
     .card-experience .card-body {
         padding: 1rem 1rem;
+    }
+    .card-testimonials {
+        border-radius: 0.2rem;
     }
 }

@@ -36,7 +36,8 @@ def home():
     skills = list(mongo.db.skills.find())
     education = list(mongo.db.education.find())
     experience = list(mongo.db.experience.find())
-    return render_template("landing.html", skills=skills, education=education, experience=experience)
+    testimonials = list(mongo.db.testimonials.find())
+    return render_template("landing.html", skills=skills, education=education, experience=experience, testimonials=testimonials)
 
 
 if __name__ == "__main__":
