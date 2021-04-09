@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Projects SECTION -->
+<section id="project-details">
+    <div class="page-title-container bg-accent">
+        <h2 class="text-shadow">Project Details</h2>
+    </div>
+    <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+    <svg class="separator" width="100%" height="60" viewBox="0.1 0.1 180 40" preserveAspectRatio="none">
+        <linearGradient x1="0" y1="0" x2="100%" y2="0" id="gradient">
+            <stop class="gradient-light" offset="0"></stop>
+            <stop class="gradient-dark" offset="100%"></stop>
+        </linearGradient>
+        <g transform="translate(-18.298844,-77.973964)">
+            <path class="fill-dark"
+                d="M 31.615583,86.351641 H 192.16499 v 26.901969 c 0,0 -32.03411,-14.237983 -59.62682,-12.72484 -22.34188,1.2252 -54.779359,9.72634 -54.779359,9.72634 0,0 -22.029534,3.62882 -34.471238,-1.88988 -12.441702,-5.51871 -11.67199,-22.013589 -11.67199,-22.013589 z">
+            </path>
+            <path fill="url(#gradient)"
+                d="M 18.441597,78.106256 H 198.58126 v 39.288614 c 0,0 -43.10672,-27.825245 -73.47599,-19.687823 -30.369264,8.137423 -46.832208,12.548653 -46.832208,12.548653 0,0 -32.775418,8.05972 -46.735258,0 C 17.577964,102.19598 18.441597,78.106256 18.441597,78.106256 Z">
+            </path>
+        </g>
+    </svg>
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <figure class="figure">
+                    <img src="{{ project.photos }}" alt="{{ project.title }}" class="img-fluid img-thumbnail project-main-photo">
+                </figure>
+            </div>
+            <div class="col-12 col-md-6">
+                <h3 class="project-title">{{ project.title }}</h3>
+                <div class="d-grid gap-3 d-sm-flex">
+                    <a href="{{ project.repo }}" target="_blank" class="btn btn-dark w-100"> <i class="bi bi-github"></i> Source</a>
+                    <a href="{{ project.live_url }}" target="_blank" class="btn btn-accent-light w-100"><i class="bi bi-display"></i> Demo</a>
+                </div>
+                <div class="project-tech">
+                    <h4>Technologies</h4>
+                    <p>
+                        {% set technologies = project.tech.split(',') %}
+                        {% for tech in technologies %}
+                            <span class="badge rounded-pill bg-accent">{{ tech }}</span>
+                        {% endfor %} 
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 project-description">
+                <h4>Description</h4>
+                <p>{{ project.description }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<section id="project-gallery">
+    <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
+    <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
+    preserveAspectRatio="none">
+        <g class="separator" transform="translate(-9.2218046,-83.494585)">
+            <path class="fill-dark"
+                d="M 9.484815,89.716055 H 209.81018 V 126.90507 L 110.46368,93.705147 9.579391,127.39334 Z" />
+            <path class="fill-bg-color"
+                d="M 9.3544335,83.626877 H 209.68181 V 120.29057 L 110.46368,93.705147 9.4490103,120.77195 Z" />
+        </g>
+    </svg>
+    <div class="container-xl">
+        <h2 class="section-title text-shadow">Gallery</h2>
+        photos
+    </div>
+</section>
+{% endblock content %}

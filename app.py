@@ -49,7 +49,7 @@ def portofolio():
 @app.route('/portofolio/<project>')
 def get_project(project):
     project = mongo.db.projects.find_one({"slug": project})
-    return project
+    return render_template("project.html", project=project)
 
 
 if __name__ == "__main__":

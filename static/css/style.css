@@ -39,7 +39,7 @@ h1, h2, h3, h4, h5 {
     color: var(--accent-dark);
 }
 
-h1, h2 {
+h1, h2, h3 {
     text-align: center;
 }
 
@@ -488,6 +488,35 @@ h1, h2 {
 .card-project .list-group-item {
     color: var(--accent-dark-hover);
     background-color: transparent;
+}
+
+/*------------------------------------------ PROJECT */
+
+#project-details .separator {
+    margin-bottom: 2rem;
+}
+
+.project-title {
+    margin-bottom: 1rem;
+}
+
+.project-tech {
+    margin: 1rem 0 1rem 0;
+}
+
+.project-tech .badge {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+#project-gallery {
+    background-color: var(--accent);
+    color: var(--accent-light-hover);
+}
+
+#project-gallery .section-title {
+    margin-top: -1rem;
+    color: var(--text-light);
 }
 
 /*------------------------------------------ FOOTER */
