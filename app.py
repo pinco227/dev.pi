@@ -46,6 +46,12 @@ def portofolio():
     return render_template("portofolio.html", projects=projects)
 
 
+@app.route('/portofolio/<project>')
+def get_project(project):
+    project = mongo.db.projects.find_one({"slug": project})
+    return project
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
