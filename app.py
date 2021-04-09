@@ -40,6 +40,12 @@ def home():
     return render_template("landing.html", skills=skills, education=education, experience=experience, testimonials=testimonials)
 
 
+@app.route('/portofolio')
+def portofolio():
+    projects = list(mongo.db.projects.find())
+    return render_template("portofolio.html", projects=projects)
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
