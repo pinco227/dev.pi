@@ -97,6 +97,12 @@ def get_post(post):
     return render_template("blog-post.html", post=post)
 
 
+@app.route('/contact')
+@register_breadcrumb(app, '.contact', 'Contact')
+def contact():
+    return render_template("contact.html")
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
