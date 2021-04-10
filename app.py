@@ -40,13 +40,13 @@ def home():
     return render_template("landing.html", skills=skills, education=education, experience=experience, testimonials=testimonials)
 
 
-@app.route('/portofolio')
-def portofolio():
+@app.route('/portfolio')
+def portfolio():
     projects = list(mongo.db.projects.find())
-    return render_template("portofolio.html", projects=projects)
+    return render_template("portfolio.html", projects=projects)
 
 
-@app.route('/portofolio/<project>')
+@app.route('/portfolio/<project>')
 def get_project(project):
     project = mongo.db.projects.find_one({"slug": project})
     return render_template("project.html", project=project)

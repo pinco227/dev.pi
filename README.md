@@ -1,6 +1,6 @@
 # {π} Dev.PI
 
-**Dev.PI** is a Developer's Portofolio which also serves as a Milestone Project for the **Software Developer Diploma** programme of **Code Institute**.
+**Dev.PI** is a Developer's Portfolio which also serves as a Milestone Project for the **Software Developer Diploma** programme of **Code Institute**.
 
 ## Table of Contents
   - [Demo](#demo)
@@ -32,12 +32,12 @@
 - ### Goals
   - The main goal is to get clients/contracts (job offers).
   - Expand online presence.
-  - Present previous work (portofolio).
+  - Present previous work (portfolio).
   - Present biography, skills, education, experience, links and CV.
   - Receive feedback/testimonials from clients/collaborators.
 - ### Users Needs
   - Need to learn about the showcased developer.
-  - Need of an up to date portofolio with previews and source code (where applicable).
+  - Need of an up to date portfolio with previews and source code (where applicable).
   - Need of an up to date list of skills, education, experience.
   - Need to be able to download resume.
   - Need to be able to contact the developer if interested.
@@ -61,7 +61,7 @@
     - To easily navigate throughout the website on any device/platform.
     - To be able to write a testimonial
   - #### As the developer I need:
-    - To be able to add, update and delete skills, education, work experience, portofolio projects and links.
+    - To be able to add, update and delete skills, education, work experience, portfolio projects and links.
     - To be able to update my current status, availability and contact information.
     - To be able to post, edit and delete personal blogs.
     - To be able to manage (approve, remove) user's testimonials.
