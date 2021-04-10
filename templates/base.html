@@ -19,13 +19,13 @@
     <nav class="navbar bg-accent-transparent navbar-expand-md sticky-top">
         <div class="container-xxl">
             <a class="navbar-brand" href="{{ url_for('home') }}">{&pi;} Dev.PI</a>
-            <button class="navbar-toggler text-shadow" id="navbar-toggler" type="button" aria-label="Toggle navigation">
+            <button class="navbar-toggler text-shadow" id="navbar-toggler" type="button" aria-label="Toggle navigation" data-toggle="offcavas">
                 <i class="bi bi-list"></i>
             </button>
             <div class="navbar-collapse offcanvas-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
+                        <a class="nav-link active" href="{{ url_for('home') }}" data-toggle="offcavas">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -33,22 +33,22 @@
                             Résumé
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ url_for('home') }}#skills">Skills</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('home') }}#education">Education</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('home') }}#experience">Experience</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#skills" data-toggle="offcavas">Skills</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#education" data-toggle="offcavas">Education</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#experience" data-toggle="offcavas">Experience</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('home') }}#testimonials">Testimonials</a>
+                        <a class="nav-link" href="{{ url_for('home') }}#testimonials" data-toggle="offcavas">Testimonials</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('portfolio') }}">Portfolio</a>
+                        <a class="nav-link" href="{{ url_for('portfolio') }}" data-toggle="offcavas">Portfolio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
+                        <a class="nav-link" href="{{ url_for('blog') }}" data-toggle="offcavas">Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+                        <a class="nav-link" href="{{ url_for('contact') }}" data-toggle="offcavas">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -63,6 +63,12 @@
         <svg class="footer-separator" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" preserveAspectRatio="none">
 			<path d="M0 100 C40 0 60 0 100 100 Z"></path>
 		</svg>
+        <div class="hero-social">
+                <div><a href="#"><i class="bi bi-github"></i></a></div>
+                <div><a href="#"><i class="bi bi-linkedin"></i></a></div>
+                <div><a href="#"><i class="bi bi-facebook"></i></a></div>
+                <div><a href="#"><i class="bi bi-instagram"></i></a></div>
+            </div>
         <div class="container-xxl">
             <span>Place sticky footer content here.</span>
         </div>
