@@ -6,6 +6,7 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
+from datetime import date
 if os.path.exists("env.py"):
     import env
 
@@ -50,6 +51,13 @@ def portfolio():
 def get_project(project):
     project = mongo.db.projects.find_one({"slug": project})
     return render_template("project.html", project=project)
+
+
+@app.route('/blog')
+def blog():
+    blogs = list(mongo.db.blogs.find())
+    # today = date.today().strftime("%B %d, %Y")
+    return render_template("blog.html", blogs=blogs)
 
 
 if __name__ == "__main__":
