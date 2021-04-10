@@ -30,8 +30,8 @@ def context_processor():
         {"_id": ObjectId('606a3310d5c7c22eeee180f6')}))
 
 
-@app.route('/')
 @app.route("/home")
+@app.route('/')
 def home():
     skills = list(mongo.db.skills.find())
     education = list(mongo.db.education.find())

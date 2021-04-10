@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-12 col-md-6">
                 <figure>
-                    <img src="{{ photos[0] }}" alt="{{ project.title }}" class="project-main-photo">
+                    <img src="{{ photos[0].replace(' ', '') }}" alt="{{ project.title }}" class="project-main-photo">
                 </figure>
             </div>
             <div class="col-12 col-md-6">
@@ -75,7 +75,7 @@
             {% for photo in photos %}
                 <div class="col">
                     <figure>
-                        <a href="{{ photo.strip() }}" class="{{ project.slug }}-gallery"><img src="{{ photo.strip() }}" alt="Photo {{ loop.index }}"></a>
+                        <a href="{{ photo.replace(' ', '') }}" class="{{ project.slug }}-gallery"><img src="{{ photo.replace(' ', '') }}" alt="Photo {{ loop.index }}"></a>
                     </figure>
                 </div>
             {% endfor %} 

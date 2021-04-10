@@ -23,9 +23,10 @@
     <div class="container-xl">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
             {% for project in projects %}
+                {% set photos = project.photos.split(',') %}
                 <div class="col">
                     <div class="card card-project h-100">
-                        <img src="{{ project.photos }}" class="card-img-top" alt="{{ project.title }}">
+                        <img src="{{ photos[0].replace(' ', '') }}" class="card-img-top" alt="{{ project.title }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ project.title }}</h5>
                             <p class="card-text">{{ project.description|truncate(80, True, ' ...') }}</p>

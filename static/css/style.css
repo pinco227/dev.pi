@@ -15,12 +15,11 @@
 /*------------------------------------------ DOCUMENT */
 
 html, body {
+    scroll-behavior: smooth;
     overflow-x: hidden;
-    /* Prevent scroll on narrow devices */
 }
 
 body {
-    /* padding-top: 56px; */
     background-color: var(--main-bg-color);
     color: var(--accent-dark-hover);
 }

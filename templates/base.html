@@ -18,14 +18,14 @@
 <body class="d-flex flex-column h-100">
     <nav class="navbar bg-accent-transparent navbar-expand-md sticky-top">
         <div class="container-xxl">
-            <a class="navbar-brand" href="#">{&pi;} Dev.PI</a>
+            <a class="navbar-brand" href="{{ url_for('home') }}">{&pi;} Dev.PI</a>
             <button class="navbar-toggler text-shadow" id="navbar-toggler" type="button" aria-label="Toggle navigation">
                 <i class="bi bi-list"></i>
             </button>
             <div class="navbar-collapse offcanvas-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -33,16 +33,16 @@
                             Résumé
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Skills</a></li>
-                            <li><a class="dropdown-item" href="#">Education</a></li>
-                            <li><a class="dropdown-item" href="#">Experience</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#skills">Skills</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#education">Education</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#experience">Experience</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Testimonials</a>
+                        <a class="nav-link" href="{{ url_for('home') }}#testimonials">Testimonials</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Portofolio</a>
+                        <a class="nav-link" href="{{ url_for('portofolio') }}">Portofolio</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Blog</a>
