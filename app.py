@@ -60,6 +60,12 @@ def blog():
     return render_template("blog.html", blogs=blogs)
 
 
+@app.route('/blog/<post>')
+def get_post(post):
+    post = mongo.db.blogs.find_one({"slug": post})
+    return render_template("blog-post.html", post=post)
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),

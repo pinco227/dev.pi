@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<!-- Blogs SECTION -->
-<section id="blogs">
+<!-- Blog Post SECTION -->
+<section id="blog-post">
     <div class="page-title-container bg-accent">
-        <h2 class="text-shadow">Blogs</h2>
+        <h2 class="text-shadow">Blog Post</h2>
     </div>
     <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
     <svg class="separator" width="100%" height="60" viewBox="0.1 0.1 180 40" preserveAspectRatio="none">
@@ -21,28 +21,27 @@
         </g>
     </svg>
     <div class="container-xl">
-        <div class="row row-cols-1">
-        {% for blog in blogs %}
+        <div class="row mb-4">
             <div class="col">
-                <div class="card card-blogs">
-                    <div class="row">
-                        <div class="col-12 col-md-4 text-center">
-                            <img src="{{ blog.photo }}" alt="{{ blog.title }}" class="img-fluid">
-                        </div>
-                        <div class="card-blogs-body col-12 col-md-8">
-                            <div class="card-body">
-                                <h2 class="card-title">{{ blog.title }}</h2>
-                                <p class="card-text">{{ blog.body|truncate(150) }}</p>
-                                <p class="card-text"><small class="text-muted">{{ blog.added_on }}</small></p>
-                            </div>
-                            <div class="card-footer text-end">
-                                <a href="{{ url_for('get_post', post=blog.slug) }}" class="btn btn-sm btn-accent bg-accent">Read More ...</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <a href="{{ url_for('blog') }}" class="btn btn-accent-light"><i class="bi bi-arrow-left-circle"></i> Go
+                    back</a>
             </div>
-        {% endfor %}
+        </div>
+        <div class="row mb-4">
+            <div class="col">
+                <figure class="float-start col-sm-6 col-md-4">
+                    <img src="{{ post.photo }}" alt="{{ post.title }}" class="post-photo">
+                </figure>
+                <h3 class="post-title">{{ post.title }}</h3>
+                <p><small class="text-muted">{{ post.added_on }}</small></p>
+                <p>{{ post.body }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="{{ url_for('blog') }}" class="btn btn-accent-light"><i class="bi bi-arrow-left-circle"></i> Go
+                    back</a>
+            </div>
         </div>
     </div>
     </div>

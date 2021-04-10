@@ -489,41 +489,6 @@ h1, h2, h3 {
     background-color: transparent;
 }
 
-/*------------------------------------------ BLOGS */
-
-#blogs .separator {
-    margin-bottom: 2rem;
-}
-
-.card-blogs {
-    width: 100%;
-    margin-bottom: 2rem;
-    border-radius: 1rem;
-    background-color: var(--text-light);
-    box-shadow: inset 0px 2px 3px rgba(0, 0, 0, .4);
-    border: none;
-}
-
-.card-blogs img {
-    border-radius: 1rem;
-    box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
-    transform: scale(1.05);
-}
-
-.card-blogs-body {
-    display: flex;
-    flex-direction: column;
-}
-
-.card-blogs-body .card-title {
-    text-align: left;
-    margin-bottom: 1rem;
-}
-
-.card-blogs-body .card-footer {
-    background-color: transparent;
-}
-
 /*------------------------------------------ PROJECT */
 
 #project-details .separator {
@@ -578,6 +543,65 @@ h1, h2, h3 {
 #project-gallery img:hover {
     transform: scale(1.05);
     box-shadow: 2px 6px 6px rgba(0, 0, 0, .3);
+}
+
+/*------------------------------------------ BLOGS */
+
+#blogs .separator {
+    margin-bottom: 2rem;
+}
+
+.card-blogs {
+    width: 100%;
+    margin-bottom: 2rem;
+    border-radius: 1rem;
+    background-color: var(--text-light);
+    box-shadow: inset 0px 2px 3px rgba(0, 0, 0, .4);
+    border: none;
+}
+
+.card-blogs img {
+    border-radius: 1rem;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
+    transform: scale(1.05);
+}
+
+.card-blogs-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-blogs-body .card-title {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.card-blogs-body .card-footer {
+    background-color: transparent;
+}
+
+/*------------------------------------------ BLOG POST */
+
+#blog-post .separator {
+    margin-bottom: 2rem;
+}
+
+#blog-post figure {
+    margin-right: 1rem;
+}
+
+.post-photo {
+    padding: .5rem;
+    background-color: var(--text-light);
+    border: 0;
+    border-radius: 1rem;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+}
+
+.post-title {
+    text-align: left;
 }
 
 /*------------------------------------------ FOOTER */
