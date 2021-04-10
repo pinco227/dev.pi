@@ -507,6 +507,17 @@ h1, h2, h3 {
 .project-tech .badge {
     font-size: 1.2rem;
     font-weight: 500;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
+}
+
+.project-main-photo {
+    padding: .5rem;
+    background-color: var(--text-light);
+    border: 0;
+    border-radius: 1rem;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
 }
 
 #project-gallery {
@@ -517,6 +528,22 @@ h1, h2, h3 {
 #project-gallery .section-title {
     margin-top: -1rem;
     color: var(--text-light);
+}
+
+#project-gallery img {
+    padding: .25rem;
+    background-color: var(--text-light);
+    border: 0;
+    border-radius: .5rem;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
+    transition: transform .3s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+#project-gallery img:hover {
+    transform: scale(1.05);
+    box-shadow: 2px 6px 6px rgba(0, 0, 0, .3);
 }
 
 /*------------------------------------------ FOOTER */
