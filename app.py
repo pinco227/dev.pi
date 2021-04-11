@@ -42,8 +42,25 @@ def home():
     skills = list(mongo.db.skills.find())
     education = list(mongo.db.education.find())
     experience = list(mongo.db.experience.find())
-    testimonials = list(mongo.db.testimonials.find())
+    testimonials = list(mongo.db.testimonials.find({"approved": True}))
     return render_template("landing.html", skills=skills, education=education, experience=experience, testimonials=testimonials)
+
+
+@app.route('/write-testimonial', methods=["GET", "POST"])
+@register_breadcrumb(app, '.write-testimonial', 'Write Testimonial')
+def add_testimonial():
+    if request.method == "POST":
+        testimonial = {
+            "author": request.form.get("name"),
+            "role": request.form.get("role"),
+            "text": request.form.get("text"),
+            "approved": False
+        }
+        mongo.db.testimonials.insert_one(testimonial)
+        flash("Thank you for your feedback!")
+        return redirect(url_for("home"))
+
+    return render_template("write-testimonial.html")
 
 
 @app.route('/portfolio')

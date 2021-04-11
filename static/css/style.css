@@ -114,6 +114,27 @@ h1, h2, h3 {
     text-shadow: 1px 2px 3px rgb(0, 0, 0, .5);
 }
 
+/*------------------------------------------ ALERTS */
+
+.toast-container {
+    width: 75%;
+}
+
+.toast {
+    background-color: rgba(var(--accent-rgb), .9);
+    color: var(--text-light);
+}
+
+.toast-body {
+    color: var(--text-light);
+    font-size: 1.5rem;
+}
+
+a[data-bs-dismiss="toast"] {
+    color: var(--text-light);
+    font-size: 1.5rem;
+}
+
 /*------------------------------------------ BUTTONS */
 
 /* HOVER.CSS Grow */
@@ -680,6 +701,24 @@ nav[aria-label="breadcrumb"] {
     height: 100px;
 }
 
+/*------------------------------------------ WRITE TESTIMONIAL */
+
+.card-testimonial-form {
+    background-color: var(--accent-light);
+    border-radius: 1rem;
+    text-align: center;
+    border: none;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
+}
+
+.card-testimonial-form .card-title {
+    margin-bottom: 1rem;
+}
+
+.card-testimonial-form #message {
+    height: 100px;
+}
+
 /*------------------------------------------ FOOTER */
 
 footer {
@@ -779,6 +818,13 @@ footer .hero-social div {
         background-color: var(--accent-light);
         padding-bottom: 6rem;
         margin-bottom: -6rem;
+    }
+    .card-testimonial-form {
+        background: none;
+        box-shadow: none;
+    }
+    .card-testimonial-form .card-body {
+        padding: 0;
     }
 }
 
