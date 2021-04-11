@@ -74,14 +74,43 @@
             {% block content %}
             {% endblock content %}
     </main>
-    <footer class="footer mt-auto pb-3">
+    <footer class="footer mt-auto">
         <!-- CREDIT: https://codepen.io/webd3v/pen/JbJvMQ -->
         <svg class="footer-separator" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" preserveAspectRatio="none">
 			<path d="M0 100 C40 0 60 0 100 100 Z"></path>
 		</svg>
         {% include "inc/social-links.html" %}
         <div class="container-xxl">
-            <span>Place sticky footer content here.</span>
+            <div class="row">
+                <div class="col-md-6 text-center d-flex flex-column justify-content-center">
+                    <h3 class="text-shadow mt-3 mb-4">Thank you for visiting!</h3>    
+                    <p class="d-none d-md-block">2021 &#169; Paul Istratoaie</p>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <h5 class="text-shadow">Résumé</h5>
+                    <ul class="footer-list list-group list-group-flush">
+                        <li class="list-group-item"><a href="{{ url_for('home') }}#skills">Skills</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('home') }}#education">Education</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('home') }}#experience">Experience</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <h5 class="text-shadow">Links</h5>
+                    <ul class="footer-list list-group list-group-flush">
+                        <li class="list-group-item"><a href="{{ url_for('home') }}">Home</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('blog') }}">Blog</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('contact') }}">Contact</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('home') }}#testimonials">Testimonials</a></li>
+                        <li class="list-group-item"><a href="{{ url_for('add_testimonial') }}">Write Testimonial</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row d-block d-md-none">
+                <div class="col text-center mt-2">
+                    2021 &#169; Paul Istratoaie
+                </div>
+            </div>
         </div>
     </footer>
 

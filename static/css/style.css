@@ -730,6 +730,7 @@ footer {
     background-color: var(--accent-dark);
     color: var(--text-light);
     padding: 1rem;
+    padding-top: 2rem;
 }
 
 footer .hero-social {
@@ -747,6 +748,28 @@ footer .hero-social div {
     height: 2.4rem;
     width: 100%;
     fill: var(--accent-dark);
+}
+
+footer h3, footer h5 {
+    color: var(--text-light);
+}
+
+.footer-list .list-group-item {
+    background: none;
+    padding: .2rem 0;
+    border: none;
+}
+
+.footer-list .list-group-item a {
+    color: var(--accent-light);
+    text-decoration: none;
+    line-height: 1rem;
+    transition: font-size ease-in-out 0.2s;
+}
+
+.footer-list .list-group-item a:hover, .footer-list .list-group-item a:focus {
+    color: var(--accent-light-hover);
+    font-size: 1.1rem;
 }
 
 /*------------------------------------------ MEDIA QUERIES */
