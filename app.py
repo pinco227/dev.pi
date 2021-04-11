@@ -31,8 +31,10 @@ def context_processor():
     Returns:
         dict: settings db collection
     """
-    return dict(settings=mongo.db.settings.find_one(
-        {"_id": ObjectId('606a3310d5c7c22eeee180f6')}))
+    settings = mongo.db.settings.find_one(
+        {"_id": ObjectId('606a3310d5c7c22eeee180f6')})
+    links = list(mongo.db.links.find())
+    return dict(settings=settings, links=links)
 
 
 @app.route("/home")

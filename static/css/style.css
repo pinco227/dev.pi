@@ -43,7 +43,7 @@ section {
     margin: 0;
 }
 
-/*------------------------------------------ HEADINGS */
+/*------------------------------------------ TYPOGRAPHY */
 
 h1, h2, h3, h4, h5 {
     color: var(--accent-dark);
@@ -55,6 +55,10 @@ h1, h2, h3 {
 
 .section-title {
     margin: 1rem 0 2rem 0;
+}
+
+.lead {
+    margin: 1rem 0 1rem 0;
 }
 
 /*------------------------------------------ FORMS */

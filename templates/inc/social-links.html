@@ -1,0 +1,5 @@
+<div class="hero-social">
+    {% for link in links %}
+    <div><a href="{{ link.url }}" target="_blank"><i class="bi bi-{{ link.icon }}"></i></a></div>
+    {% endfor %}
+</div>
