@@ -32,6 +32,10 @@ main {
     padding: 0 .5rem;
 }
 
+.navbar-nav .nav-item .nav-link {
+    padding: .5rem;
+}
+
 /*------------------------------------------ SIDEBAR */
 
 .sidebar {
