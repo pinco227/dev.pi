@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block title %}
+Portfolio
+{% endblock title %}
 {% block content %}
 <!-- Projects SECTION -->
 <section id="portfolio">
@@ -24,25 +27,28 @@
         {% include "inc/breadcrumbs.html" %}
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
             {% for project in projects %}
-                {% set photos = project.photos.split(',') %}
-                <div class="col">
-                    <div class="card card-project h-100">
-                        <img src="{{ photos[0].replace(' ', '') }}" class="card-img-top" alt="{{ project.title }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ project.title }}</h5>
-                            <p class="card-text">{{ project.description|truncate(80, True, ' ...') }}</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">{{ project.tech }}</li>
-                            <li class="list-group-item d-grid"><a href="{{ project.repo }}" target="_blank" class="btn btn-sm btn-dark"> <i class="bi bi-github"></i> Source</a></li>
-                            <li class="list-group-item d-grid"><a href="{{ project.live_url }}" target="_blank" class="btn btn-sm btn-accent-light"><i class="bi bi-display"></i> Demo</a></li>
-                            <li class="list-group-item d-grid"><a href="{{ url_for('get_project', project=project.slug) }}" class="btn btn-sm btn-accent"><i class="bi bi-info-circle-fill"></i> Details</a></li>
-                        </ul>
+            {% set photos = project.photos.split(',') %}
+            <div class="col">
+                <div class="card card-project h-100">
+                    <img src="{{ photos[0].replace(' ', '') }}" class="card-img-top" alt="{{ project.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ project.title }}</h5>
+                        <p class="card-text">{{ project.description|truncate(80, True, ' ...') }}</p>
                     </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{ project.tech }}</li>
+                        <li class="list-group-item d-grid"><a href="{{ project.repo }}" target="_blank"
+                                class="btn btn-sm btn-dark"> <i class="bi bi-github"></i> Source</a></li>
+                        <li class="list-group-item d-grid"><a href="{{ project.live_url }}" target="_blank"
+                                class="btn btn-sm btn-accent-light"><i class="bi bi-display"></i> Demo</a></li>
+                        <li class="list-group-item d-grid"><a href="{{ url_for('get_project', project=project.slug) }}"
+                                class="btn btn-sm btn-accent"><i class="bi bi-info-circle-fill"></i> Details</a></li>
+                    </ul>
                 </div>
+            </div>
             {% endfor %}
         </div>
     </div>
-</div>
+    </div>
 </section>
 {% endblock content %}

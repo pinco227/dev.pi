@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block title %}
+Project: {{ project.title }}
+{% endblock title %}
 {% block styles %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 {% endblock styles %}
@@ -29,7 +32,8 @@
         {% include "inc/breadcrumbs.html" %}
         <div class="row mb-4">
             <div class="col">
-                <a href="{{ url_for('portfolio') }}" class="btn btn-accent-light"><i class="bi bi-arrow-left-circle"></i> Go
+                <a href="{{ url_for('portfolio') }}" class="btn btn-accent-light"><i
+                        class="bi bi-arrow-left-circle"></i> Go
                     back</a>
             </div>
         </div>
@@ -42,16 +46,18 @@
             <div class="col-12 col-md-6">
                 <h3 class="project-title">{{ project.title }}</h3>
                 <div class="d-grid gap-3 d-sm-flex">
-                    <a href="{{ project.repo }}" target="_blank" class="btn btn-dark w-100"> <i class="bi bi-github"></i> Source</a>
-                    <a href="{{ project.live_url }}" target="_blank" class="btn btn-accent-light w-100"><i class="bi bi-display"></i> Demo</a>
+                    <a href="{{ project.repo }}" target="_blank" class="btn btn-dark w-100"> <i
+                            class="bi bi-github"></i> Source</a>
+                    <a href="{{ project.live_url }}" target="_blank" class="btn btn-accent-light w-100"><i
+                            class="bi bi-display"></i> Demo</a>
                 </div>
                 <div class="project-tech">
                     <h4>Technologies</h4>
                     <p>
                         {% set technologies = project.tech.split(',') %}
                         {% for tech in technologies %}
-                            <span class="badge rounded-pill bg-accent">{{ tech }}</span>
-                        {% endfor %} 
+                        <span class="badge rounded-pill bg-accent">{{ tech }}</span>
+                        {% endfor %}
                     </p>
                 </div>
             </div>
@@ -63,12 +69,12 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 </section>
 <section id="project-gallery">
     <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
     <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
-    preserveAspectRatio="none">
+        preserveAspectRatio="none">
         <g class="separator" transform="translate(-9.2218046,-83.494585)">
             <path class="fill-dark"
                 d="M 9.484815,89.716055 H 209.81018 V 126.90507 L 110.46368,93.705147 9.579391,127.39334 Z" />
@@ -80,16 +86,18 @@
         <h2 class="section-title text-shadow">Gallery</h2>
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 mb-4" data-masonry='{"percentPosition": true }'>
             {% for photo in photos %}
-                <div class="col">
-                    <figure>
-                        <a href="{{ photo.replace(' ', '') }}" class="{{ project.slug }}-gallery"><img src="{{ photo.replace(' ', '') }}" alt="Photo {{ loop.index }}"></a>
-                    </figure>
-                </div>
-            {% endfor %} 
+            <div class="col">
+                <figure>
+                    <a href="{{ photo.replace(' ', '') }}" class="{{ project.slug }}-gallery"><img
+                            src="{{ photo.replace(' ', '') }}" alt="Photo {{ loop.index }}"></a>
+                </figure>
+            </div>
+            {% endfor %}
         </div>
         <div class="row">
             <div class="col">
-                <a href="{{ url_for('portfolio') }}" class="btn btn-accent-light"><i class="bi bi-arrow-left-circle"></i> Go
+                <a href="{{ url_for('portfolio') }}" class="btn btn-accent-light"><i
+                        class="bi bi-arrow-left-circle"></i> Go
                     back</a>
             </div>
         </div>
@@ -98,10 +106,12 @@
 {% endblock content %}
 
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
+    integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous"
+    async></script>
 <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
 <!-- CREDIT: https://github.com/biati-digital/glightbox -->
 <script type="text/javascript">
-  const lightbox = GLightbox({ 'selector': '.{{ project.slug }}-gallery' });
+    const lightbox = GLightbox({ 'selector': '.{{ project.slug }}-gallery' });
 </script>
 {% endblock scripts %}

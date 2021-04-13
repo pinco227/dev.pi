@@ -1,0 +1,73 @@
+/*------------------------------------------ DOCUMENT */
+
+body {
+    font-size: .875rem;
+}
+
+main {
+    padding: 48px 0 0;
+}
+
+/*------------------------------------------ NAVBAR */
+
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1rem;
+    background-color: var(--accent-dark);
+}
+
+.navbar .navbar-toggler {
+    top: .25rem;
+    right: 0rem;
+}
+
+.navbar-nav {
+    flex-direction: row;
+}
+
+.navbar-nav .nav-item {
+    padding: 0 .5rem;
+}
+
+/*------------------------------------------ SIDEBAR */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    background-color: var(--accent-light);
+    box-shadow: inset -1px 0 6px rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: var(--text-dark);
+    text-shadow: none;
+}
+
+.sidebar .nav-link .bi {
+    margin-right: 4px;
+    color: #727272;
+}
+
+.sidebar .nav-link.active {
+    color: var(--accent);
+}
+
+.sidebar .nav-link:hover .bi, .sidebar .nav-link.active .bi {
+    color: inherit;
+}

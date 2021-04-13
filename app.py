@@ -122,6 +122,12 @@ def contact():
     return render_template("contact.html")
 
 
+# ADMIN PANEL
+@app.route('/admin')
+def admin():
+    return render_template("admin/dashboard.html")
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
