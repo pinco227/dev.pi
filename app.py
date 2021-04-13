@@ -125,7 +125,25 @@ def contact():
 # ADMIN PANEL
 @app.route('/admin')
 def admin():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+
     return render_template("admin/dashboard.html")
+
+
+@app.route('/admin/login', methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        if request.form.get("username").lower() == os.environ.get("ADMIN_USERNAME").lower() and request.form.get("password") == os.environ.get("ADMIN_PASSWORD"):
+            session["user"] = request.form.get("username").lower()
+            flash("Welcome, {}".format(request.form.get("username")))
+            return redirect(url_for("admin"))
+        else:
+            # username doesn't exist
+            flash("Incorrect Username")
+            return redirect(url_for("login"))
+
+    return render_template("admin/login.html")
 
 
 if __name__ == "__main__":

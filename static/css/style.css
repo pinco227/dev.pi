@@ -129,9 +129,18 @@ h1, h2, h3 {
     color: var(--text-light);
 }
 
+.toast span {
+    font-size: 1.5rem;
+}
+
 .toast-body {
     color: var(--text-light);
     font-size: 1.5rem;
+    width: 100%;
+}
+
+.toast-body h4 {
+    color: var(--text-light);
 }
 
 a[data-bs-dismiss="toast"] {

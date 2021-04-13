@@ -1,10 +1,12 @@
 /*------------------------------------------ DOCUMENT */
 
-body {
+html, body {
+    height: 100%;
     font-size: .875rem;
 }
 
 main {
+    position: relative;
     padding: 48px 0 0;
 }
 
@@ -70,4 +72,37 @@ main {
 
 .sidebar .nav-link:hover .bi, .sidebar .nav-link.active .bi {
     color: inherit;
+}
+
+/*------------------------------------------ SIDEBAR */
+
+.body-login {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: var(--main-bg-color);
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
