@@ -131,6 +131,27 @@ def admin():
     return render_template("admin/dashboard.html")
 
 
+@app.route('/admin/testimonials', methods=['GET', 'POST'])
+def get_testimonials():
+    if request.method == "POST":
+        testimonials = list(mongo.db.testimonials.find())
+
+        for testimonial in testimonials:
+            if request.form.get("approved[{}]".format(testimonial['_id'])):
+                is_approved = True
+            else:
+                is_approved = False
+            mongo.db.testimonials.update({"_id": ObjectId(testimonial['_id'])}, {
+                "$set": {"approved": is_approved}})
+        flash("Testimonials were successfully updated!")
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_testimonials"))
+
+    approved = list(mongo.db.testimonials.find({"approved": True}))
+    unapproved = list(mongo.db.testimonials.find({"approved": False}))
+    return render_template("admin/testimonials.html", approved=approved, unapproved=unapproved)
+
+
 @app.route('/admin/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -153,13 +174,6 @@ def logout():
 
     flash("You have been logged out")
     return redirect(url_for("home"))
-
-
-@app.route('/admin/testimonials', methods=['GET', 'POST'])
-def get_testimonials():
-    approved = list(mongo.db.testimonials.find({"approved": True}))
-    unapproved = list(mongo.db.testimonials.find({"approved": False}))
-    return render_template("admin/testimonials.html", approved=approved, unapproved=unapproved)
 
 
 if __name__ == "__main__":

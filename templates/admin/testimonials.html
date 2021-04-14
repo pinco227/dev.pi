@@ -1,8 +1,19 @@
 {% extends "admin/base.html" %}
 {% block content %}
 <section id="get_testimonials">
-    <h2>Testimonials</h2>
+    <div class="row my-2 align-items-center">
+        <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+            <h1 class="text-start my-2">Testimonials</h1>
+        </div>
+        <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+            <img src="{{ url_for('static', filename='images/testimonials.svg') }}" alt="Testimonials" class="section-image">
+        </div>
+    </div>
     <div class="card">
+        <form action="{{ url_for('get_testimonials') }}" method="POST">
+        <div class="card-header text-center">
+            <button type="submit" class="btn btn-lg btn-accent">Update</button>
+        </div>
         <div class="card-header">
             Unapproved
         </div>
@@ -15,8 +26,8 @@
                     </div>
                     <div class="controls d-flex align-items-baseline">
                         <div class="form-check form-switch me-3">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Approved</label>
+                            <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]" name="approved[{{ post._id }}]">
+                            <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
                         </div>
                         <a href="" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
                     </div>
@@ -35,14 +46,18 @@
                     </div>
                     <div class="controls d-flex align-items-baseline">
                         <div class="form-check form-switch me-3">
-                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Approved</label>
+                            <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]" name="approved[{{ post._id }}]" checked>
+                            <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
                         </div>
                         <a href="" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
                     </div>
                 </li>
             {% endfor %}
         </ul>
+        <div class="card-footer text-center">
+            <button type="submit" class="btn btn-lg btn-accent">Update</button>
+        </div>
+        </form>
     </div>
 </section>
 {% endblock content %}

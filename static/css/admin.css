@@ -10,6 +10,11 @@ main {
     padding: 48px 0 0;
 }
 
+.section-image {
+    width: 100%;
+    max-width: 180px;
+}
+
 /*------------------------------------------ NAVBAR */
 
 .navbar-brand {
