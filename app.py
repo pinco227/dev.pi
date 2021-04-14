@@ -123,16 +123,23 @@ def contact():
 
 
 # ADMIN PANEL
+def check_admin():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+
 @app.route('/admin')
 def admin():
-    if not session.get("user"):
-        return redirect(url_for("login"))
+    check_admin()
 
     return render_template("admin/dashboard.html")
 
 
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
 def get_testimonials():
+    check_admin()
+
     if request.method == "POST":
         testimonials = list(mongo.db.testimonials.find())
 
@@ -150,6 +157,15 @@ def get_testimonials():
     approved = list(mongo.db.testimonials.find({"approved": True}))
     unapproved = list(mongo.db.testimonials.find({"approved": False}))
     return render_template("admin/testimonials.html", approved=approved, unapproved=unapproved)
+
+
+@app.route('/admin/delete_testimonial/<id>')
+def delete_testimonial(id):
+    check_admin()
+
+    mongo.db.testimonials.remove({"_id": ObjectId(id)})
+    flash("Testimonial was successfully deleted")
+    return redirect(url_for("get_testimonials"))
 
 
 @app.route('/admin/login', methods=["GET", "POST"])

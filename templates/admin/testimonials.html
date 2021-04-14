@@ -29,7 +29,7 @@
                             <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]" name="approved[{{ post._id }}]">
                             <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
                         </div>
-                        <a href="" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                        <a href="{{ url_for('delete_testimonial', id=post._id) }}" class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
                     </div>
                 </li>
             {% endfor %}
@@ -49,7 +49,7 @@
                             <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]" name="approved[{{ post._id }}]" checked>
                             <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
                         </div>
-                        <a href="" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                        <a href="{{ url_for('delete_testimonial', id=post._id) }}" class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
                     </div>
                 </li>
             {% endfor %}
