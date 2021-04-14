@@ -19,6 +19,24 @@
 </head>
 
 <body class="body-login text-center">
+    <!-- flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3 w-75" style="z-index: 5">
+                {% for message in messages %}
+                    <div class="d-flex w-100 toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <span class="m-auto px-2">
+                            <i class="bi bi-bell-fill"></i>
+                        </span>
+                        <div class="toast-body">
+                            <h4>{{ message }}</h4>
+                        </div>
+                        <a href="" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"><i class="bi bi-x-circle"></i></a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
     <main class="form-signin">
         <form method="POST" action="{{ url_for('login') }}">
             <h1 class="text-center">{&pi;}</h1>
@@ -29,11 +47,19 @@
                 <label for="floatingInput">Username</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+                <input type="password" class="form-control" id="floatingPassword" name="password"
+                    placeholder="Password">
                 <label for="floatingPassword">Password</label>
             </div>
             <button class="w-100 btn btn-lg btn-accent" type="submit">Sign in</button>
         </form>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 </body>
+
 </html>

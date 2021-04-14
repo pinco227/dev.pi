@@ -126,7 +126,6 @@ def contact():
 @app.route('/admin')
 def admin():
     if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
         return redirect(url_for("login"))
 
     return render_template("admin/dashboard.html")
