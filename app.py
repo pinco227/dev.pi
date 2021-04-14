@@ -155,6 +155,13 @@ def logout():
     return redirect(url_for("home"))
 
 
+@app.route('/admin/testimonials', methods=['GET', 'POST'])
+def get_testimonials():
+    approved = list(mongo.db.testimonials.find({"approved": True}))
+    unapproved = list(mongo.db.testimonials.find({"approved": False}))
+    return render_template("admin/testimonials.html", approved=approved, unapproved=unapproved)
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),

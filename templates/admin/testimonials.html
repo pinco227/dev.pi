@@ -1,0 +1,48 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<section id="get_testimonials">
+    <h2>Testimonials</h2>
+    <div class="card">
+        <div class="card-header">
+            Unapproved
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for post in unapproved %}
+                <li class="list-group-item d-flex">
+                    <div class="w-100">
+                        "{{ post.text }}" <br>
+                        <small class="text-muted">by <strong>{{ post.author }}</strong> ({{ post.role }})</small>
+                    </div>
+                    <div class="controls d-flex align-items-baseline">
+                        <div class="form-check form-switch me-3">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Approved</label>
+                        </div>
+                        <a href="" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="card-header">
+            Approved
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for post in approved %}
+                <li class="list-group-item d-flex">
+                    <div class="w-100">
+                        "{{ post.text }}" <br>
+                        <small class="text-muted">by <strong>{{ post.author }}</strong> ({{ post.role }})</small>
+                    </div>
+                    <div class="controls d-flex align-items-baseline">
+                        <div class="form-check form-switch me-3">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Approved</label>
+                        </div>
+                        <a href="" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock content %}

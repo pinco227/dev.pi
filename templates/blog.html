@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-Blog
+- Blog
 {% endblock title %}
 {% block content %}
 <!-- Blogs SECTION -->
@@ -26,7 +26,7 @@ Blog
     <div class="container-xl">
         {% include "inc/breadcrumbs.html" %}
         <div class="row row-cols-1">
-        {% for blog in blogs %}
+            {% for blog in blogs %}
             <div class="col">
                 <div class="card card-blogs">
                     <div class="row">
@@ -40,13 +40,14 @@ Blog
                                 <p class="card-text"><small class="text-muted">{{ blog.added_on }}</small></p>
                             </div>
                             <div class="card-footer text-end">
-                                <a href="{{ url_for('get_post', post=blog.slug) }}" class="btn btn-sm btn-accent bg-accent">Read More ...</a>
+                                <a href="{{ url_for('get_post', post=blog.slug) }}"
+                                    class="btn btn-sm btn-accent bg-accent">Read More ...</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
         </div>
     </div>
     </div>
