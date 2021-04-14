@@ -168,6 +168,38 @@ def delete_testimonial(id):
     return redirect(url_for("get_testimonials"))
 
 
+@app.route('/admin/skills', methods=['GET', 'POST'])
+def get_skills():
+    check_admin()
+
+    if request.method == "POST":
+        skills = list(mongo.db.skills.find())
+
+        for skill in skills:
+            updated = {
+                "name": request.form.get("name[{}]".format(skill['_id'])),
+                "percentage": int(request.form.get("percentage[{}]".format(skill['_id'])))
+            }
+            mongo.db.skills.update({"_id": ObjectId(skill['_id'])}, {
+                "$set": updated})
+
+        flash("Skills were successfully updated!")
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_skills"))
+
+    skills = list(mongo.db.skills.find())
+    return render_template("admin/skills.html", skills=skills)
+
+
+@app.route('/admin/delete_skill/<id>')
+def delete_skill(id):
+    check_admin()
+
+    mongo.db.skills.remove({"_id": ObjectId(id)})
+    flash("Skill was successfully deleted")
+    return redirect(url_for("get_skills"))
+
+
 @app.route('/admin/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
