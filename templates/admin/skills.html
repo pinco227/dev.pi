@@ -9,6 +9,11 @@
             <img src="{{ url_for('static', filename='images/skills.svg') }}" alt="Skills" class="section-image">
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <a href="{{ url_for('add_skill') }}" class="btn btn-round btn-success float-end m-4" data-bs-toggle="tooltip" data-bs-placement="left" title="Add new"><i class="bi bi-plus"></i></a>
+        </div>
+    </div>
     <div class="card">
         <form action="{{ url_for('get_skills') }}" method="POST">
         <div class="card-header text-center">

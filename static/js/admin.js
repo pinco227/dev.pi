@@ -34,4 +34,9 @@
         // Sorta magic numbers based on size of the native UI thumb
         bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
     }
+
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    const tooltipList = tooltipTriggerList.map(tooltipTriggerEl => {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    })
 })()

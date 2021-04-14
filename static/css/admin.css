@@ -15,6 +15,20 @@ main {
     max-width: 180px;
 }
 
+/*------------------------------------------ BUTTONS */
+
+.btn-round {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: var(--text-light);
+    text-shadow: -1px -1px rgb(0 0 0 / 40%);
+}
+
 /*------------------------------------------ NAVBAR */
 
 .navbar-brand {

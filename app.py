@@ -123,22 +123,20 @@ def contact():
 
 
 # ADMIN PANEL
-def check_admin():
+@app.route('/admin')
+def admin():
     if not session.get("user"):
         flash("You don't have the user privileges to access this section.")
         return redirect(url_for("login"))
-
-
-@app.route('/admin')
-def admin():
-    check_admin()
 
     return render_template("admin/dashboard.html")
 
 
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
 def get_testimonials():
-    check_admin()
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
 
     if request.method == "POST":
         testimonials = list(mongo.db.testimonials.find())
@@ -161,7 +159,9 @@ def get_testimonials():
 
 @app.route('/admin/delete_testimonial/<id>')
 def delete_testimonial(id):
-    check_admin()
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
 
     mongo.db.testimonials.remove({"_id": ObjectId(id)})
     flash("Testimonial was successfully deleted")
@@ -170,7 +170,9 @@ def delete_testimonial(id):
 
 @app.route('/admin/skills', methods=['GET', 'POST'])
 def get_skills():
-    check_admin()
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
 
     if request.method == "POST":
         skills = list(mongo.db.skills.find())
@@ -193,11 +195,32 @@ def get_skills():
 
 @app.route('/admin/delete_skill/<id>')
 def delete_skill(id):
-    check_admin()
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
 
     mongo.db.skills.remove({"_id": ObjectId(id)})
     flash("Skill was successfully deleted")
     return redirect(url_for("get_skills"))
+
+
+@app.route('/admin/add_skill', methods=["GET", "POST"])
+def add_skill():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        skill = {
+            "name": request.form.get("name"),
+            "percentage": int(request.form.get("percentage"))
+        }
+        mongo.db.skills.insert_one(skill)
+        flash(Markup(
+            "Skill <strong>{}</strong> was successfully Added!".format(skill['name'])))
+        return redirect(url_for("get_skills"))
+
+    return render_template("admin/add_skill.html")
 
 
 @app.route('/admin/login', methods=["GET", "POST"])
