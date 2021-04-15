@@ -279,6 +279,36 @@ def add_link():
     return render_template("admin/add_link.html")
 
 
+@app.route('/admin/settings', methods=["GET", "POST"])
+def settings():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        updated = {
+            "name": request.form.get("name"),
+            "bio": request.form.get("bio"),
+            "status": request.form.get("status"),
+            "availability": request.form.get("availability"),
+            "email": request.form.get("email"),
+            "phone": request.form.get("phone"),
+            "address": request.form.get("address"),
+            "photo": request.form.get("photo"),
+            "cv": request.form.get("cv"),
+            "meta_title": request.form.get("meta_title"),
+            "meta_desc": request.form.get("meta_desc"),
+            "meta_keys": request.form.get("meta_keys")
+        }
+        mongo.db.settings.update({"_id": ObjectId(os.environ.get("DB_SETTINGS_ID"))}, {
+            "$set": updated})
+        flash("Settings were successfully updated!")
+        # Redirect to avoid re-submission
+        return redirect(url_for("settings"))
+
+    return render_template("admin/settings.html")
+
+
 @app.route('/admin/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":

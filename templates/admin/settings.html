@@ -1,0 +1,76 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<section id="settings">
+    <div class="row my-2 align-items-center">
+        <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+            <h1 class="text-start my-2">Settings</h1>
+        </div>
+        <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+            <img src="{{ url_for('static', filename='images/settings.svg') }}" alt="Settings" class="section-image">
+        </div>
+    </div>
+    <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+        <form action="{{ url_for('settings') }}" method="POST">
+            <div class="card-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="name" name="name" value="{{ settings.name }}">
+                    <label for="name">Dev Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" rows="3" id="bio" name="bio"
+                        style="height: 100px;">{{ settings.bio }}</textarea>
+                    <label for="bio">Bio</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="status" name="status" value="{{ settings.status }}">
+                    <label for="status">Status</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="availability" name="availability"
+                        value="{{ settings.availability }}">
+                    <label for="availability">Availability</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="email" name="email" value="{{ settings.email }}">
+                    <label for="email">Email address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ settings.phone }}">
+                    <label for="phone">Phone number</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="address" name="address" value="{{ settings.address }}">
+                    <label for="address">Address</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="photo" name="photo" value="{{ settings.photo }}">
+                    <label for="photo">Photo</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="cv" name="cv" value="{{ settings.cv }}">
+                    <label for="cv">CV</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="meta_title" name="meta_title"
+                        value="{{ settings.meta_title }}">
+                    <label for="meta_title">META Title</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="meta_desc" name="meta_desc"
+                        value="{{ settings.meta_desc }}">
+                    <label for="meta_desc">META Description</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="meta_keys" name="meta_keys"
+                        value="{{ settings.meta_keys }}">
+                    <label for="meta_keys">META Keywords</label>
+                    <small class="text-muted">separated by comma</small>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-lg btn-accent">Update</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock content %}
