@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<section id="add_link">
+    <div class="row my-2 align-items-center">
+        <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+            <h1 class="text-start my-2">Add New Link</h1>
+        </div>
+        <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+            <img src="{{ url_for('static', filename='images/links.svg') }}" alt="Social Links" class="section-image">
+        </div>
+    </div>
+    <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+        <form action="{{ url_for('add_link') }}" method="POST">
+            <div class="card-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="GitHub">
+                    <label for="name">Link name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="url" name="url" placeholder="GitHub">
+                    <label for="url">URL</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="icon" name="icon" placeholder="github">
+                    <label for="icon">Icon</label>
+                    <small class="text-muted"><a href="https://icons.getbootstrap.com/" target="_blank">Bootstrap
+                            Icons</a></small>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-lg btn-accent">Add</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock content %}

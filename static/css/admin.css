@@ -132,6 +132,10 @@ main {
 
 /*------------------------------------------ SKILLS */
 
+/* CREDIT
+* https://css-tricks.com/value-bubbles-for-range-inputs/
+*/
+
 .range-wrap {
     position: relative;
     margin: 0 auto 2rem;

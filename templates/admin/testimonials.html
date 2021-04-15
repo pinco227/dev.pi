@@ -19,12 +19,12 @@
         </div>
         <ul class="list-group list-group-flush">
             {% for post in unapproved %}
-                <li class="list-group-item d-flex">
+                <li class="list-group-item d-flex flex-column flex-sm-row">
                     <div class="w-100">
                         "{{ post.text }}" <br>
                         <small class="text-muted">by <strong>{{ post.author }}</strong> ({{ post.role }})</small>
                     </div>
-                    <div class="controls d-flex align-items-baseline">
+                    <div class="controls d-flex align-items-baseline justify-content-end">
                         <div class="form-check form-switch me-3">
                             <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]" name="approved[{{ post._id }}]">
                             <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
@@ -39,12 +39,12 @@
         </div>
         <ul class="list-group list-group-flush">
             {% for post in approved %}
-                <li class="list-group-item d-flex">
+                <li class="list-group-item d-flex flex-column flex-sm-row">
                     <div class="w-100">
                         "{{ post.text }}" <br>
                         <small class="text-muted">by <strong>{{ post.author }}</strong> ({{ post.role }})</small>
                     </div>
-                    <div class="controls d-flex align-items-baseline">
+                    <div class="controls d-flex align-items-baseline justify-content-end">
                         <div class="form-check form-switch me-3">
                             <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]" name="approved[{{ post._id }}]" checked>
                             <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>

@@ -5,9 +5,9 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
-from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import date
+
 if os.path.exists("env.py"):
     import env
 
@@ -220,6 +220,63 @@ def add_skill():
         return redirect(url_for("get_skills"))
 
     return render_template("admin/add_skill.html")
+
+
+@app.route('/admin/links', methods=['GET', 'POST'])
+def get_links():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        links = list(mongo.db.links.find())
+
+        for link in links:
+            updated = {
+                "name": request.form.get("name[{}]".format(link['_id'])),
+                "icon": request.form.get("icon[{}]".format(link['_id'])),
+                "url": request.form.get("url[{}]".format(link['_id']))
+            }
+            mongo.db.links.update({"_id": ObjectId(link['_id'])}, {
+                "$set": updated})
+
+        flash("Links were successfully updated!")
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_links"))
+
+    links = list(mongo.db.links.find())
+    return render_template("admin/links.html", links=links)
+
+
+@app.route('/admin/delete_link/<id>')
+def delete_link(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    mongo.db.links.remove({"_id": ObjectId(id)})
+    flash("Link was successfully deleted")
+    return redirect(url_for("get_links"))
+
+
+@app.route('/admin/add_link', methods=["GET", "POST"])
+def add_link():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        link = {
+            "name": request.form.get("name"),
+            "icon": request.form.get("icon"),
+            "url": request.form.get("url")
+        }
+        mongo.db.links.insert_one(link)
+        flash(Markup(
+            "Link <strong>{}</strong> was successfully Added!".format(link['name'])))
+        return redirect(url_for("get_links"))
+
+    return render_template("admin/add_link.html")
 
 
 @app.route('/admin/login', methods=["GET", "POST"])
