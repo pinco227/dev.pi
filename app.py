@@ -94,7 +94,6 @@ def get_project(project):
 @register_breadcrumb(app, '.blog', 'Blog')
 def blog():
     blogs = list(mongo.db.blogs.find())
-    # today = date.today().strftime("%B %d, %Y")
     return render_template("blog.html", blogs=blogs)
 
 
@@ -175,6 +174,28 @@ def get_blogs():
 
     blogs = list(mongo.db.blogs.find())
     return render_template("admin/blogs.html", blogs=blogs)
+
+
+@app.route('/admin/add_blog', methods=["GET", "POST"])
+def add_blog():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        blog = {
+            "title": request.form.get("title"),
+            "slug": request.form.get("slug"),
+            "photo": request.form.get("photo"),
+            "body": request.form.get("body"),
+            "added_on": date.today().strftime("%B %d, %Y")
+        }
+        mongo.db.blogs.insert_one(blog)
+        flash(Markup(
+            "Blog <strong>{}</strong> was successfully Added!".format(blog['title'])))
+        return redirect(url_for("get_blogs"))
+
+    return render_template("admin/add_blog.html")
 
 
 @app.route('/admin/skills', methods=['GET', 'POST'])
