@@ -222,6 +222,17 @@ def edit_blog(id):
     return render_template("admin/edit_blog.html", post=post)
 
 
+@app.route('/admin/delete_blog/<id>')
+def delete_blog(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    mongo.db.blogs.remove({"_id": ObjectId(id)})
+    flash("Blog was successfully deleted")
+    return redirect(url_for("get_blogs"))
+
+
 @app.route('/admin/skills', methods=['GET', 'POST'])
 def get_skills():
     if not session.get("user"):

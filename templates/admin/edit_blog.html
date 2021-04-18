@@ -18,7 +18,7 @@
                     <label for="title">Title</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="slug" name="slug" value="{{ post.slug }}">
+                    <input type="text" class="form-control" id="slug" name="slug" value="{{ post.slug }}" disabled>
                     <label for="slug">Slug</label>
                 </div>
                 <div class="form-floating mb-3">
@@ -31,10 +31,14 @@
                     <label for="body">Text</label>
                 </div>
             </div>
-            <div class="card-footer text-center">
+            <div class="card-footer text-center d-flex justify-content-between">
+                <a href="{{ url_for('get_blogs') }}" class="btn btn-lg btn-danger">Cancel</a>
                 <button type="submit" class="btn btn-lg btn-accent">Edit</button>
             </div>
         </form>
     </div>
 </section>
 {% endblock content %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin-blog.js') }}"></script>
+{% endblock scripts %}
