@@ -20,7 +20,8 @@
                     <label for="title">Title</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="slug" name="slug" value="{{ post.slug }}" disabled>
+                    <input type="text" class="form-control" id="slug" name="slug" value="{{ post.slug }}"
+                        readonly="readonly">
                     <label for="slug">Slug</label>
                 </div>
                 <div class="form-floating mb-3">
@@ -42,5 +43,5 @@
 </section>
 {% endblock content %}
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/admin-blog.js') }}"></script>
+<script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
 {% endblock scripts %}

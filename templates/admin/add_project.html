@@ -1,0 +1,62 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<section id="add_project">
+    <div class="row my-2 align-items-center">
+        <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+            <h1 class="text-start my-2">Add New Project</h1>
+        </div>
+        <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+            <img src="{{ url_for('static', filename='images/project.svg') }}" alt="Project" class="section-image">
+        </div>
+    </div>
+    <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+        <form action="{{ url_for('add_project') }}" method="POST">
+            <div class="card-header">
+                <h4 class="text-center">New</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="New Project Title">
+                    <label for="title">Title</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="slug" name="slug" placeholder="new-project-title"
+                        readonly="readonly">
+                    <label for="slug">Slug</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="tech" name="tech" placeholder="HTML, CSS">
+                    <label for="tech">Technologies Used</label>
+                    <small class="text-muted">Separated by comma.</small>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="repo" name="repo"
+                        placeholder="http://www.github.com/...">
+                    <label for="repo">Source code (repository url)</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="live_url" name="live_url"
+                        placeholder="http://www.website.com">
+                    <label for="live_url">Live URL</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" rows="3" id="description" name="description" style="height: 100px;"
+                        placeholder="..."></textarea>
+                    <label for="description">Description</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="photos" name="photos" placeholder="...">
+                    <label for="photos">Photos</label>
+                </div>
+            </div>
+            <div class="card-footer text-center d-flex justify-content-between">
+                <a href="{{ url_for('get_projects') }}" class="btn btn-lg btn-danger">Cancel</a>
+                <button type="submit" class="btn btn-lg btn-accent">Add</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock content %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
+{% endblock scripts %}

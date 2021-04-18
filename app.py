@@ -455,6 +455,30 @@ def get_projects():
     return render_template("admin/projects.html", projects=projects)
 
 
+@app.route('/admin/add_project', methods=["GET", "POST"])
+def add_project():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        project = {
+            "title": request.form.get("title"),
+            "slug": request.form.get("slug"),
+            "tech": request.form.get("tech"),
+            "description": request.form.get("description"),
+            "repo": request.form.get("repo"),
+            "live_url": request.form.get("live_url"),
+            "photos": request.form.get("photos")
+        }
+        mongo.db.projects.insert_one(project)
+        flash(Markup(
+            "Project <strong>{}</strong> was successfully Added!".format(project['title'])))
+        return redirect(url_for("get_projects"))
+
+    return render_template("admin/add_project.html")
+
+
 @app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
