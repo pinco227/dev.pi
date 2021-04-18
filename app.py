@@ -409,6 +409,31 @@ def add_experience():
     return render_template("admin/add_experience.html")
 
 
+@app.route('/admin/edit_experience/<id>', methods=["GET", "POST"])
+def edit_experience(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        updated = {
+            "company": request.form.get("company"),
+            "period": request.form.get("period"),
+            "role": request.form.get("role"),
+            "description": request.form.get("description"),
+            "order": int(request.form.get("order"))
+        }
+        mongo.db.experience.update({"_id": ObjectId(id)}, {
+            "$set": updated})
+        flash(Markup(
+            "Job at <strong>{}</strong> was successfully edited!".format(updated['company'])))
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_experience"))
+
+    job = mongo.db.experience.find_one({"_id": ObjectId(id)})
+    return render_template("admin/edit_experience.html", job=job)
+
+
 @app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
