@@ -445,6 +445,16 @@ def delete_experience(id):
     return redirect(url_for("get_experience"))
 
 
+@app.route('/admin/projects')
+def get_projects():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    projects = list(mongo.db.projects.find())
+    return render_template("admin/projects.html", projects=projects)
+
+
 @app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
