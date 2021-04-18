@@ -42,7 +42,7 @@
                     </div>
                     <div class="controls d-flex flex-column align-items-center justify-content-around ms-4">
                         <a href="#" class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
-                        <a href="#" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ url_for('edit_education', id=school._id) }}" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
                     </div>
                 </li>
             {% endfor %}

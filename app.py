@@ -298,7 +298,7 @@ def get_education():
     if request.method == "POST":
         for school in education:
             mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
-                "$set": {"order": request.form.get("order[{}]".format(school['_id']))}})
+                "$set": {"order": int(request.form.get("order[{}]".format(school['_id'])))}})
 
         flash("Education successfully updated!")
         # Redirect to avoid re-submission
@@ -320,7 +320,7 @@ def add_education():
             "title": request.form.get("title"),
             "department": request.form.get("department"),
             "description": request.form.get("description"),
-            "order": request.form.get("order")
+            "order": int(request.form.get("order"))
         }
         mongo.db.education.insert_one(school)
         flash(Markup(
@@ -328,6 +328,32 @@ def add_education():
         return redirect(url_for("get_education"))
 
     return render_template("admin/add_education.html")
+
+
+@app.route('/admin/edit_education/<id>', methods=["GET", "POST"])
+def edit_education(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        updated = {
+            "school": request.form.get("school"),
+            "period": request.form.get("period"),
+            "title": request.form.get("title"),
+            "department": request.form.get("department"),
+            "description": request.form.get("description"),
+            "order": int(request.form.get("order"))
+        }
+        mongo.db.education.update({"_id": ObjectId(id)}, {
+            "$set": updated})
+        flash(Markup(
+            "School <strong>{}</strong> was successfully edited!".format(updated['school'])))
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_education"))
+
+    school = mongo.db.education.find_one({"_id": ObjectId(id)})
+    return render_template("admin/edit_education.html", school=school)
 
 
 @ app.route('/admin/links', methods=['GET', 'POST'])
