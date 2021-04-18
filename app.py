@@ -367,6 +367,26 @@ def delete_education(id):
     return redirect(url_for("get_education"))
 
 
+@app.route('/admin/experience', methods=["GET", "POST"])
+def get_experience():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    experience = list(mongo.db.experience.find().sort("order", 1))
+
+    if request.method == "POST":
+        for job in experience:
+            mongo.db.experience.update({"_id": ObjectId(job['_id'])}, {
+                "$set": {"order": int(request.form.get("order[{}]".format(job['_id'])))}})
+
+        flash("Work Experience successfully updated!")
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_experience"))
+
+    return render_template("admin/experience.html", experience=experience)
+
+
 @app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
