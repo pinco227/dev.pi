@@ -479,6 +479,33 @@ def add_project():
     return render_template("admin/add_project.html")
 
 
+@app.route('/admin/edit_project/<id>', methods=["GET", "POST"])
+def edit_project(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        updated = {
+            "title": request.form.get("title"),
+            "slug": request.form.get("slug"),
+            "tech": request.form.get("tech"),
+            "description": request.form.get("description"),
+            "repo": request.form.get("repo"),
+            "live_url": request.form.get("live_url"),
+            "photos": request.form.get("photos")
+        }
+        mongo.db.projects.update({"_id": ObjectId(id)}, {
+            "$set": updated})
+        flash(Markup(
+            "Project <strong>{}</strong> was successfully edited!".format(updated['title'])))
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_projects"))
+
+    project = mongo.db.projects.find_one({"_id": ObjectId(id)})
+    return render_template("admin/edit_project.html", project=project)
+
+
 @app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
