@@ -356,7 +356,18 @@ def edit_education(id):
     return render_template("admin/edit_education.html", school=school)
 
 
-@ app.route('/admin/links', methods=['GET', 'POST'])
+@app.route('/admin/delete_education/<id>')
+def delete_education(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    mongo.db.education.remove({"_id": ObjectId(id)})
+    flash("School was successfully deleted")
+    return redirect(url_for("get_education"))
+
+
+@app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
         flash("You don't have the user privileges to access this section.")
