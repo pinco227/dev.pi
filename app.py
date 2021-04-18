@@ -239,9 +239,9 @@ def get_skills():
         flash("You don't have the user privileges to access this section.")
         return redirect(url_for("login"))
 
-    if request.method == "POST":
-        skills = list(mongo.db.skills.find())
+    skills = list(mongo.db.skills.find())
 
+    if request.method == "POST":
         for skill in skills:
             updated = {
                 "name": request.form.get("name[{}]".format(skill['_id'])),
@@ -254,7 +254,6 @@ def get_skills():
         # Redirect to avoid re-submission
         return redirect(url_for("get_skills"))
 
-    skills = list(mongo.db.skills.find())
     return render_template("admin/skills.html", skills=skills)
 
 
@@ -288,15 +287,35 @@ def add_skill():
     return render_template("admin/add_skill.html")
 
 
-@app.route('/admin/links', methods=['GET', 'POST'])
+@app.route('/admin/education', methods=["GET", "POST"])
+def get_education():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    education = list(mongo.db.education.find().sort("order", 1))
+
+    if request.method == "POST":
+        for school in education:
+            mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
+                "$set": {"order": request.form.get("order[{}]".format(school['_id']))}})
+
+        flash("Education successfully updated!")
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_education"))
+
+    return render_template("admin/education.html", education=education)
+
+
+@ app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
         flash("You don't have the user privileges to access this section.")
         return redirect(url_for("login"))
 
-    if request.method == "POST":
-        links = list(mongo.db.links.find())
+    links = list(mongo.db.links.find())
 
+    if request.method == "POST":
         for link in links:
             updated = {
                 "name": request.form.get("name[{}]".format(link['_id'])),
@@ -310,11 +329,10 @@ def get_links():
         # Redirect to avoid re-submission
         return redirect(url_for("get_links"))
 
-    links = list(mongo.db.links.find())
     return render_template("admin/links.html", links=links)
 
 
-@app.route('/admin/delete_link/<id>')
+@ app.route('/admin/delete_link/<id>')
 def delete_link(id):
     if not session.get("user"):
         flash("You don't have the user privileges to access this section.")
@@ -325,7 +343,7 @@ def delete_link(id):
     return redirect(url_for("get_links"))
 
 
-@app.route('/admin/add_link', methods=["GET", "POST"])
+@ app.route('/admin/add_link', methods=["GET", "POST"])
 def add_link():
     if not session.get("user"):
         flash("You don't have the user privileges to access this section.")
@@ -345,7 +363,7 @@ def add_link():
     return render_template("admin/add_link.html")
 
 
-@app.route('/admin/settings', methods=["GET", "POST"])
+@ app.route('/admin/settings', methods=["GET", "POST"])
 def settings():
     if not session.get("user"):
         flash("You don't have the user privileges to access this section.")
@@ -375,7 +393,7 @@ def settings():
     return render_template("admin/settings.html")
 
 
-@app.route('/admin/login', methods=["GET", "POST"])
+@ app.route('/admin/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         if request.form.get("username").lower() == os.environ.get("ADMIN_USERNAME").lower() and request.form.get("password") == os.environ.get("ADMIN_PASSWORD"):
@@ -390,7 +408,7 @@ def login():
     return render_template("admin/login.html")
 
 
-@app.route("/admin/logout")
+@ app.route("/admin/logout")
 def logout():
     if session.get("user"):
         session.pop("user")
