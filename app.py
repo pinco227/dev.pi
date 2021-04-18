@@ -167,6 +167,16 @@ def delete_testimonial(id):
     return redirect(url_for("get_testimonials"))
 
 
+@app.route('/admin/blogs')
+def get_blogs():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    blogs = list(mongo.db.blogs.find())
+    return render_template("admin/blogs.html", blogs=blogs)
+
+
 @app.route('/admin/skills', methods=['GET', 'POST'])
 def get_skills():
     if not session.get("user"):
