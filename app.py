@@ -198,6 +198,30 @@ def add_blog():
     return render_template("admin/add_blog.html")
 
 
+@app.route('/admin/edit_blog/<id>', methods=["GET", "POST"])
+def edit_blog(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        updated = {
+            "title": request.form.get("title"),
+            "slug": request.form.get("slug"),
+            "photo": request.form.get("photo"),
+            "body": request.form.get("body")
+        }
+        mongo.db.blogs.update({"_id": ObjectId(id)}, {
+            "$set": updated})
+        flash(Markup(
+            "Blog <strong>{}</strong> was successfully edited!".format(updated['title'])))
+        # Redirect to avoid re-submission
+        return redirect(url_for("get_blogs"))
+
+    post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
+    return render_template("admin/edit_blog.html", post=post)
+
+
 @app.route('/admin/skills', methods=['GET', 'POST'])
 def get_skills():
     if not session.get("user"):
