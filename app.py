@@ -434,6 +434,17 @@ def edit_experience(id):
     return render_template("admin/edit_experience.html", job=job)
 
 
+@app.route('/admin/delete_experience/<id>')
+def delete_experience(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    mongo.db.experience.remove({"_id": ObjectId(id)})
+    flash("Job was successfully deleted")
+    return redirect(url_for("get_experience"))
+
+
 @app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
