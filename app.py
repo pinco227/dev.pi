@@ -506,6 +506,17 @@ def edit_project(id):
     return render_template("admin/edit_project.html", project=project)
 
 
+@app.route('/admin/delete_project/<id>')
+def delete_project(id):
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    mongo.db.projects.remove({"_id": ObjectId(id)})
+    flash("Project was successfully deleted")
+    return redirect(url_for("get_projects"))
+
+
 @app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
     if not session.get("user"):
