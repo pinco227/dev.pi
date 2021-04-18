@@ -42,8 +42,8 @@ def context_processor():
 @register_breadcrumb(app, '.', 'Home')
 def home():
     skills = list(mongo.db.skills.find())
-    education = list(mongo.db.education.find())
-    experience = list(mongo.db.experience.find())
+    education = list(mongo.db.education.find().sort("order", 1))
+    experience = list(mongo.db.experience.find().sort("order", 1))
     testimonials = list(mongo.db.testimonials.find({"approved": True}))
     return render_template("landing.html", skills=skills, education=education, experience=experience, testimonials=testimonials)
 
@@ -305,6 +305,29 @@ def get_education():
         return redirect(url_for("get_education"))
 
     return render_template("admin/education.html", education=education)
+
+
+@app.route('/admin/add_education', methods=["GET", "POST"])
+def add_education():
+    if not session.get("user"):
+        flash("You don't have the user privileges to access this section.")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        school = {
+            "school": request.form.get("school"),
+            "period": request.form.get("period"),
+            "title": request.form.get("title"),
+            "department": request.form.get("department"),
+            "description": request.form.get("description"),
+            "order": request.form.get("order")
+        }
+        mongo.db.education.insert_one(school)
+        flash(Markup(
+            "School <strong>{}</strong> was successfully Added!".format(school['school'])))
+        return redirect(url_for("get_education"))
+
+    return render_template("admin/add_education.html")
 
 
 @ app.route('/admin/links', methods=['GET', 'POST'])

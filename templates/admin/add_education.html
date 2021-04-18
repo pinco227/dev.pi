@@ -1,0 +1,52 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<section id="add_school">
+    <div class="row my-2 align-items-center">
+        <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+            <h1 class="text-start my-2">Add New Education Item</h1>
+        </div>
+        <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+            <img src="{{ url_for('static', filename='images/school.svg') }}" alt="School" class="section-image">
+        </div>
+    </div>
+    <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+        <form action="{{ url_for('add_education') }}" method="POST">
+            <div class="card-header">
+                <h4 class="text-center">New</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="school" name="school" placeholder="School's name">
+                    <label for="school">School</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="period" name="period" placeholder="2005 - 2006">
+                    <label for="period">Period of study</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Diploma in Domain">
+                    <label for="title">Title/Award</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="department" name="department"
+                        placeholder="Department of Engineering">
+                    <label for="department">Department</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" rows="3" id="description" name="description" style="height: 100px;"
+                        placeholder="..."></textarea>
+                    <label for="description">Description</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="order" name="order" placeholder="3">
+                    <label for="order">Sort Order</label>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{{ url_for('get_education') }}" class="btn btn-lg btn-danger">Cancel</a>
+                <button type="submit" class="btn btn-lg btn-accent">Add</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock content %}
