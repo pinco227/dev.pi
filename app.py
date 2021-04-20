@@ -1,7 +1,7 @@
 import os
 from flask import (
     Flask, flash, render_template,
-    redirect, request, session, url_for, Markup)
+    redirect, request, session, url_for, Markup, send_from_directory)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
@@ -11,7 +11,6 @@ from datetime import date
 if os.path.exists("env.py"):
     import env
 
-
 app = Flask(__name__)
 
 # Initialize Flask-Breadcrumbs
@@ -20,6 +19,9 @@ Breadcrumbs(app=app)
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+app.config['UPLOAD_PATH'] = 'uploads'
+app.config['UPLOAD_EXTENSIONS'] = [
+    '.txt', '.doc', '.docx', '.pdf', '.png', '.jpg', '.jpeg', '.gif']
 
 mongo = PyMongo(app)
 
@@ -35,6 +37,12 @@ def context_processor():
         {"_id": ObjectId('606a3310d5c7c22eeee180f6')})
     links = list(mongo.db.links.find())
     return dict(settings=settings, links=links)
+
+
+@app.route('/uploads/<filename>')
+def uploads(filename):
+    return send_from_directory(app.config['UPLOAD_PATH'],
+                               filename)
 
 
 @app.route("/home")
@@ -196,10 +204,19 @@ def add_blog():
         return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
+        uploaded_file = request.files['photo']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
+                uploaded_file.save(os.path.join(
+                    app.config['UPLOAD_PATH'], filename))
+            else:
+                flash("Uploaded file not supported!")
         blog = {
             "title": request.form.get("title"),
             "slug": request.form.get("slug"),
-            "photo": request.form.get("photo"),
+            "photo": filename,
             "body": request.form.get("body"),
             "added_on": date.today().strftime("%B %d, %Y")
         }

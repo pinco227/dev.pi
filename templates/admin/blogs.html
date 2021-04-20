@@ -11,7 +11,8 @@
     </div>
     <div class="row">
         <div class="col">
-            <a href="{{ url_for('add_blog') }}" class="btn btn-round btn-success float-end m-4" data-bs-toggle="tooltip" data-bs-placement="left" title="Add new"><i class="bi bi-plus"></i></a>
+            <a href="{{ url_for('add_blog') }}" class="btn btn-round btn-success float-end m-4" data-bs-toggle="tooltip"
+                data-bs-placement="left" title="Add new"><i class="bi bi-plus"></i></a>
         </div>
     </div>
     <div class="card">
@@ -20,23 +21,28 @@
         </div>
         <ul class="list-group list-group-flush">
             {% for blog in blogs %}
-                <li class="list-group-item d-flex justify-content-between">
-                    <div class="row w-100 align-items-center">
-                        <div class="col-6 offset-3 col-sm-2 offset-sm-0">
-                            <img src="{{ blog.photo }}" alt="{{ blog.title }}" class="img-fluid">
-                        </div>
-                        <div class="col-12 col-sm-10">
-                            <h3 class="text-start">{{ blog.title }}</h3>
-                            <span class="fst-italic">{{ blog.slug }}</span>
-                            <small class="text-muted">{{ blog.added_on }}</small>
-                            <p class="pt-2 fw-light">{{ blog.body|truncate(250) }}</p>
-                        </div>
+            <li class="list-group-item d-flex justify-content-between">
+                <div class="row w-100 align-items-center">
+                    {% if blog.photo|length %}
+                    <div class="col-6 offset-3 col-sm-2 offset-sm-0">
+                        <img src="{{ url_for('uploads', filename=blog.photo) }}" alt="{{ blog.title }}"
+                            class="img-fluid">
                     </div>
-                    <div class="controls d-flex flex-column align-items-center justify-content-around ms-4">
-                        <a href="{{ url_for('delete_blog', id=blog._id) }}" class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
-                        <a href="{{ url_for('edit_blog', id=blog._id) }}" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
+                    {% endif %}
+                    <div class="col-12 col-sm-10">
+                        <h3 class="text-start">{{ blog.title }}</h3>
+                        <span class="fst-italic">{{ blog.slug }}</span>
+                        <small class="text-muted">{{ blog.added_on }}</small>
+                        <p class="pt-2 fw-light">{{ blog.body|truncate(250) }}</p>
                     </div>
-                </li>
+                </div>
+                <div class="controls d-flex flex-column align-items-center justify-content-around ms-4">
+                    <a href="{{ url_for('delete_blog', id=blog._id) }}" class="btn btn-sm btn-danger confirm"><i
+                            class="bi bi-trash"></i></a>
+                    <a href="{{ url_for('edit_blog', id=blog._id) }}" class="btn btn-sm btn-light"><i
+                            class="bi bi-pencil"></i></a>
+                </div>
+            </li>
             {% endfor %}
         </ul>
         <div class="card-footer"></div>

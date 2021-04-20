@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-        <form action="{{ url_for('add_blog') }}" method="POST">
+        <form action="{{ url_for('add_blog') }}" method="POST" enctype="multipart/form-data">
             <div class="card-header">
                 <h4 class="text-center">New</h4>
             </div>
@@ -24,9 +24,9 @@
                         readonly="readonly">
                     <label for="slug">Slug</label>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="photo" name="photo" placeholder="...">
-                    <label for="photo">Photo</label>
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Photo</label>
+                    <input class="form-control" id="photo" name="photo" type="file">
                 </div>
                 <div class="form-floating mb-3">
                     <textarea class="form-control" rows="3" id="body" name="body" style="height: 100px;"
