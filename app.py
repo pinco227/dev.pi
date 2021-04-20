@@ -122,19 +122,35 @@ def contact():
 
 
 # ADMIN PANEL
+def askLogin(flash_message=False):
+    """Check if user is logged in and sends a flash message if not
+
+    Args:
+        flash_message (bool, optional): Message to be sent via Flash. If left empty then no message is sent. Defaults to False.
+
+    Returns:
+        [bool]: False if it doesn't require login
+        [function]: redirect function to login route if not logged in
+    """
+    if not session.get("user"):
+        flash(flash_message) if flash_message else None
+        return redirect(url_for("login"))
+    else:
+        return False
+
+
 @app.route('/admin')
 def admin():
-    if not session.get("user"):
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin()
 
     return render_template("admin/dashboard.html")
 
 
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
 def get_testimonials():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         testimonials = list(mongo.db.testimonials.find())
@@ -157,9 +173,8 @@ def get_testimonials():
 
 @app.route('/admin/delete_testimonial/<id>')
 def delete_testimonial(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     mongo.db.testimonials.remove({"_id": ObjectId(id)})
     flash("Testimonial was successfully deleted")
@@ -168,9 +183,8 @@ def delete_testimonial(id):
 
 @app.route('/admin/blogs')
 def get_blogs():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     blogs = list(mongo.db.blogs.find())
     return render_template("admin/blogs.html", blogs=blogs)
@@ -178,9 +192,8 @@ def get_blogs():
 
 @app.route('/admin/add_blog', methods=["GET", "POST"])
 def add_blog():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         blog = {
@@ -200,9 +213,8 @@ def add_blog():
 
 @app.route('/admin/edit_blog/<id>', methods=["GET", "POST"])
 def edit_blog(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         updated = {
@@ -224,9 +236,8 @@ def edit_blog(id):
 
 @app.route('/admin/delete_blog/<id>')
 def delete_blog(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     mongo.db.blogs.remove({"_id": ObjectId(id)})
     flash("Blog was successfully deleted")
@@ -235,9 +246,8 @@ def delete_blog(id):
 
 @app.route('/admin/skills', methods=['GET', 'POST'])
 def get_skills():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     skills = list(mongo.db.skills.find())
 
@@ -259,9 +269,8 @@ def get_skills():
 
 @app.route('/admin/delete_skill/<id>')
 def delete_skill(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     mongo.db.skills.remove({"_id": ObjectId(id)})
     flash("Skill was successfully deleted")
@@ -270,9 +279,8 @@ def delete_skill(id):
 
 @app.route('/admin/add_skill', methods=["GET", "POST"])
 def add_skill():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         skill = {
@@ -289,9 +297,8 @@ def add_skill():
 
 @app.route('/admin/education', methods=["GET", "POST"])
 def get_education():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     education = list(mongo.db.education.find().sort("order", 1))
 
@@ -309,9 +316,8 @@ def get_education():
 
 @app.route('/admin/add_education', methods=["GET", "POST"])
 def add_education():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         school = {
@@ -332,9 +338,8 @@ def add_education():
 
 @app.route('/admin/edit_education/<id>', methods=["GET", "POST"])
 def edit_education(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         updated = {
@@ -358,9 +363,8 @@ def edit_education(id):
 
 @app.route('/admin/delete_education/<id>')
 def delete_education(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     mongo.db.education.remove({"_id": ObjectId(id)})
     flash("School was successfully deleted")
@@ -369,9 +373,8 @@ def delete_education(id):
 
 @app.route('/admin/experience', methods=["GET", "POST"])
 def get_experience():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     experience = list(mongo.db.experience.find().sort("order", 1))
 
@@ -389,9 +392,8 @@ def get_experience():
 
 @app.route('/admin/add_experience', methods=["GET", "POST"])
 def add_experience():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         job = {
@@ -411,9 +413,8 @@ def add_experience():
 
 @app.route('/admin/edit_experience/<id>', methods=["GET", "POST"])
 def edit_experience(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         updated = {
@@ -436,9 +437,8 @@ def edit_experience(id):
 
 @app.route('/admin/delete_experience/<id>')
 def delete_experience(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     mongo.db.experience.remove({"_id": ObjectId(id)})
     flash("Job was successfully deleted")
@@ -447,9 +447,8 @@ def delete_experience(id):
 
 @app.route('/admin/projects')
 def get_projects():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     projects = list(mongo.db.projects.find())
     return render_template("admin/projects.html", projects=projects)
@@ -457,9 +456,8 @@ def get_projects():
 
 @app.route('/admin/add_project', methods=["GET", "POST"])
 def add_project():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         project = {
@@ -481,9 +479,8 @@ def add_project():
 
 @app.route('/admin/edit_project/<id>', methods=["GET", "POST"])
 def edit_project(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         updated = {
@@ -508,9 +505,8 @@ def edit_project(id):
 
 @app.route('/admin/delete_project/<id>')
 def delete_project(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     mongo.db.projects.remove({"_id": ObjectId(id)})
     flash("Project was successfully deleted")
@@ -519,9 +515,8 @@ def delete_project(id):
 
 @app.route('/admin/links', methods=['GET', 'POST'])
 def get_links():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     links = list(mongo.db.links.find())
 
@@ -544,9 +539,8 @@ def get_links():
 
 @ app.route('/admin/delete_link/<id>')
 def delete_link(id):
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     mongo.db.links.remove({"_id": ObjectId(id)})
     flash("Link was successfully deleted")
@@ -555,9 +549,8 @@ def delete_link(id):
 
 @ app.route('/admin/add_link', methods=["GET", "POST"])
 def add_link():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         link = {
@@ -575,9 +568,8 @@ def add_link():
 
 @ app.route('/admin/settings', methods=["GET", "POST"])
 def settings():
-    if not session.get("user"):
-        flash("You don't have the user privileges to access this section.")
-        return redirect(url_for("login"))
+    if askLogin():
+        return askLogin("You don't have the user privileges to access this section.")
 
     if request.method == "POST":
         updated = {
