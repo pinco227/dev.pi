@@ -5,8 +5,8 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
-from werkzeug.utils import secure_filename
 from datetime import date
+import random
 
 if os.path.exists("env.py"):
     import env
@@ -205,10 +205,13 @@ def add_blog():
 
     if request.method == "POST":
         uploaded_file = request.files['photo']
-        filename = secure_filename(uploaded_file.filename)
-        if filename != '':
-            file_ext = os.path.splitext(filename)[1]
+        filename = ''
+        if uploaded_file.filename != '':
+            new_filename = request.form.get(
+                "slug")[:25] + str(random.randint(1111, 9999))
+            file_ext = os.path.splitext(uploaded_file.filename)[1]
             if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
+                filename = new_filename + file_ext.lower()
                 uploaded_file.save(os.path.join(
                     app.config['UPLOAD_PATH'], filename))
             else:
@@ -255,6 +258,10 @@ def edit_blog(id):
 def delete_blog(id):
     if askLogin():
         return askLogin("You don't have the user privileges to access this section.")
+
+    post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
+    if post["photo"].strip() and os.path.exists(os.path.join("uploads", post["photo"])):
+        os.remove(os.path.join("uploads", post["photo"]))
 
     mongo.db.blogs.remove({"_id": ObjectId(id)})
     flash("Blog was successfully deleted")
