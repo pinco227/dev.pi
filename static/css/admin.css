@@ -21,6 +21,14 @@ main {
     background-color: var(--accent-light);
 }
 
+.toast-body a {
+    color: var(--main-bg-color);
+}
+
+.toast-body a:hover {
+    color: var(--text-light);
+}
+
 /*------------------------------------------ BUTTONS */
 
 .btn-round {

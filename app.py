@@ -22,6 +22,7 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 app.config['UPLOAD_PATH'] = 'uploads'
 app.config['UPLOAD_EXTENSIONS'] = [
     '.txt', '.doc', '.docx', '.pdf', '.png', '.jpg', '.jpeg', '.gif']
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 
 mongo = PyMongo(app)
 
@@ -37,6 +38,14 @@ def context_processor():
         {"_id": ObjectId('606a3310d5c7c22eeee180f6')})
     links = list(mongo.db.links.find())
     return dict(settings=settings, links=links)
+
+
+@app.errorhandler(413)
+def too_large(e):
+    flash(Markup('''<strong>Sorry!</strong> File is to large. <br>
+            <small>use <a href="https://tinypng.com/" target="_blank">TinyPNG</a> to compress and/or
+            <a href="https://photoshop.adobe.com/resize" target="_blank">Photoshop Express</a> to resize.</small>'''))
+    return redirect('/admin/' + request.url.split("/").pop()), 413
 
 
 @app.route('/uploads/<filename>')
@@ -216,6 +225,7 @@ def add_blog():
                     app.config['UPLOAD_PATH'], filename))
             else:
                 flash("Uploaded file not supported!")
+
         blog = {
             "title": request.form.get("title"),
             "slug": request.form.get("slug"),
