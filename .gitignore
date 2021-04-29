@@ -1,3 +1,4 @@
 env.py
 uploads/*
+!uploads/.gitkeep 
 __pycache__/

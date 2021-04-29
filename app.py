@@ -46,7 +46,7 @@ def too_large(e):
     flash(Markup('''<strong>Sorry!</strong> File is to large. <br>
             <small>use <a href="https://tinypng.com/" target="_blank">TinyPNG</a> to compress and/or
             <a href="https://photoshop.adobe.com/resize" target="_blank">Photoshop Express</a> to resize.</small>'''))
-    return redirect('/admin/' + request.url.split("/").pop()), 413
+    return redirect(request.url), 413
 
 
 @app.route('/uploads/<filename>')
