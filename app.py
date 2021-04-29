@@ -244,6 +244,7 @@ def add_blog():
 @app.route('/admin/edit_blog/<id>', methods=["GET", "POST"])
 @login_required("You don't have the user privileges to access this section.")
 def edit_blog(id):
+    post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
     if request.method == "POST":
         if 'blog-data' in request.form:
             updated = {
@@ -251,16 +252,43 @@ def edit_blog(id):
                 "slug": request.form.get("slug"),
                 "body": request.form.get("body")
             }
+            flash(Markup(
+                "Blog <strong>{}</strong> was successfully edited!".format(updated['title'])))
         elif 'blog-photo' in request.form:
-            updated = {}
+            uploaded_file = request.files['photo']
+            filename = ''
+            if uploaded_file.filename != '':
+                new_filename = post["slug"][:25] + \
+                    str(random.randint(1111, 9999))
+                file_ext = os.path.splitext(uploaded_file.filename)[1]
+                if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
+                    # remove current photo
+                    if post["photo"].strip() and os.path.exists(os.path.join("uploads", post["photo"])):
+                        os.remove(os.path.join("uploads", post["photo"]))
+                    filename = new_filename + file_ext.lower()
+                    uploaded_file.save(os.path.join(
+                        app.config['UPLOAD_PATH'], filename))
+                else:
+                    flash("Uploaded file not supported!")
+            else:
+                # remove current photo
+                if post["photo"].strip() and os.path.exists(os.path.join("uploads", post["photo"])):
+                    os.remove(os.path.join("uploads", post["photo"]))
+
+            updated = {
+                "photo": filename
+            }
+            flash(Markup(
+                "Blog <strong>{}</strong> was successfully edited!".format(post['title'])))
+        else:
+            flash("Something went wrong!")
+            return redirect(url_for("get_blogs"))
+
         mongo.db.blogs.update({"_id": ObjectId(id)}, {
             "$set": updated})
-        flash(Markup(
-            "Blog <strong>{}</strong> was successfully edited!".format(updated['title'])))
         # Redirect to avoid re-submission
         return redirect(url_for("get_blogs"))
 
-    post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
     return render_template("admin/edit_blog.html", post=post)
 
 

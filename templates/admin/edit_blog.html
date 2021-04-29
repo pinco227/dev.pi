@@ -9,36 +9,60 @@
             <img src="{{ url_for('static', filename='images/post.svg') }}" alt="Blog Post" class="section-image">
         </div>
     </div>
-    <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-        <form action="{{ url_for('edit_blog', id=post._id) }}" method="POST">
-            <div class="card-header">
-                <h4 class="text-center">Edit</h4>
+    <div class="row g-4">
+        <div class="col-md-7">
+            <div class="card">
+                <form action="{{ url_for('edit_blog', id=post._id) }}" method="POST">
+                    <div class="card-header">
+                        <h4 class="text-center">Edit</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}">
+                            <label for="title">Title</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="slug" name="slug" value="{{ post.slug }}"
+                                readonly="readonly">
+                            <label for="slug">Slug</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" rows="3" id="body" name="body"
+                                style="height: 100px;">{{ post.body }}</textarea>
+                            <label for="body">Text</label>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center d-flex justify-content-between">
+                        <a href="{{ url_for('get_blogs') }}" class="btn btn-lg btn-danger">Cancel</a>
+                        <button type="submit" name="blog-data" class="btn btn-lg btn-accent confirm">Update</button>
+                    </div>
+                </form>
             </div>
-            <div class="card-body">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}">
-                    <label for="title">Title</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="slug" name="slug" value="{{ post.slug }}"
-                        readonly="readonly">
-                    <label for="slug">Slug</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="photo" name="photo" value="{{ post.photo }}">
-                    <label for="photo">Photo</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <textarea class="form-control" rows="3" id="body" name="body"
-                        style="height: 100px;">{{ post.body }}</textarea>
-                    <label for="body">Text</label>
-                </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <form action="{{ url_for('edit_blog', id=post._id) }}" method="POST" enctype="multipart/form-data">
+                    <div class="card-header">
+                        <h4 class="text-center">Photo</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if post.photo|length %}
+                            <label for="current-photo">Current Photo:</label>
+                            <img class="img-thumbnail w-50" src="{{ url_for('uploads', filename=post.photo) }}" alt="{{ post.title }}">
+                        {% else %}
+                            <label>No Photo</label>
+                        {% endif %}
+                        <div class="mb-3">
+                            <label for="photo" class="form-label">New Photo</label>
+                            <input class="form-control" id="photo" name="photo" type="file">
+                        </div>
+                    </div>
+                    <div class="card-footer text-center d-flex justify-content-between">
+                        <button type="submit" name="blog-photo" class="btn btn-lg btn-accent confirm">Submit</button>
+                    </div>
+                </form>
             </div>
-            <div class="card-footer text-center d-flex justify-content-between">
-                <a href="{{ url_for('get_blogs') }}" class="btn btn-lg btn-danger">Cancel</a>
-                <button type="submit" class="btn btn-lg btn-accent confirm">Update</button>
-            </div>
-        </form>
+        </div>
     </div>
 </section>
 {% endblock content %}
