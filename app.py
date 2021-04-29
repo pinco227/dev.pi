@@ -5,6 +5,7 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
+from functools import wraps
 from datetime import date
 import random
 
@@ -29,10 +30,10 @@ mongo = PyMongo(app)
 
 @app.context_processor
 def context_processor():
-    """Inject settings variable to all templates
+    """Inject settings and links variables to all templates
 
     Returns:
-        dict: settings db collection
+        dict: settings and links db collections
     """
     settings = mongo.db.settings.find_one(
         {"_id": ObjectId('606a3310d5c7c22eeee180f6')})
@@ -139,36 +140,41 @@ def contact():
 
 
 # ADMIN PANEL
-def askLogin(flash_message=False):
-    """Check if user is logged in and sends a flash message if not
+def login_required(flash_message=False):
+    """Function decorator to check for login
 
     Args:
         flash_message (bool, optional): Message to be sent via Flash. If left empty then no message is sent. Defaults to False.
-
-    Returns:
-        [bool]: False if it doesn't require login
-        [function]: redirect function to login route if not logged in
     """
-    if not session.get("user"):
-        flash(flash_message) if flash_message else None
-        return redirect(url_for("login"))
-    else:
-        return False
+    def inner_function(f):
+        """Wrapper function in order to get argument into decorator
+
+        Args:
+            f (function): Decorated function
+
+        Returns:
+            function: Function after being decorated
+        """
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not session.get("user"):
+                flash(flash_message) if flash_message else None
+                return redirect(url_for("login"))
+            else:
+                return f(*args, **kwargs)
+        return decorated_function
+    return inner_function
 
 
 @app.route('/admin')
+@login_required()
 def admin():
-    if askLogin():
-        return askLogin()
-
     return render_template("admin/dashboard.html")
 
 
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
+@login_required("You don't have the user privileges to access this section.")
 def get_testimonials():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         testimonials = list(mongo.db.testimonials.find())
 
@@ -189,29 +195,23 @@ def get_testimonials():
 
 
 @app.route('/admin/delete_testimonial/<id>')
+@login_required("You don't have the user privileges to access this section.")
 def delete_testimonial(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     mongo.db.testimonials.remove({"_id": ObjectId(id)})
     flash("Testimonial was successfully deleted")
     return redirect(url_for("get_testimonials"))
 
 
 @app.route('/admin/blogs')
+@login_required("You don't have the user privileges to access this section.")
 def get_blogs():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     blogs = list(mongo.db.blogs.find())
     return render_template("admin/blogs.html", blogs=blogs)
 
 
 @app.route('/admin/add_blog', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def add_blog():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         uploaded_file = request.files['photo']
         filename = ''
@@ -242,17 +242,17 @@ def add_blog():
 
 
 @app.route('/admin/edit_blog/<id>', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def edit_blog(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
-        updated = {
-            "title": request.form.get("title"),
-            "slug": request.form.get("slug"),
-            "photo": request.form.get("photo"),
-            "body": request.form.get("body")
-        }
+        if 'blog-data' in request.form:
+            updated = {
+                "title": request.form.get("title"),
+                "slug": request.form.get("slug"),
+                "body": request.form.get("body")
+            }
+        elif 'blog-photo' in request.form:
+            updated = {}
         mongo.db.blogs.update({"_id": ObjectId(id)}, {
             "$set": updated})
         flash(Markup(
@@ -265,10 +265,8 @@ def edit_blog(id):
 
 
 @app.route('/admin/delete_blog/<id>')
+@login_required("You don't have the user privileges to access this section.")
 def delete_blog(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
     if post["photo"].strip() and os.path.exists(os.path.join("uploads", post["photo"])):
         os.remove(os.path.join("uploads", post["photo"]))
@@ -279,10 +277,8 @@ def delete_blog(id):
 
 
 @app.route('/admin/skills', methods=['GET', 'POST'])
+@login_required("You don't have the user privileges to access this section.")
 def get_skills():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     skills = list(mongo.db.skills.find())
 
     if request.method == "POST":
@@ -302,20 +298,16 @@ def get_skills():
 
 
 @app.route('/admin/delete_skill/<id>')
+@login_required("You don't have the user privileges to access this section.")
 def delete_skill(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     mongo.db.skills.remove({"_id": ObjectId(id)})
     flash("Skill was successfully deleted")
     return redirect(url_for("get_skills"))
 
 
 @app.route('/admin/add_skill', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def add_skill():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         skill = {
             "name": request.form.get("name"),
@@ -330,10 +322,8 @@ def add_skill():
 
 
 @app.route('/admin/education', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def get_education():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     education = list(mongo.db.education.find().sort("order", 1))
 
     if request.method == "POST":
@@ -349,10 +339,8 @@ def get_education():
 
 
 @app.route('/admin/add_education', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def add_education():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         school = {
             "school": request.form.get("school"),
@@ -371,10 +359,8 @@ def add_education():
 
 
 @app.route('/admin/edit_education/<id>', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def edit_education(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         updated = {
             "school": request.form.get("school"),
@@ -396,20 +382,16 @@ def edit_education(id):
 
 
 @app.route('/admin/delete_education/<id>')
+@login_required("You don't have the user privileges to access this section.")
 def delete_education(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     mongo.db.education.remove({"_id": ObjectId(id)})
     flash("School was successfully deleted")
     return redirect(url_for("get_education"))
 
 
 @app.route('/admin/experience', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def get_experience():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     experience = list(mongo.db.experience.find().sort("order", 1))
 
     if request.method == "POST":
@@ -425,10 +407,8 @@ def get_experience():
 
 
 @app.route('/admin/add_experience', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def add_experience():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         job = {
             "company": request.form.get("company"),
@@ -446,10 +426,8 @@ def add_experience():
 
 
 @app.route('/admin/edit_experience/<id>', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def edit_experience(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         updated = {
             "company": request.form.get("company"),
@@ -470,29 +448,23 @@ def edit_experience(id):
 
 
 @app.route('/admin/delete_experience/<id>')
+@login_required("You don't have the user privileges to access this section.")
 def delete_experience(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     mongo.db.experience.remove({"_id": ObjectId(id)})
     flash("Job was successfully deleted")
     return redirect(url_for("get_experience"))
 
 
 @app.route('/admin/projects')
+@login_required("You don't have the user privileges to access this section.")
 def get_projects():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     projects = list(mongo.db.projects.find())
     return render_template("admin/projects.html", projects=projects)
 
 
 @app.route('/admin/add_project', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def add_project():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         project = {
             "title": request.form.get("title"),
@@ -512,10 +484,8 @@ def add_project():
 
 
 @app.route('/admin/edit_project/<id>', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def edit_project(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         updated = {
             "title": request.form.get("title"),
@@ -538,20 +508,16 @@ def edit_project(id):
 
 
 @app.route('/admin/delete_project/<id>')
+@login_required("You don't have the user privileges to access this section.")
 def delete_project(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     mongo.db.projects.remove({"_id": ObjectId(id)})
     flash("Project was successfully deleted")
     return redirect(url_for("get_projects"))
 
 
 @app.route('/admin/links', methods=['GET', 'POST'])
+@login_required("You don't have the user privileges to access this section.")
 def get_links():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     links = list(mongo.db.links.find())
 
     if request.method == "POST":
@@ -572,20 +538,16 @@ def get_links():
 
 
 @ app.route('/admin/delete_link/<id>')
+@login_required("You don't have the user privileges to access this section.")
 def delete_link(id):
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     mongo.db.links.remove({"_id": ObjectId(id)})
     flash("Link was successfully deleted")
     return redirect(url_for("get_links"))
 
 
 @ app.route('/admin/add_link', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def add_link():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         link = {
             "name": request.form.get("name"),
@@ -601,10 +563,8 @@ def add_link():
 
 
 @ app.route('/admin/settings', methods=["GET", "POST"])
+@login_required("You don't have the user privileges to access this section.")
 def settings():
-    if askLogin():
-        return askLogin("You don't have the user privileges to access this section.")
-
     if request.method == "POST":
         updated = {
             "name": request.form.get("name"),
