@@ -1,7 +1,7 @@
 import os
 from flask import (
     Flask, flash, render_template,
-    redirect, request, session, url_for, Markup, send_from_directory)
+    redirect, request, session, url_for, Markup, send_from_directory, jsonify, make_response)
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
@@ -175,7 +175,31 @@ def admin():
 @app.route('/admin/photos', methods=['PATCH', 'DELETE'])
 @login_required()
 def photos():
-    return 'ok', 200
+    if request.method == "DELETE":
+        if {"collection", "docid"}.issubset(request.args):
+            coll = request.args.get('collection')
+            doc_id = request.args.get('docid')
+            photo_key = request.args.get(
+                'photokey') if 'photokey' in request.args else 0
+
+            coll_dict = mongo.db[coll].find_one({"_id": ObjectId(doc_id)})
+            photos = coll_dict["photos"].split(',')
+            photo = photos[int(photo_key)].strip()
+
+            del photos[int(photo_key)]
+            new_db_photos = ','.join(photos)
+            updated_coll = {
+                "photos": new_db_photos
+            }
+            mongo.db[coll].update({"_id": ObjectId(doc_id)}, {
+                "$set": updated_coll})
+
+            if photo and os.path.exists(os.path.join("uploads", photo)):
+                os.remove(os.path.join("uploads", photo))
+
+            return make_response(jsonify({"message": f"Photo {photo} successfully deleted!"}), 200)
+
+    return
 
 
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
@@ -235,7 +259,7 @@ def add_blog():
         blog = {
             "title": request.form.get("title"),
             "slug": request.form.get("slug"),
-            "photo": filename,
+            "photos": filename,
             "body": request.form.get("body"),
             "added_on": date.today().strftime("%B %d, %Y")
         }
@@ -269,8 +293,9 @@ def edit_blog(id):
                 file_ext = os.path.splitext(uploaded_file.filename)[1]
                 if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
                     # remove current photo
-                    if post["photo"].strip() and os.path.exists(os.path.join("uploads", post["photo"])):
-                        os.remove(os.path.join("uploads", post["photo"]))
+                    if post["photos"].strip() and os.path.exists(os.path.join("uploads", post["photos"].strip())):
+                        os.remove(os.path.join(
+                            "uploads", post["photos"].strip()))
                     filename = new_filename + file_ext.lower()
                     uploaded_file.save(os.path.join(
                         app.config['UPLOAD_PATH'], filename))
@@ -278,11 +303,11 @@ def edit_blog(id):
                     flash("Uploaded file not supported!")
             else:
                 # remove current photo
-                if post["photo"].strip() and os.path.exists(os.path.join("uploads", post["photo"])):
-                    os.remove(os.path.join("uploads", post["photo"]))
+                if post["photos"].strip() and os.path.exists(os.path.join("uploads", post["photos"].strip())):
+                    os.remove(os.path.join("uploads", post["photos"].strip()))
 
             updated = {
-                "photo": filename
+                "photos": filename
             }
             flash(Markup(
                 "Blog <strong>{}</strong> was successfully edited!".format(post['title'])))
@@ -302,8 +327,8 @@ def edit_blog(id):
 @login_required("You don't have the user privileges to access this section.")
 def delete_blog(id):
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
-    if post["photo"].strip() and os.path.exists(os.path.join("uploads", post["photo"])):
-        os.remove(os.path.join("uploads", post["photo"]))
+    if post["photos"].strip() and os.path.exists(os.path.join("uploads", post["photos"].strip())):
+        os.remove(os.path.join("uploads", post["photos"].strip()))
 
     mongo.db.blogs.remove({"_id": ObjectId(id)})
     flash("Blog was successfully deleted")

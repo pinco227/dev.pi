@@ -23,9 +23,9 @@
             {% for blog in blogs %}
             <li class="list-group-item d-flex justify-content-between">
                 <div class="row w-100 align-items-center">
-                    {% if blog.photo|length %}
+                    {% if blog.photos|length %}
                     <div class="col-6 offset-3 col-sm-2 offset-sm-0">
-                        <img src="{{ url_for('uploads', filename=blog.photo) }}" alt="{{ blog.title }}"
+                        <img src="{{ url_for('uploads', filename=blog.photos) }}" alt="{{ blog.title }}"
                             class="img-fluid">
                     </div>
                     {% endif %}

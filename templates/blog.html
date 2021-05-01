@@ -30,9 +30,9 @@
             <div class="col">
                 <div class="card card-blogs">
                     <div class="row">
-                        {% if blog.photo|length %}
+                        {% if blog.photos|length %}
                             <div class="col-12 col-md-4 text-center">
-                                <img src="{{ url_for('uploads', filename=blog.photo) }}" alt="{{ blog.title }}"
+                                <img src="{{ url_for('uploads', filename=blog.photos) }}" alt="{{ blog.title }}"
                                     class="img-fluid">
                             </div>
                         {% endif %}
