@@ -43,10 +43,10 @@ def context_processor():
 
 @app.errorhandler(413)
 def too_large(e):
-    flash(Markup('''<strong>Sorry!</strong> File is to large. <br>
-            <small>use <a href="https://tinypng.com/" target="_blank">TinyPNG</a> to compress and/or
-            <a href="https://photoshop.adobe.com/resize" target="_blank">Photoshop Express</a> to resize.</small>'''))
-    return redirect(request.url), 413
+    # flash(Markup('''<strong>Sorry!</strong> File is to large. <br>
+    #         <small>use <a href="https://tinypng.com/" target="_blank">TinyPNG</a> to compress and/or
+    #         <a href="https://photoshop.adobe.com/resize" target="_blank">Photoshop Express</a> to resize.</small>'''))
+    return "Sorry! File is to large.", 413
 
 
 @app.route('/uploads/<filename>')
@@ -172,6 +172,12 @@ def admin():
     return render_template("admin/dashboard.html")
 
 
+@app.route('/admin/photos', methods=['PATCH', 'DELETE'])
+@login_required()
+def photos():
+    return 'ok', 200
+
+
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
 @login_required("You don't have the user privileges to access this section.")
 def get_testimonials():
@@ -224,7 +230,7 @@ def add_blog():
                 uploaded_file.save(os.path.join(
                     app.config['UPLOAD_PATH'], filename))
             else:
-                flash("Uploaded file not supported!")
+                return "Invalid image", 400
 
         blog = {
             "title": request.form.get("title"),
