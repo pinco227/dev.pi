@@ -209,7 +209,7 @@ def get_testimonials():
         testimonials = list(mongo.db.testimonials.find())
 
         for testimonial in testimonials:
-            if request.form.get("approved[{}]".format(testimonial['_id'])):
+            if request.form.get(f"approved[{testimonial['_id']}]"):
                 is_approved = True
             else:
                 is_approved = False
@@ -265,14 +265,14 @@ def add_blog():
         }
         mongo.db.blogs.insert_one(blog)
         flash(Markup(
-            "Blog <strong>{}</strong> was successfully Added!".format(blog['title'])))
+            f"Blog <strong>{blog['title']}</strong> was successfully Added!"))
         return redirect(url_for("get_blogs"))
 
     return render_template("admin/add_blog.html")
 
 
-@app.route('/admin/edit_blog/<id>', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/edit_blog/<id>', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def edit_blog(id):
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
     if request.method == "POST":
@@ -283,7 +283,7 @@ def edit_blog(id):
                 "body": request.form.get("body")
             }
             flash(Markup(
-                "Blog <strong>{}</strong> was successfully edited!".format(updated['title'])))
+                f"Blog <strong>{updated['title']}</strong> was successfully edited!"))
         elif 'blog-photo' in request.form:
             uploaded_file = request.files['photo']
             filename = ''
@@ -310,7 +310,7 @@ def edit_blog(id):
                 "photos": filename
             }
             flash(Markup(
-                "Blog <strong>{}</strong> was successfully edited!".format(post['title'])))
+                f"Blog <strong>{post['title']}</strong> was successfully edited!"))
         else:
             flash("Something went wrong!")
             return redirect(url_for("get_blogs"))
@@ -323,8 +323,8 @@ def edit_blog(id):
     return render_template("admin/edit_blog.html", post=post)
 
 
-@app.route('/admin/delete_blog/<id>')
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/delete_blog/<id>')
+@ login_required("You don't have the user privileges to access this section.")
 def delete_blog(id):
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
     if post["photos"].strip() and os.path.exists(os.path.join("uploads", post["photos"].strip())):
@@ -335,16 +335,16 @@ def delete_blog(id):
     return redirect(url_for("get_blogs"))
 
 
-@app.route('/admin/skills', methods=['GET', 'POST'])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/skills', methods=['GET', 'POST'])
+@ login_required("You don't have the user privileges to access this section.")
 def get_skills():
     skills = list(mongo.db.skills.find())
 
     if request.method == "POST":
         for skill in skills:
             updated = {
-                "name": request.form.get("name[{}]".format(skill['_id'])),
-                "percentage": int(request.form.get("percentage[{}]".format(skill['_id'])))
+                "name": request.form.get(f"name[{skill['_id']}]"),
+                "percentage": int(request.form.get(f"percentage[{skill['_id']}]"))
             }
             mongo.db.skills.update({"_id": ObjectId(skill['_id'])}, {
                 "$set": updated})
@@ -356,16 +356,16 @@ def get_skills():
     return render_template("admin/skills.html", skills=skills)
 
 
-@app.route('/admin/delete_skill/<id>')
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/delete_skill/<id>')
+@ login_required("You don't have the user privileges to access this section.")
 def delete_skill(id):
     mongo.db.skills.remove({"_id": ObjectId(id)})
     flash("Skill was successfully deleted")
     return redirect(url_for("get_skills"))
 
 
-@app.route('/admin/add_skill', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/add_skill', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def add_skill():
     if request.method == "POST":
         skill = {
@@ -374,21 +374,21 @@ def add_skill():
         }
         mongo.db.skills.insert_one(skill)
         flash(Markup(
-            "Skill <strong>{}</strong> was successfully Added!".format(skill['name'])))
+            f"Skill <strong>{skill['name']}</strong> was successfully Added!"))
         return redirect(url_for("get_skills"))
 
     return render_template("admin/add_skill.html")
 
 
-@app.route('/admin/education', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/education', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def get_education():
     education = list(mongo.db.education.find().sort("order", 1))
 
     if request.method == "POST":
         for school in education:
             mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
-                "$set": {"order": int(request.form.get("order[{}]".format(school['_id'])))}})
+                "$set": {"order": int(request.form.get(f"order[{school['_id']}]"))}})
 
         flash("Education successfully updated!")
         # Redirect to avoid re-submission
@@ -397,8 +397,8 @@ def get_education():
     return render_template("admin/education.html", education=education)
 
 
-@app.route('/admin/add_education', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/add_education', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def add_education():
     if request.method == "POST":
         school = {
@@ -411,14 +411,14 @@ def add_education():
         }
         mongo.db.education.insert_one(school)
         flash(Markup(
-            "School <strong>{}</strong> was successfully Added!".format(school['school'])))
+            f"School <strong>{school['school']}</strong> was successfully Added!"))
         return redirect(url_for("get_education"))
 
     return render_template("admin/add_education.html")
 
 
-@app.route('/admin/edit_education/<id>', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/edit_education/<id>', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def edit_education(id):
     if request.method == "POST":
         updated = {
@@ -432,7 +432,7 @@ def edit_education(id):
         mongo.db.education.update({"_id": ObjectId(id)}, {
             "$set": updated})
         flash(Markup(
-            "School <strong>{}</strong> was successfully edited!".format(updated['school'])))
+            f"School <strong>{updated['school']}</strong> was successfully edited!"))
         # Redirect to avoid re-submission
         return redirect(url_for("get_education"))
 
@@ -440,23 +440,23 @@ def edit_education(id):
     return render_template("admin/edit_education.html", school=school)
 
 
-@app.route('/admin/delete_education/<id>')
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/delete_education/<id>')
+@ login_required("You don't have the user privileges to access this section.")
 def delete_education(id):
     mongo.db.education.remove({"_id": ObjectId(id)})
     flash("School was successfully deleted")
     return redirect(url_for("get_education"))
 
 
-@app.route('/admin/experience', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/experience', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def get_experience():
     experience = list(mongo.db.experience.find().sort("order", 1))
 
     if request.method == "POST":
         for job in experience:
             mongo.db.experience.update({"_id": ObjectId(job['_id'])}, {
-                "$set": {"order": int(request.form.get("order[{}]".format(job['_id'])))}})
+                "$set": {"order": int(request.form.get(f"order[{job['_id']}]"))}})
 
         flash("Work Experience successfully updated!")
         # Redirect to avoid re-submission
@@ -465,8 +465,8 @@ def get_experience():
     return render_template("admin/experience.html", experience=experience)
 
 
-@app.route('/admin/add_experience', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/add_experience', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def add_experience():
     if request.method == "POST":
         job = {
@@ -478,14 +478,14 @@ def add_experience():
         }
         mongo.db.experience.insert_one(job)
         flash(Markup(
-            "Job at <strong>{}</strong> was successfully Added!".format(job['company'])))
+            f"Job at <strong>{job['company']}</strong> was successfully Added!"))
         return redirect(url_for("get_experience"))
 
     return render_template("admin/add_experience.html")
 
 
-@app.route('/admin/edit_experience/<id>', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/edit_experience/<id>', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def edit_experience(id):
     if request.method == "POST":
         updated = {
@@ -498,7 +498,7 @@ def edit_experience(id):
         mongo.db.experience.update({"_id": ObjectId(id)}, {
             "$set": updated})
         flash(Markup(
-            "Job at <strong>{}</strong> was successfully edited!".format(updated['company'])))
+            f"Job at <strong>{updated['company']}</strong> was successfully edited!"))
         # Redirect to avoid re-submission
         return redirect(url_for("get_experience"))
 
@@ -506,23 +506,23 @@ def edit_experience(id):
     return render_template("admin/edit_experience.html", job=job)
 
 
-@app.route('/admin/delete_experience/<id>')
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/delete_experience/<id>')
+@ login_required("You don't have the user privileges to access this section.")
 def delete_experience(id):
     mongo.db.experience.remove({"_id": ObjectId(id)})
     flash("Job was successfully deleted")
     return redirect(url_for("get_experience"))
 
 
-@app.route('/admin/projects')
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/projects')
+@ login_required("You don't have the user privileges to access this section.")
 def get_projects():
     projects = list(mongo.db.projects.find())
     return render_template("admin/projects.html", projects=projects)
 
 
-@app.route('/admin/add_project', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/add_project', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def add_project():
     if request.method == "POST":
         project = {
@@ -536,14 +536,14 @@ def add_project():
         }
         mongo.db.projects.insert_one(project)
         flash(Markup(
-            "Project <strong>{}</strong> was successfully Added!".format(project['title'])))
+            f"Project <strong>{project['title']}</strong> was successfully Added!"))
         return redirect(url_for("get_projects"))
 
     return render_template("admin/add_project.html")
 
 
-@app.route('/admin/edit_project/<id>', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/edit_project/<id>', methods=["GET", "POST"])
+@ login_required("You don't have the user privileges to access this section.")
 def edit_project(id):
     if request.method == "POST":
         updated = {
@@ -558,7 +558,7 @@ def edit_project(id):
         mongo.db.projects.update({"_id": ObjectId(id)}, {
             "$set": updated})
         flash(Markup(
-            "Project <strong>{}</strong> was successfully edited!".format(updated['title'])))
+            f"Project <strong>{updated['title']}</strong> was successfully edited!"))
         # Redirect to avoid re-submission
         return redirect(url_for("get_projects"))
 
@@ -566,25 +566,25 @@ def edit_project(id):
     return render_template("admin/edit_project.html", project=project)
 
 
-@app.route('/admin/delete_project/<id>')
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/delete_project/<id>')
+@ login_required("You don't have the user privileges to access this section.")
 def delete_project(id):
     mongo.db.projects.remove({"_id": ObjectId(id)})
     flash("Project was successfully deleted")
     return redirect(url_for("get_projects"))
 
 
-@app.route('/admin/links', methods=['GET', 'POST'])
-@login_required("You don't have the user privileges to access this section.")
+@ app.route('/admin/links', methods=['GET', 'POST'])
+@ login_required("You don't have the user privileges to access this section.")
 def get_links():
     links = list(mongo.db.links.find())
 
     if request.method == "POST":
         for link in links:
             updated = {
-                "name": request.form.get("name[{}]".format(link['_id'])),
-                "icon": request.form.get("icon[{}]".format(link['_id'])),
-                "url": request.form.get("url[{}]".format(link['_id']))
+                "name": request.form.get(f"name[{link['_id']}]"),
+                "icon": request.form.get(f"icon[{link['_id']}]"),
+                "url": request.form.get(f"url[{link['_id']}]")
             }
             mongo.db.links.update({"_id": ObjectId(link['_id'])}, {
                 "$set": updated})
@@ -597,7 +597,7 @@ def get_links():
 
 
 @ app.route('/admin/delete_link/<id>')
-@login_required("You don't have the user privileges to access this section.")
+@ login_required("You don't have the user privileges to access this section.")
 def delete_link(id):
     mongo.db.links.remove({"_id": ObjectId(id)})
     flash("Link was successfully deleted")
@@ -605,7 +605,7 @@ def delete_link(id):
 
 
 @ app.route('/admin/add_link', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ login_required("You don't have the user privileges to access this section.")
 def add_link():
     if request.method == "POST":
         link = {
@@ -615,14 +615,14 @@ def add_link():
         }
         mongo.db.links.insert_one(link)
         flash(Markup(
-            "Link <strong>{}</strong> was successfully Added!".format(link['name'])))
+            f"Link <strong>{link['name']}</strong> was successfully Added!"))
         return redirect(url_for("get_links"))
 
     return render_template("admin/add_link.html")
 
 
 @ app.route('/admin/settings', methods=["GET", "POST"])
-@login_required("You don't have the user privileges to access this section.")
+@ login_required("You don't have the user privileges to access this section.")
 def settings():
     if request.method == "POST":
         updated = {
@@ -653,7 +653,7 @@ def login():
     if request.method == "POST":
         if request.form.get("username").lower() == os.environ.get("ADMIN_USERNAME").lower() and request.form.get("password") == os.environ.get("ADMIN_PASSWORD"):
             session["user"] = request.form.get("username").lower()
-            flash("Welcome, {}".format(request.form.get("username")))
+            flash(f"Welcome, {request.form.get('username')}")
             return redirect(url_for("admin"))
         else:
             # username doesn't exist

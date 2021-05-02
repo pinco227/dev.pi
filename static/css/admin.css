@@ -179,3 +179,9 @@ main {
     top: -1px;
     left: 50%;
 }
+
+/*------------------------------------------ PHOTO EDIT */
+
+.photo-container .btn {
+    margin-top: -4rem;
+}
