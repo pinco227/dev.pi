@@ -26,6 +26,7 @@
         });
     };
 
+    // Declare used variables
     const dropArea = document.getElementById('drop-area');
     const fileElem = document.getElementById('drop-file-elem');
     const urlForPhotos = document.getElementById('url-for-photos').value;
@@ -55,6 +56,9 @@
         dropArea.classList.remove('highlight');
     }
 
+    /**
+    * Function called when drop area is clicked and it triggers click on the file input.
+    */
     const handleClick = () => {
         fileElem.click();
     }
@@ -71,6 +75,11 @@
         handleFiles(files);
     }
 
+    /**
+    * Handles a set of files by calling Upload function for each.
+    * If the drag&drop area is not set to multiple, then an ajax DELETE request is sent to delete the current file.
+    * @param {obj} files - files object.
+    */
     const handleFiles = (files) => {
         if (dropArea.dataset.multiple == "true") {
             ([...files]).forEach(uploadFile);
@@ -89,7 +98,11 @@
         }
     }
 
-    function uploadFile(file) {
+    /**
+    * Uploads a file element by sending at through an PATCH ajax call to a python route
+    * @param {obj} file - file object.
+    */
+    const uploadFile = (file) => {
         const url = urlForPhotos + "?collection=" + collection + "&docid=" + docId;
         const formData = new FormData();
 
@@ -119,6 +132,8 @@
         }
     }
 
+    // Event Delegation for dynamic created elements
+    // Click event listener for file delete button
     document.getElementById("gallery").addEventListener('click', (e) => {
         if (e.target && e.target.classList.contains('delete-photo')) {
             e.preventDefault();
@@ -134,21 +149,22 @@
         }
     });
 
+    // Drag&Drop event listeners
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, preventDefaults, false);
     });
-
     ['dragenter', 'dragover'].forEach(eventName => {
         dropArea.addEventListener(eventName, highlight, false);
     });
-
     ['dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, unhighlight, false);
     });
-
     dropArea.addEventListener('drop', handleDrop, false);
+
+    // Click on the drag&drop area event listener
     dropArea.addEventListener('click', handleClick, false);
 
+    // File input change event listener
     fileElem.onchange = () => {
         handleFiles(fileElem.files);
     };

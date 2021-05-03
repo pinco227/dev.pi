@@ -1,4 +1,4 @@
-(function () {
+(() => {
     /** 
     * Prevents event's default action if is not confirmed by user.
     * @param {obj} e - Event
@@ -15,6 +15,7 @@
         item.addEventListener('click', confirmIt, false);
     });
 
+    // Make value bubble for range inputs
     // CREDIT: https://css-tricks.com/value-bubbles-for-range-inputs/
     const allRanges = document.querySelectorAll(".range-wrap");
     allRanges.forEach(wrap => {
@@ -27,7 +28,12 @@
         setBubble(range, bubble);
     });
 
-    function setBubble(range, bubble) {
+    /**
+    * Sets the value bubble for the range input.
+    * @param {obj} range - range DOM element
+    * @param {obj} bubble - bubble DOM element
+    */
+    const setBubble = (range, bubble) => {
         const val = range.value;
         const min = range.min ? range.min : 0;
         const max = range.max ? range.max : 100;
