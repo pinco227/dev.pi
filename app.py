@@ -196,7 +196,7 @@ def photos():
 
             if photo and os.path.exists(os.path.join("uploads", photo)):
                 os.remove(os.path.join("uploads", photo))
-                return make_response(jsonify({"message": f"Photo {photo} successfully deleted!"}), 200)
+                return make_response(jsonify({"message": f"File {photo} successfully deleted!"}), 200)
             else:
                 return make_response(jsonify({"message": "Something went wrong!"}), 400)
         elif request.method == "PATCH":
@@ -222,16 +222,18 @@ def photos():
                     response = {
                         "name": uploaded_file.filename,
                         "newName": filename,
-                        "status": "Successfully uploaded",
+                        "message": f"File {uploaded_file.filename} was successfully uploaded",
                         "statusCode": 201
                     }
                 else:
                     response = {
                         "name": uploaded_file.filename,
-                        "status": "Unsupported Media Type",
+                        "message": "Unsupported Media Type!",
                         "statusCode": 415
                     }
                 return make_response(jsonify(response), response["statusCode"])
+            else:
+                return make_response(jsonify({"message": "Invalid file!"}), 400)
     return make_response(jsonify({"message": "error"}), 400)
 
 
