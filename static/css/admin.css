@@ -185,3 +185,20 @@ main {
 .photo-container .btn {
     margin-top: -4rem;
 }
+
+#drop-area {
+    background-color: var(--main-bg-color);
+    border: 2px dashed var(--accent-dark);
+    border-radius: .5rem;
+    width: 100%;
+    padding: 1rem;
+}
+
+#drop-area.highlight {
+    border-color: var(--accent);
+    background-color: var(--text-light);
+}
+
+#drop-file-elem {
+    display: none;
+}

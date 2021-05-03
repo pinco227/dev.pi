@@ -4,7 +4,10 @@
     * @param {obj} e - Event
     */
     const confirmIt = e => {
-        if (!confirm('Are you sure?')) e.preventDefault();
+        if (!confirm('Are you sure?')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
     };
 
     // Confirm action event listener for items with class .confirm
