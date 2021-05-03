@@ -41,40 +41,30 @@
         </div>
         <div class="col-md-5">
             <div class="card">
-                <form action="{{ url_for('edit_blog', id=post._id) }}" method="POST" enctype="multipart/form-data">
-                    <div class="card-header">
-                        <h4 class="text-center">Photo</h4>
-                    </div>
-                    <div class="card-body row justify-content-center g-2">
+                <div class="card-header">
+                    <h4 class="text-center">Photo</h4>
+                </div>
+                <div class="card-body row justify-content-center g-2">
+                    <label for="current-photo">Current Photo:</label>
+                    <div id="gallery">
                         {% if post.photos|length %}
-                            <label for="current-photo">Current Photo:</label>
-                            <div class="photo-container col-sm-4 col-md-6 col-lg-4">
-                                <img class="img-thumbnail" src="{{ url_for('uploads', filename=post.photos) }}" alt="{{ post.title }}">
-                                <a href="#" class="delete-photo confirm btn btn-danger" data-photo-key="0">
-                                    <i class="bi bi-trash-fill"></i>
-                                </a>
-                            </div>
-                        {% else %}
-                            <label>No Current Photo</label>
+                        <div class="photo-container col-sm-4 col-md-6 col-lg-4">
+                            <img class="img-thumbnail" src="{{ url_for('uploads', filename=post.photos) }}" alt="{{ post.title }}">
+                            <button class="delete-photo btn btn-danger" data-photo-key="0">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </div>
                         {% endif %}
-                        <div class="mb-3">
-                            <input type="hidden" id="url-for-photos" value="{{ url_for('photos')}}">
-                            <input type="hidden" id="collection" value="blogs">
-                            <input type="hidden" id="doc-id" value="{{ post._id }}">
-                            <label for="drop-file-elem" class="form-label">New Photo</label>
-                            <noscript>
-                                <input class="form-control" id="drop-file-elem" name="photo" type="file">
-                            </noscript>
-                            <div id="drop-area"></div>
-                            <small>This will replace the current image (if any). Empty submit will simply remove photo.</small>
-                        </div>
                     </div>
-                    <noscript>
-                        <div class="card-footer text-center d-flex justify-content-between">
-                            <button type="submit" name="blog-photo" class="btn btn-lg btn-accent confirm" id="photo-submit">Submit</button>
-                        </div>
-                    </noscript>
-                </form>
+                    <div class="mb-3">
+                        <input type="hidden" id="url-for-photos" value="{{ url_for('photos')}}">
+                        <input type="hidden" id="collection" value="blogs">
+                        <input type="hidden" id="doc-id" value="{{ post._id }}">
+                        <label for="drop-file-elem" class="form-label">New Photo</label>
+                        <div id="drop-area" data-multiple="false"></div>
+                        <small>This will replace the current image (if any). Empty submit will simply remove photo.</small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

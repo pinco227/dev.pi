@@ -67,7 +67,21 @@
     }
 
     const handleFiles = (files) => {
-        ([...files]).forEach(uploadFile);
+        if (dropArea.dataset.multiple == "true") {
+            ([...files]).forEach(uploadFile);
+        } else {
+            if (uploadFile(files[0])) {
+                if (document.querySelectorAll('[data-photo-key]')[0]) {
+                    const delete_url = urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=0";
+                    ajax_call(delete_url, 'DELETE', '', (data, stat) => {
+                        if (stat === 200) {
+                            document.querySelectorAll('[data-photo-key]')[0].parentElement.remove();
+                            console.log(data);
+                        }
+                    });
+                }
+            }
+        }
     }
 
     function uploadFile(file) {
@@ -76,27 +90,43 @@
 
         formData.append('photos', file);
 
-        ajax_call(url, 'PATCH', formData, (data, stat) => {
+        if (ajax_call(url, 'PATCH', formData, (data, stat) => {
             if (stat === 201) {
                 console.log(data);
+                const containerEl = document.getElementById('gallery');
+                const newEl = document.createElement("div");
+                newEl.classList.add("photo-container", "col-sm-4", "col-md-6", "col-lg-4");
+                const existingElCount = document.querySelectorAll(".photo-container").length;
+                newEl.innerHTML = `<img class="img-thumbnail" src="/uploads/${data.newName}" alt="${data.newName}">
+                                    <button href="#" class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>`
+                containerEl.appendChild(newEl);
+                return true;
             } else {
                 console.log(stat);
+                return false
             }
-        });
+        })) {
+            return true
+        } else {
+            return false
+        }
     }
 
-    document.querySelectorAll('.delete-photo').forEach((el) => {
-        el.addEventListener('click', (e) => {
+    document.getElementById("gallery").addEventListener('click', (e) => {
+        if (e.target && e.target.classList.contains('delete-photo')) {
             e.preventDefault();
 
-            const url = urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=" + el.dataset.photoKey;
+            const url = urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=" + e.target.dataset.photoKey;
+            console.log(url);
             ajax_call(url, 'DELETE', '', (data, stat) => {
                 if (stat === 200) {
-                    el.parentElement.remove();
+                    e.target.parentElement.remove();
                     console.log(data);
                 }
             });
-        });
+        }
     });
 
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
