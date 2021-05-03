@@ -27,6 +27,7 @@
     };
 
     const dropArea = document.getElementById('drop-area');
+    const fileElem = document.getElementById('drop-file-elem');
     const urlForPhotos = document.getElementById('url-for-photos').value;
     const collection = document.getElementById('collection').value;
     const docId = document.getElementById('doc-id').value;
@@ -52,6 +53,10 @@
     */
     const unhighlight = () => {
         dropArea.classList.remove('highlight');
+    }
+
+    const handleClick = () => {
+        fileElem.click();
     }
 
     /**
@@ -139,8 +144,12 @@
 
     ['dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, unhighlight, false);
-    })
+    });
 
     dropArea.addEventListener('drop', handleDrop, false);
+    dropArea.addEventListener('click', handleClick, false);
 
+    fileElem.onchange = () => {
+        handleFiles(fileElem.files);
+    };
 })()

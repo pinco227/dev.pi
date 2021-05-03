@@ -192,11 +192,24 @@ main {
     border-radius: .5rem;
     width: 100%;
     padding: 1rem;
+    text-align: center;
+}
+
+#drop-area:hover {
+    cursor: pointer;
+    border-color: var(--accent);
+    background-color: var(--text-light);
 }
 
 #drop-area.highlight {
     border-color: var(--accent);
     background-color: var(--text-light);
+}
+
+#drop-area .bi {
+    display: block;
+    font-size: 2rem;
+    margin: .5rem;
 }
 
 #drop-file-elem {

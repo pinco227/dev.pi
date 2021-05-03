@@ -232,7 +232,6 @@ def photos():
                         "statusCode": 415
                     }
                 return make_response(jsonify(response), response["statusCode"])
-            return make_response(jsonify({"message": "error"}), 400)
     return make_response(jsonify({"message": "error"}), 400)
 
 
