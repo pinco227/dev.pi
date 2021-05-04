@@ -46,7 +46,7 @@ def context_processor():
 
 @app.errorhandler(413)
 def too_large(e):
-    return "Sorry! File is to large.", 413
+    return make_response(jsonify({"message": "File is too large!"}), 413)
 
 
 @app.route('/uploads/<filename>')
@@ -560,6 +560,22 @@ def get_projects():
 @ login_required("You don't have the user privileges to access this section.")
 def add_project():
     if request.method == "POST":
+        uploaded_files = request.files.getlist("photos")
+        files = []
+        for file in uploaded_files:
+            filename = ''
+            if file.filename != '':
+                new_filename = request.form.get(
+                    "slug")[:25] + str(random.randint(1111, 9999))
+                file_ext = os.path.splitext(file.filename)[1]
+                if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
+                    filename = new_filename + file_ext.lower()
+                    file.save(os.path.join(
+                        app.config['UPLOAD_PATH'], filename))
+                    files.append(filename)
+                else:
+                    continue
+
         project = {
             "title": request.form.get("title"),
             "slug": request.form.get("slug"),
@@ -567,7 +583,7 @@ def add_project():
             "description": request.form.get("description"),
             "repo": request.form.get("repo"),
             "live_url": request.form.get("live_url"),
-            "photos": request.form.get("photos")
+            "photos": ','.join(files)
         }
         mongo.db.projects.insert_one(project)
         flash(Markup(
@@ -604,6 +620,12 @@ def edit_project(id):
 @ app.route('/admin/delete_project/<id>')
 @ login_required("You don't have the user privileges to access this section.")
 def delete_project(id):
+    post = mongo.db.projects.find_one({"_id": ObjectId(id)})
+    photos = list(filter(None, post["photos"].split(',')))
+    for photo in photos:
+        if photo and os.path.exists(os.path.join("uploads", photo)):
+            os.remove(os.path.join("uploads", photo))
+
     mongo.db.projects.remove({"_id": ObjectId(id)})
     flash("Project was successfully deleted")
     return redirect(url_for("get_projects"))
