@@ -26,10 +26,15 @@
                         readonly="readonly">
                     <label for="slug">Slug</label>
                 </div>
-                <div class="mb-3">
-                    <label for="photo" class="form-label">Photo</label>
-                    <input class="form-control" id="photo" name="photo" type="file" accept="image/*">
+                <input type="hidden" id="url-for-photos" value="{{ url_for('photos')}}">
+                <input type="hidden" id="collection" value="blogs">
+                <input type="hidden" name="photo-list" id="photo-list">
+                <input type="file" name="photos" id="drop-file-elem" accept="image/*">
+                <div id="drop-area" data-multiple="false">
+                    <i class="bi bi-upload"></i>
+                        Drag&drop files here or click to select...
                 </div>
+                <div id="gallery" class="row"></div>
                 <div class="form-floating mb-3">
                     <textarea class="form-control" rows="3" id="body" name="body" style="height: 100px;"
                         placeholder="..."></textarea>
@@ -37,8 +42,8 @@
                 </div>
             </div>
             <div class="card-footer text-center d-flex justify-content-between">
-                <a href="{{ url_for('get_blogs') }}" class="btn btn-lg btn-danger">Cancel</a>
-                <button type="submit" class="btn btn-lg btn-accent">Add</button>
+                <a href="{{ url_for('get_blogs') }}" class="btn btn-lg btn-danger" id="cancel-form">Cancel</a>
+                <button type="submit" class="btn btn-lg btn-accent" id="submit-form">Add</button>
             </div>
         </form>
     </div>
@@ -46,4 +51,5 @@
 {% endblock content %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
+<script src="{{ url_for('static', filename='js/photos.js') }}"></script>
 {% endblock scripts %}

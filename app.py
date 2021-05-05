@@ -175,50 +175,79 @@ def admin():
 @app.route('/admin/photos', methods=['PATCH', 'DELETE'])
 @login_required()
 def photos():
-    if {"collection", "docid"}.issubset(request.args):
+    if "collection" in request.args:
         coll = request.args.get('collection')
-        doc_id = request.args.get('docid')
-        coll_dict = mongo.db[coll].find_one({"_id": ObjectId(doc_id)})
-        photos = list(filter(None, coll_dict["photos"].split(',')))
 
+        # DELETE request
         if request.method == "DELETE":
-            photo_key = request.args.get(
-                'photokey') if 'photokey' in request.args else 0
-            photo = photos[int(photo_key)].strip()
+            # Check if document id was sent as argument
+            if "docid" in request.args:
+                doc_id = request.args.get('docid')
+                coll_dict = mongo.db[coll].find_one({"_id": ObjectId(doc_id)})
+                photos = list(filter(None, coll_dict["photos"].split(',')))
 
-            del photos[int(photo_key)]
-            new_db_photos = ','.join(photos)
-            updated_coll = {
-                "photos": new_db_photos
-            }
-            mongo.db[coll].update({"_id": ObjectId(doc_id)}, {
-                "$set": updated_coll})
+                # Check if photo key (position starting with 0) was sent as argument and set to 0 if not
+                photo_key = request.args.get(
+                    'photokey') if 'photokey' in request.args else 0
+                photo = photos[int(photo_key)].strip()
 
-            if photo and os.path.exists(os.path.join("uploads", photo)):
-                os.remove(os.path.join("uploads", photo))
-                return make_response(jsonify({"message": f"File {photo} successfully deleted!"}), 200)
+                # Remove file from the list
+                del photos[int(photo_key)]
+                new_db_photos = ','.join(photos)
+                updated_coll = {
+                    "photos": new_db_photos
+                }
+                # Update database with new files list
+                mongo.db[coll].update({"_id": ObjectId(doc_id)}, {
+                    "$set": updated_coll})
+
+                # Check if selected photo exists and delete from server
+                if photo and os.path.exists(os.path.join("uploads", photo)):
+                    os.remove(os.path.join("uploads", photo))
+                    return make_response(jsonify({"message": f"File {photo} successfully deleted!"}), 200)
+                else:
+                    return make_response(jsonify({"message": "Something went wrong!"}), 400)
             else:
-                return make_response(jsonify({"message": "Something went wrong!"}), 400)
+                # Check if file src was sent as argument and delete file from server
+                if ("src" in request.args) and request.args.get('src') and os.path.exists(os.path.join("uploads", request.args.get('src'))):
+                    os.remove(os.path.join("uploads", request.args.get('src')))
+                    return make_response(jsonify({"message": f"File {request.args.get('src')} successfully deleted!"}), 200)
+                else:
+                    return make_response(jsonify({"message": "Something went wrong!"}), 400)
+        # PATCH request
         elif request.method == "PATCH":
             uploaded_file = request.files["photos"]
             response = {}
             filename = ''
             if uploaded_file.filename != '':
-                new_filename = coll_dict["slug"][:25] + \
-                    str(random.randint(1111, 9999))
+                # Check if document id was sent as argument and set filename as truncated slug + random number
+                if "docid" in request.args:
+                    doc_id = request.args.get('docid')
+                    coll_dict = mongo.db[coll].find_one(
+                        {"_id": ObjectId(doc_id)})
+                    new_filename = coll_dict["slug"][:25] + \
+                        str(random.randint(1111, 9999))
+                # Set filename as default collection name + day + month + random number
+                else:
+                    coll_dict = False
+                    new_filename = coll + date.today().strftime("%d%m") + \
+                        str(random.randint(1111, 9999))
                 file_ext = os.path.splitext(uploaded_file.filename)[1]
+                # Check if file extension is allowed
                 if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
                     filename = new_filename + file_ext.lower()
                     uploaded_file.save(os.path.join(
                         app.config['UPLOAD_PATH'], filename))
-                    print(photos)
-                    photos.append(filename)
-                    print(photos)
-                    updated_coll = {
-                        "photos": ','.join(photos) if len(photos) > 1 else photos[0]
-                    }
-                    mongo.db[coll].update({"_id": ObjectId(doc_id)}, {
-                        "$set": updated_coll})
+                    # Check if upload is made for existig db document and update it
+                    if coll_dict:
+                        photos = list(
+                            filter(None, coll_dict["photos"].split(',')))
+                        photos.append(filename)
+                        updated_coll = {
+                            "photos": ','.join(photos) if len(photos) > 1 else photos[0]
+                        }
+                        mongo.db[coll].update({"_id": ObjectId(doc_id)}, {
+                            "$set": updated_coll})
                     response = {
                         "name": uploaded_file.filename,
                         "newName": filename,
@@ -278,23 +307,10 @@ def get_blogs():
 @login_required("You don't have the user privileges to access this section.")
 def add_blog():
     if request.method == "POST":
-        uploaded_file = request.files['photo']
-        filename = ''
-        if uploaded_file.filename != '':
-            new_filename = request.form.get(
-                "slug")[:25] + str(random.randint(1111, 9999))
-            file_ext = os.path.splitext(uploaded_file.filename)[1]
-            if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
-                filename = new_filename + file_ext.lower()
-                uploaded_file.save(os.path.join(
-                    app.config['UPLOAD_PATH'], filename))
-            else:
-                return "Invalid image", 400
-
         blog = {
             "title": request.form.get("title"),
             "slug": request.form.get("slug"),
-            "photos": filename,
+            "photos": request.form.get("photo-list"),
             "body": request.form.get("body"),
             "added_on": date.today().strftime("%B %d, %Y")
         }

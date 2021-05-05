@@ -26,11 +26,13 @@ const ajax_call = async (url, method, body, callback) => {
 };
 
 // Declare used variables
+const formElement = document.getElementById('dropzoneForm');
+let formSubmitted = false;
 const dropArea = document.getElementById('drop-area');
 const fileElem = document.getElementById('drop-file-elem');
 const urlForPhotos = document.getElementById('url-for-photos').value;
 const collection = document.getElementById('collection').value;
-const docId = document.getElementById('doc-id').value;
+const docId = document.getElementById('doc-id') ? document.getElementById('doc-id').value : 0;
 
 /** 
 * Prevents default action for the event in which was called.
@@ -53,6 +55,18 @@ const highlight = () => {
 */
 const unhighlight = () => {
     dropArea.classList.remove('highlight');
+}
+
+/**
+* Updates the hidden input with uploaded filenames list.
+*/
+const fileListUpdate = () => {
+    const fileListInput = document.getElementById('photo-list');
+    const fileList = [];
+    document.querySelectorAll('.photo-container').forEach(el => {
+        fileList.push(el.dataset.src);
+    });
+    fileListInput.value = fileList.join(',');
 }
 
 /**
@@ -87,7 +101,8 @@ const handleFiles = (files) => {
         if (document.querySelectorAll('[data-photo-key]')[0]) {
             if (confirm('Are you sure?\r\n This will replace the current file!')) {
                 if (uploadFile(files[0])) {
-                    const delete_url = urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=0";
+                    const delete_url = docId ? urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=0" :
+                        urlForPhotos + "?collection=" + collection + "&src=" + document.querySelectorAll('[data-photo-key]')[0].parentElement.dataset.src;
                     ajax_call(delete_url, 'DELETE', '', (data, stat) => {
                         if (stat === 200) {
                             document.querySelectorAll('[data-photo-key]')[0].parentElement.remove();
@@ -109,22 +124,27 @@ const handleFiles = (files) => {
 * @param {obj} file - file object.
 */
 const uploadFile = (file) => {
-    const url = urlForPhotos + "?collection=" + collection + "&docid=" + docId;
+    const url = docId ? urlForPhotos + "?collection=" + collection + "&docid=" + docId : urlForPhotos + "?collection=" + collection;
     const formData = new FormData();
 
     formData.append('photos', file);
 
     return ajax_call(url, 'PATCH', formData, (data, stat) => {
         if (stat === 201) {
-            const containerEl = document.getElementById('gallery');
-            const newEl = document.createElement("div");
-            newEl.classList.add("photo-container", "col-sm-4", "col-md-6", "col-lg-4");
-            const existingElCount = document.querySelectorAll(".photo-container").length;
-            newEl.innerHTML = `<img class="img-thumbnail" src="/uploads/${data.newName}" alt="${data.newName}">
-                                    <button href="#" class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
-                                        <i class="bi bi-trash-fill"></i>
-                                    </button>`
-            containerEl.appendChild(newEl);
+            if (document.getElementById('gallery')) {
+                const containerEl = document.getElementById('gallery');
+                const existingElCount = document.querySelectorAll(".photo-container").length;
+                const newEl = Object.assign(document.createElement('div'), {
+                    className: 'photo-container col-sm-4 col-md-6 col-lg-4',
+                    innerHTML: `<img class="img-thumbnail" src="/uploads/${data.newName}" alt="${data.newName}">
+                                        <a href="#" class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>`
+                });
+                newEl.dataset.src = data.newName;
+                containerEl.appendChild(newEl);
+                fileListUpdate();
+            }
             alertToast(data.message);
             return true;
         } else {
@@ -139,17 +159,56 @@ const uploadFile = (file) => {
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-photo') && e.target.dataset.photoKey) {
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
-            const url = urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=" + e.target.dataset.photoKey;
+            const url = docId ? urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=" + e.target.dataset.photoKey :
+                urlForPhotos + "?collection=" + collection + "&src=" + e.target.parentElement.dataset.src;
             console.log(url);
             ajax_call(url, 'DELETE', '', (data, stat) => {
                 if (stat === 200) {
                     e.target.parentElement.remove();
                     alertToast(data.message);
+                    fileListUpdate();
                 }
             });
         }
     }
 });
+
+// Event listener for form submission
+formElement.addEventListener('submit', () => {
+    formSubmitted = true;
+});
+
+// Check if db doc id is set (if is set then page is on an edit form)
+if (!docId) {
+    /**
+    * Delay function
+    * @credit https://www.perimeterx.com/tech-blog/2019/beforeunload-and-unload-events/
+    * @param {number} delay - miliseconds.
+    */
+    const sleep = (delay) => {
+        const start = new Date().getTime();
+        while (new Date().getTime() < start + delay);
+        // TODO: add spinning circle
+    }
+    // Prevent leaving page if any existing uploads (except for submit)
+    window.onbeforeunload = () => {
+        if (document.querySelectorAll('.photo-container').length && !formSubmitted) {
+            return "Are you sure you want to leave?";
+        } else {
+            return;
+        }
+    };
+    // Delete uploaded files on page unload
+    window.onunload = () => {
+        if (document.querySelectorAll('.photo-container').length && !formSubmitted) {
+            document.querySelectorAll('.photo-container').forEach(el => {
+                const url = urlForPhotos + "?collection=" + collection + "&src=" + el.dataset.src;
+                ajax_call(url, 'DELETE', '', () => { });
+            });
+            sleep(2000);
+        }
+    };
+}
 
 // Drag&Drop event listeners
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
