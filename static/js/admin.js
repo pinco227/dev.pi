@@ -9,6 +9,27 @@ const confirmIt = e => {
     }
 };
 
+const showSpinner = () => {
+    const overlay = Object.assign(document.createElement('div'), {
+        id: "spin-overlay"
+    });
+    const spinnerEl = Object.assign(document.createElement('div'), {
+        id: "spinner",
+        className: 'spinner-border',
+        innerHTML: `<span class="visually-hidden">Loading...</span>`
+    });
+    document.body.appendChild(overlay);
+    document.body.appendChild(spinnerEl);
+}
+
+const hideSpinner = () => {
+    const overlay = document.getElementById("spin-overlay");
+    const spinner = document.getElementById("spinner");
+
+    overlay.remove();
+    spinner.remove();
+}
+
 // Confirm action event listener for items with class .confirm
 document.querySelectorAll('.confirm').forEach(item => {
     item.addEventListener('click', confirmIt, false);
@@ -43,7 +64,7 @@ const setBubble = (range, bubble) => {
     bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
 }
 
-const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 const tooltipList = tooltipTriggerList.map(tooltipTriggerEl => {
     return new bootstrap.Tooltip(tooltipTriggerEl);
-})
+});

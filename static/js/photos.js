@@ -154,6 +154,16 @@ const uploadFile = (file) => {
     });
 }
 
+/**
+* Delay function
+* @credit https://www.perimeterx.com/tech-blog/2019/beforeunload-and-unload-events/
+* @param {number} delay - miliseconds.
+*/
+const sleep = (delay) => {
+    const start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+}
+
 // Event Delegation for dynamic created elements
 // Click event listener for file delete button
 document.addEventListener('click', (e) => {
@@ -180,18 +190,10 @@ formElement.addEventListener('submit', () => {
 
 // Check if db doc id is set (if is set then page is on an edit form)
 if (!docId) {
-    /**
-    * Delay function
-    * @credit https://www.perimeterx.com/tech-blog/2019/beforeunload-and-unload-events/
-    * @param {number} delay - miliseconds.
-    */
-    const sleep = (delay) => {
-        const start = new Date().getTime();
-        while (new Date().getTime() < start + delay);
-        // TODO: add spinning circle
-    }
     // Prevent leaving page if any existing uploads (except for submit)
     window.onbeforeunload = () => {
+        showSpinner();
+        setTimeout(() => { hideSpinner() }, 1000); // Only hides the spinner if user cancels unload
         if (document.querySelectorAll('.photo-container').length && !formSubmitted) {
             return "Are you sure you want to leave?";
         } else {
