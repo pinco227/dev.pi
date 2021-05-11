@@ -9,6 +9,9 @@ const confirmIt = e => {
     }
 };
 
+/**
+* Display bootstrap spinner by creating element and appending it to body
+*/
 const showSpinner = () => {
     const overlay = Object.assign(document.createElement('div'), {
         id: "spin-overlay"
@@ -22,12 +25,31 @@ const showSpinner = () => {
     document.body.appendChild(spinnerEl);
 }
 
+/**
+* Hides previously created spinner by removing element
+*/
 const hideSpinner = () => {
     const overlay = document.getElementById("spin-overlay");
     const spinner = document.getElementById("spinner");
 
-    overlay.remove();
-    spinner.remove();
+    if (overlay) overlay.remove();
+    if (spinner) spinner.remove();
+}
+
+/**
+* Sets the value bubble for the range input.
+* @param {obj} range - range DOM element
+* @param {obj} bubble - bubble DOM element
+*/
+const setBubble = (range, bubble) => {
+    const val = range.value;
+    const min = range.min ? range.min : 0;
+    const max = range.max ? range.max : 100;
+    const newVal = Number(((val - min) * 100) / (max - min));
+    bubble.innerHTML = val;
+
+    // Sorta magic numbers based on size of the native UI thumb
+    bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
 }
 
 // Confirm action event listener for items with class .confirm
@@ -48,22 +70,7 @@ allRanges.forEach(wrap => {
     setBubble(range, bubble);
 });
 
-/**
-* Sets the value bubble for the range input.
-* @param {obj} range - range DOM element
-* @param {obj} bubble - bubble DOM element
-*/
-const setBubble = (range, bubble) => {
-    const val = range.value;
-    const min = range.min ? range.min : 0;
-    const max = range.max ? range.max : 100;
-    const newVal = Number(((val - min) * 100) / (max - min));
-    bubble.innerHTML = val;
-
-    // Sorta magic numbers based on size of the native UI thumb
-    bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
-}
-
+// Initialize bootstrap tooltips
 const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 const tooltipList = tooltipTriggerList.map(tooltipTriggerEl => {
     return new bootstrap.Tooltip(tooltipTriggerEl);

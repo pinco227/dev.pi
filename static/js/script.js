@@ -6,11 +6,23 @@ document.querySelectorAll('[data-toggle="offcavas"]').forEach(item => {
     })
 });
 
+// Declare used variables
 const toastContainer = document.querySelectorAll('.toast-container')[0];
 const toastSettings = {
     autohide: true,
     delay: 4000
 };
+
+// Create Botstrap toasts from existing DOM elements
+const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+const toastList = toastElList.map(function (toastEl) {
+    return new bootstrap.Toast(toastEl, toastSettings);
+});
+
+// Show toasts
+toastList.forEach(toast => {
+    toast.show();
+});
 
 /**
 * Creates a new toast element and displays it
@@ -35,13 +47,3 @@ const alertToast = message => {
     const newToast = new bootstrap.Toast(newToastEl, toastSettings);
     newToast.show();
 };
-
-// Create Botstrap toasts from existing DOM elements
-const toastElList = [].slice.call(document.querySelectorAll('.toast'));
-const toastList = toastElList.map(function (toastEl) {
-    return new bootstrap.Toast(toastEl, toastSettings);
-});
-// Show toasts
-toastList.forEach(toast => {
-    toast.show();
-});
