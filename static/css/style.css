@@ -148,6 +148,12 @@ a[data-bs-dismiss="toast"] {
     font-size: 1.5rem;
 }
 
+/*------------------------------------------ IMAGES */
+
+.gallery-item {
+    cursor: zoom-in;
+}
+
 /*------------------------------------------ BUTTONS */
 
 /* HOVER.CSS Grow */
