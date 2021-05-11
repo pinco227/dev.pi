@@ -30,7 +30,7 @@ const formElement = document.getElementById('dropzoneForm');
 let formSubmitted = false;
 const dropArea = document.getElementById('drop-area');
 const fileElem = document.getElementById('drop-file-elem');
-const urlForPhotos = document.getElementById('url-for-photos').value;
+const urlForFiles = document.getElementById('url-for-files').value;
 const collection = document.getElementById('collection').value;
 const docId = document.getElementById('doc-id') ? document.getElementById('doc-id').value : 0;
 
@@ -101,8 +101,8 @@ const handleFiles = (files) => {
         if (document.querySelectorAll('[data-photo-key]')[0]) {
             if (confirm('Are you sure?\r\n This will replace the current file!')) {
                 if (uploadFile(files[0])) {
-                    const delete_url = docId ? urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=0" :
-                        urlForPhotos + "?collection=" + collection + "&src=" + document.querySelectorAll('[data-photo-key]')[0].parentElement.dataset.src;
+                    const delete_url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId + "&photokey=0" :
+                        urlForFiles + "?collection=" + collection + "&src=" + document.querySelectorAll('[data-photo-key]')[0].parentElement.dataset.src;
                     ajax_call(delete_url, 'DELETE', '', (data, stat) => {
                         if (stat === 200) {
                             document.querySelectorAll('[data-photo-key]')[0].parentElement.remove();
@@ -124,10 +124,10 @@ const handleFiles = (files) => {
 * @param {obj} file - file object.
 */
 const uploadFile = (file) => {
-    const url = docId ? urlForPhotos + "?collection=" + collection + "&docid=" + docId : urlForPhotos + "?collection=" + collection;
+    const url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId : urlForFiles + "?collection=" + collection;
     const formData = new FormData();
 
-    formData.append('photos', file);
+    formData.append('files', file);
 
     return ajax_call(url, 'PATCH', formData, (data, stat) => {
         if (stat === 201) {
@@ -169,8 +169,8 @@ const sleep = (delay) => {
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-photo') && e.target.dataset.photoKey) {
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
-            const url = docId ? urlForPhotos + "?collection=" + collection + "&docid=" + docId + "&photokey=" + e.target.dataset.photoKey :
-                urlForPhotos + "?collection=" + collection + "&src=" + e.target.parentElement.dataset.src;
+            const url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId + "&photokey=" + e.target.dataset.photoKey :
+                urlForFiles + "?collection=" + collection + "&src=" + e.target.parentElement.dataset.src;
             console.log(url);
             ajax_call(url, 'DELETE', '', (data, stat) => {
                 if (stat === 200) {
@@ -184,9 +184,12 @@ document.addEventListener('click', (e) => {
 });
 
 // Event listener for form submission
-formElement.addEventListener('submit', () => {
-    formSubmitted = true;
-});
+if (formElement) {
+    formElement.addEventListener('submit', () => {
+        formSubmitted = true;
+        console.log("submitted");
+    });
+}
 
 // Check if db doc id is set (if is set then page is on an edit form)
 if (!docId) {
@@ -204,7 +207,7 @@ if (!docId) {
     window.onunload = () => {
         if (document.querySelectorAll('.photo-container').length && !formSubmitted) {
             document.querySelectorAll('.photo-container').forEach(el => {
-                const url = urlForPhotos + "?collection=" + collection + "&src=" + el.dataset.src;
+                const url = urlForFiles + "?collection=" + collection + "&src=" + el.dataset.src;
                 ajax_call(url, 'DELETE', '', () => { });
             });
             sleep(2000);
@@ -230,4 +233,5 @@ dropArea.addEventListener('click', handleClick, false);
 // File input change event listener
 fileElem.onchange = () => {
     handleFiles(fileElem.files);
+    fileElem.value = "";
 };

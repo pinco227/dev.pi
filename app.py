@@ -172,9 +172,9 @@ def admin():
     return render_template("admin/dashboard.html")
 
 
-@app.route('/admin/photos', methods=['PATCH', 'DELETE'])
+@app.route('/admin/files', methods=['PATCH', 'DELETE'])
 @login_required()
-def photos():
+def files():
     if "collection" in request.args:
         coll = request.args.get('collection')
 
@@ -184,7 +184,7 @@ def photos():
             if "docid" in request.args:
                 doc_id = request.args.get('docid')
                 coll_dict = mongo.db[coll].find_one({"_id": ObjectId(doc_id)})
-                photos = list(filter(None, coll_dict["photos"].split(',')))
+                photos = list(filter(None, coll_dict["files"].split(',')))
 
                 # Check if photo key (position starting with 0) was sent as argument and set to 0 if not
                 photo_key = request.args.get(
@@ -216,7 +216,7 @@ def photos():
                     return make_response(jsonify({"message": "Something went wrong!"}), 400)
         # PATCH request
         elif request.method == "PATCH":
-            uploaded_file = request.files["photos"]
+            uploaded_file = request.files["files"]
             response = {}
             filename = ''
             if uploaded_file.filename != '':
@@ -576,22 +576,6 @@ def get_projects():
 @ login_required("You don't have the user privileges to access this section.")
 def add_project():
     if request.method == "POST":
-        uploaded_files = request.files.getlist("photos")
-        files = []
-        for file in uploaded_files:
-            filename = ''
-            if file.filename != '':
-                new_filename = request.form.get(
-                    "slug")[:25] + str(random.randint(1111, 9999))
-                file_ext = os.path.splitext(file.filename)[1]
-                if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
-                    filename = new_filename + file_ext.lower()
-                    file.save(os.path.join(
-                        app.config['UPLOAD_PATH'], filename))
-                    files.append(filename)
-                else:
-                    continue
-
         project = {
             "title": request.form.get("title"),
             "slug": request.form.get("slug"),
@@ -599,7 +583,7 @@ def add_project():
             "description": request.form.get("description"),
             "repo": request.form.get("repo"),
             "live_url": request.form.get("live_url"),
-            "photos": ','.join(files)
+            "photos": request.form.get("photo-list")
         }
         mongo.db.projects.insert_one(project)
         flash(Markup(
