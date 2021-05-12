@@ -30,7 +30,9 @@
             {% set photos = project.photos.split(',') %}
             <div class="col">
                 <div class="card card-project h-100">
-                    <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" class="card-img-top" alt="{{ project.title }}">
+                    {% if project.photos|length %}
+                        <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" class="card-img-top" alt="{{ project.title }}">
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ project.title }}</h5>
                         <p class="card-text">{{ project.description|truncate(80, True, ' ...') }}</p>

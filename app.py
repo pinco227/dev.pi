@@ -184,7 +184,7 @@ def files():
             if "docid" in request.args:
                 doc_id = request.args.get('docid')
                 coll_dict = mongo.db[coll].find_one({"_id": ObjectId(doc_id)})
-                photos = list(filter(None, coll_dict["files"].split(',')))
+                photos = list(filter(None, coll_dict["photos"].split(',')))
 
                 # Check if photo key (position starting with 0) was sent as argument and set to 0 if not
                 photo_key = request.args.get(

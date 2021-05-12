@@ -66,7 +66,7 @@ const fileListUpdate = () => {
     document.querySelectorAll('.photo-container').forEach(el => {
         fileList.push(el.dataset.src);
     });
-    fileListInput.value = fileList.join(',');
+    if (fileListInput) fileListInput.value = fileList.join(',');
 }
 
 /**
@@ -134,12 +134,25 @@ const uploadFile = (file) => {
             if (document.getElementById('gallery')) {
                 const containerEl = document.getElementById('gallery');
                 const existingElCount = document.querySelectorAll(".photo-container").length;
+                const initialSlug = document.getElementById('initial-slug');
+                let galleryClass;
+                let imgTag;
+                if (initialSlug) {
+                    galleryClass = initialSlug.value + "-gallery";
+                }
+                if (galleryClass) {
+                    imgTag = `<a href="/uploads/${data.newName}" class="${galleryClass}">
+                                    <img class="img-thumbnail gallery-item" src="/uploads/${data.newName}" alt="${data.newName}">
+                                </a>`;
+                } else {
+                    imgTag = `<img class="img-thumbnail" src="/uploads/${data.newName}" alt="${data.newName}">`;
+                }
                 const newEl = Object.assign(document.createElement('div'), {
                     className: 'photo-container col-sm-4 col-md-6 col-lg-4',
-                    innerHTML: `<img class="img-thumbnail" src="/uploads/${data.newName}" alt="${data.newName}">
-                                        <a href="#" class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </a>`
+                    innerHTML: `${imgTag}
+                                <a class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>`
                 });
                 newEl.dataset.src = data.newName;
                 containerEl.appendChild(newEl);
@@ -168,6 +181,7 @@ const sleep = (delay) => {
 // Click event listener for file delete button
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-photo') && e.target.dataset.photoKey) {
+        e.preventDefault;
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
             const url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId + "&photokey=" + e.target.dataset.photoKey :
                 urlForFiles + "?collection=" + collection + "&src=" + e.target.parentElement.dataset.src;

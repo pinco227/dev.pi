@@ -23,12 +23,14 @@
             {% for blog in blogs %}
             <li class="list-group-item d-flex justify-content-between">
                 <div class="row w-100 align-items-center">
+                    <div class="col-6 offset-3 col-sm-2 offset-sm-0 text-center">
                     {% if blog.photos|length %}
-                    <div class="col-6 offset-3 col-sm-2 offset-sm-0">
                         <img src="{{ url_for('uploads', filename=blog.photos) }}" alt="{{ blog.title }}"
                             class="img-fluid">
-                    </div>
+                    {% else %}
+                        <i class="bi bi-blockquote-left fs-1"></i>
                     {% endif %}
+                    </div>
                     <div class="col-12 col-sm-10">
                         <h3 class="text-start">{{ blog.title }}</h3>
                         <span class="fst-italic">{{ blog.slug }}</span>
