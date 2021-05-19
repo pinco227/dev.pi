@@ -171,7 +171,7 @@ const getPhotoList = () => {
     if (document.querySelectorAll('.photo-container').length) {
         const photoList = [];
         document.querySelectorAll('.photo-container').forEach((el, i) => {
-            photoList.push({ title: 'Photo' + (i + 1), value: el.firstElementChild.src });
+            photoList.push({ title: 'Photo' + (i + 1), value: el.getElementsByTagName('img')[0].src.split('/').pop() });
         });
         return photoList;
     } else {

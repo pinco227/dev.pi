@@ -378,8 +378,11 @@ def edit_blog(id):
 @ login_required("You don't have the user privileges to access this section.")
 def delete_blog(id):
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
-    if post["photos"].strip() and os.path.exists(os.path.join("uploads", post["photos"].strip())):
-        os.remove(os.path.join("uploads", post["photos"].strip()))
+
+    photos = list(filter(None, post["photos"].split(',')))
+    for photo in photos:
+        if photo and os.path.exists(os.path.join("uploads", photo)):
+            os.remove(os.path.join("uploads", photo))
 
     mongo.db.blogs.remove({"_id": ObjectId(id)})
     flash("Blog was successfully deleted")

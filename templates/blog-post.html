@@ -37,12 +37,17 @@
         </div>
         <div class="row mb-4">
             <div class="col">
-                <figure class="float-start col-sm-6 col-md-4">
-                    <a href="{{ url_for('uploads', filename=post.photos) }}" class="{{ post.slug }}-gallery">
-                        <img src="{{ url_for('uploads', filename=post.photos) }}" alt="{{ post.title }}"
-                            class="post-photo gallery-item">
-                    </a>
-                </figure>
+                {% if post.photos|length %}
+                    {% set photos = post.photos.split(',') %}
+                    <figure class="float-start col-sm-6 col-md-4">
+                        <a href="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" class="{{ post.slug }}-gallery">
+                            <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" alt="{{ post.title }}"
+                                class="post-photo gallery-item">
+                        </a>
+                    </figure>
+                {% else %}
+                    <i class="bi bi-blockquote-left fs-1 float-start col-sm-6 col-md-4"></i>
+                {% endif %}
                 <h3 class="post-title">{{ post.title }}</h3>
                 <p><small class="text-muted">{{ post.added_on }}</small></p>
                 <p>{{ post.body|safe }}</p>

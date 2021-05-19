@@ -31,9 +31,10 @@
                 <div class="card card-blogs">
                     <div class="row">
                         {% if blog.photos|length %}
+                        {% set photos = blog.photos.split(',') %}
                         <div class="col-12 col-md-4 text-center">
-                            <img src="{{ url_for('uploads', filename=blog.photos) }}" alt="{{ blog.title }}"
-                                class="img-fluid">
+                            <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}"
+                                alt="{{ blog.title }}" class="img-fluid">
                         </div>
                         {% endif %}
                         <div class="card-blogs-body col-12 col-md-8">
