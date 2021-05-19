@@ -31,15 +31,15 @@
                 <div class="card card-blogs">
                     <div class="row">
                         {% if blog.photos|length %}
-                            <div class="col-12 col-md-4 text-center">
-                                <img src="{{ url_for('uploads', filename=blog.photos) }}" alt="{{ blog.title }}"
-                                    class="img-fluid">
-                            </div>
+                        <div class="col-12 col-md-4 text-center">
+                            <img src="{{ url_for('uploads', filename=blog.photos) }}" alt="{{ blog.title }}"
+                                class="img-fluid">
+                        </div>
                         {% endif %}
                         <div class="card-blogs-body col-12 col-md-8">
                             <div class="card-body">
                                 <h2 class="card-title">{{ blog.title }}</h2>
-                                <p class="card-text">{{ blog.body|truncate(150) }}</p>
+                                <p class="card-text">{{ blog.body|safe|truncate(150) }}</p>
                                 <p class="card-text"><small class="text-muted">{{ blog.added_on }}</small></p>
                             </div>
                             <div class="card-footer text-end">
