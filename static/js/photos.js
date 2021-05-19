@@ -167,6 +167,18 @@ const uploadFile = (file) => {
     });
 }
 
+const getPhotoList = () => {
+    if (document.querySelectorAll('.photo-container').length) {
+        const photoList = [];
+        document.querySelectorAll('.photo-container').forEach((el, i) => {
+            photoList.push({ title: 'Photo' + (i + 1), value: el.firstElementChild.src });
+        });
+        return photoList;
+    } else {
+        return [];
+    }
+}
+
 /**
 * Delay function
 * @credit https://www.perimeterx.com/tech-blog/2019/beforeunload-and-unload-events/

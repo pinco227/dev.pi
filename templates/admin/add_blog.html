@@ -30,8 +30,8 @@
                 <input type="hidden" id="url-for-files" value="{{ url_for('files')}}">
                 <input type="hidden" id="collection" value="blogs">
                 <input type="hidden" name="photo-list" id="photo-list">
-                <input type="file" name="files" id="drop-file-elem" accept="image/*">
-                <div id="drop-area" data-multiple="false">
+                <input type="file" name="files" id="drop-file-elem" accept="image/*" multiple>
+                <div id="drop-area" data-multiple="true">
                     <i class="bi bi-upload"></i>
                         Drag&drop files here or click to select...
                 </div>
@@ -64,7 +64,10 @@
         quickbars_insert_toolbar: false,
         min_height: 300,
         max_height: 500,
-        paste_as_text: true
+        paste_as_text: true,
+        image_list: function(success) {
+            success(getPhotoList());
+        }
     });
 </script>
 {% endblock scripts %}
