@@ -88,8 +88,21 @@
 <script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
 <script src="{{ url_for('static', filename='js/photos.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/emgmzxkejmtysjj6vbbmqrkk2zkr2qoo44j51u7oam308dtn/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <!-- CREDIT: https://github.com/biati-digital/glightbox -->
 <script type="text/javascript">
     const lightbox = GLightbox({ 'selector': '.{{ post.slug }}-gallery' });
+
+    tinymce.init({
+        selector: '#body',
+        plugins: 'anchor autolink link image imagetools table spellchecker lists autoresize charmap code emoticons fullscreen help hr media paste preview print quickbars toc',
+        contextmenu: 'anchor link image imagetools table spellchecker lists',
+        toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | numlist bullist | emoticons | code fullscreen',
+        toolbar_mode: 'wrap',
+        quickbars_insert_toolbar: false,
+        min_height: 300,
+        max_height: 500,
+        paste_as_text: true
+    });
 </script>
 {% endblock scripts %}
