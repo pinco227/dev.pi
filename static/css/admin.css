@@ -168,8 +168,35 @@ main {
 
 /*------------------------------------------ DASHBOARD */
 
-.card-news {
+#card-quick-links .card-body .col a {
+    width: 100%;
+    height: 100%;
+}
+
+#card-news {
     background-color: var(--text-light);
+}
+
+.stat-container {
+    background-color: var(--accent);
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-dark) 100%);
+    padding: 1rem;
+    border: 1px solid var(--accent-dark);
+    border-radius: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-light);
+    text-shadow: 1px 2px 3px rgba(0, 0, 0, .5);
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
+}
+
+.stat-container .stat-count {
+    font-size: 3rem;
+}
+
+.stat-container .stat-caption {
+    font-size: 1.5rem;
 }
 
 /*------------------------------------------ SKILLS */
@@ -242,4 +269,12 @@ main {
 
 #drop-file-elem {
     display: none;
+}
+
+/*------------------------------------------ MEDIA QUERIES */
+
+@media (max-width: 359px) {
+    #card-quick-links .card-body {
+        flex-direction: column;
+    }
 }

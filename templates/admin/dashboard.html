@@ -9,36 +9,19 @@
             <img src="{{ url_for('static', filename='images/dashboard.svg') }}" alt="Dashboard" class="section-image">
         </div>
     </div>
-    <div class="row mb-4">
-        <div class="col">
-            <div class="card card-quick-links">
-                <div class="card-header">
-                    <h4 class="text-center"><i class="bi bi-link-45deg"></i> Quick Links</h4>
-                </div>
-                <div class="card-body d-flex justify-content-around g-2">
-                    <a href="{{ url_for('add_blog') }}" class="btn btn-success m-2"><i class="bi bi-file-richtext-fill"></i> Add New Blog <i class="bi bi-plus-circle-dotted"></i></a>
-                    <a href="{{ url_for('add_project') }}" class="btn btn-success m-2"><i class="bi bi-display-fill"></i> Add New Project <i class="bi bi-plus-circle-dotted"></i></a>
-                    <a href="{{ url_for('add_skill') }}" class="btn btn-success m-2"><i class="bi bi-puzzle-fill"></i> Add New Skill <i class="bi bi-plus-circle-dotted"></i></a>
-                    <a href="{{ url_for('add_education') }}" class="btn btn-success m-2"><i class="bi bi-book-fill"></i> Add New School <i class="bi bi-plus-circle-dotted"></i></a>
-                    <a href="{{ url_for('add_experience') }}" class="btn btn-success m-2"><i class="bi bi-briefcase-fill"></i> Add New Job <i class="bi bi-plus-circle-dotted"></i></a>
-                    <a href="{{ url_for('add_skill') }}" class="btn btn-light m-2"><i class="bi bi-sliders"></i> General Settings</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% if testimonials > 0 %}
+    {% if unapproved_testimonials > 0 %}
         <div class="row mb-4">
             <div class="col">
-                <div class="card card-news">
+                <div class="card bg-warning" id="card-news">
                     <div class="card-header">
                         <h4 class="text-center"><i class="bi bi-bell-fill"></i> Notifications</h4>
                     </div>
                     <div class="card-body text-center g-2">
                         <h3 class="fw-normal">
-                        {% if testimonials == 1 %}
+                        {% if unapproved_testimonials == 1 %}
                             There is <strong>1</strong> unapproved testimonial! 
                         {% else %}
-                            There are <strong>{{ testimonials }}</strong> unapproved testimonials!
+                            There are <strong>{{ unapproved_testimonials }}</strong> unapproved testimonials!
                         {% endif %}
                         </h3>
                         <a href="{{ url_for('get_testimonials') }}" class="btn btn-lg btn-accent">View</a>
@@ -47,5 +30,81 @@
             </div>
         </div>
     {% endif %}
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card" id="card-quick-links">
+                <div class="card-header">
+                    <h4 class="text-center"><i class="bi bi-link-45deg"></i> Quick Links</h4>
+                </div>
+                <div class="card-body row justify-content-around g-2">
+                    <div class="col">
+                        <a href="{{ url_for('add_blog') }}" class="col btn btn-success"><i class="bi bi-file-richtext-fill"></i> Add New Blog <i class="bi bi-plus-circle-dotted"></i></a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url_for('add_project') }}" class="col btn btn-success"><i class="bi bi-display-fill"></i> Add New Project <i class="bi bi-plus-circle-dotted"></i></a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url_for('add_skill') }}" class="col btn btn-success"><i class="bi bi-puzzle-fill"></i> Add New Skill <i class="bi bi-plus-circle-dotted"></i></a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url_for('add_education') }}" class="col btn btn-success"><i class="bi bi-book-fill"></i> Add New School <i class="bi bi-plus-circle-dotted"></i></a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url_for('add_experience') }}" class="col btn btn-success"><i class="bi bi-briefcase-fill"></i> Add New Job <i class="bi bi-plus-circle-dotted"></i></a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url_for('settings') }}" class="col btn btn-light"><i class="bi bi-sliders"></i> General Settings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card bg-light" id="card-statistics">
+                <div class="card-header">
+                    <h4 class="text-center"><i class="bi bi-info-circle"></i> Statistics</h4>
+                </div>
+                <div class="card-body row justify-content-around g-4">
+                    <div class="col">
+                        <div class="stat-container">
+                            <span class="stat-count">{{ testimonials }}</span>
+                            <span class="stat-caption">Testimonials</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-container">
+                            <span class="stat-count">{{ blogs }}</span>
+                            <span class="stat-caption">Blogs</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-container">
+                            <span class="stat-count">{{ projects }}</span>
+                            <span class="stat-caption">Projects</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-container">
+                            <span class="stat-count">{{ skills }}</span>
+                            <span class="stat-caption">Skills</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-container">
+                            <span class="stat-count">{{ education }}</span>
+                            <span class="stat-caption">Schools</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="stat-container">
+                            <span class="stat-count">{{ experience }}</span>
+                            <span class="stat-caption">Jobs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock content %}

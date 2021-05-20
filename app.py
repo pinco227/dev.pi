@@ -176,9 +176,15 @@ def login_required(flash_message=False):
 @app.route('/admin')
 @login_required()
 def admin():
+    testimonials = mongo.db.testimonials.count_documents({})
+    blogs = mongo.db.blogs.count_documents({})
+    projects = mongo.db.projects.count_documents({})
+    skills = mongo.db.skills.count_documents({})
+    education = mongo.db.education.count_documents({})
+    experience = mongo.db.experience.count_documents({})
     unapproved_testimonials = mongo.db.testimonials.count_documents({
                                                                     "approved": False})
-    return render_template("admin/dashboard.html", testimonials=unapproved_testimonials)
+    return render_template("admin/dashboard.html", blogs=blogs, projects=projects, skills=skills, education=education, experience=experience, testimonials=testimonials, unapproved_testimonials=unapproved_testimonials)
 
 
 @app.route('/admin/files', methods=['PATCH', 'DELETE'])
