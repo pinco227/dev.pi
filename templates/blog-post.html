@@ -35,11 +35,17 @@
                     back</a>
             </div>
         </div>
-        <div class="row mb-4">
+        <div class="row">
+            <div class="col">
+                <h3 class="post-title">{{ post.title }}</h3>
+                <p><small class="text-muted">{{ post.added_on }}</small></p>
+            </div>
+        </div>
+        <div class="row mb-4 g-0 blog-document">
             <div class="col">
                 {% if post.photos|length %}
                     {% set photos = post.photos.split(',') %}
-                    <figure class="float-start col-sm-6 col-md-4">
+                    <figure class="float-start col-sm-6 col-md-5">
                         <a href="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" class="{{ post.slug }}-gallery">
                             <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" alt="{{ post.title }}"
                                 class="post-photo gallery-item">
@@ -48,8 +54,6 @@
                 {% else %}
                     <i class="bi bi-blockquote-left fs-1 float-start col-sm-6 col-md-4"></i>
                 {% endif %}
-                <h3 class="post-title">{{ post.title }}</h3>
-                <p><small class="text-muted">{{ post.added_on }}</small></p>
                 <p>{{ post.body|safe }}</p>
             </div>
         </div>

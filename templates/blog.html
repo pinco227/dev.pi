@@ -40,7 +40,7 @@
                         <div class="card-blogs-body col-12 col-md-8">
                             <div class="card-body">
                                 <h2 class="card-title">{{ blog.title }}</h2>
-                                <p class="card-text">{{ blog.body|safe|truncate(150) }}</p>
+                                <div class="post-body">{{ blog.body|safe }}</div>
                                 <p class="card-text"><small class="text-muted">{{ blog.added_on }}</small></p>
                             </div>
                             <div class="card-footer text-end">

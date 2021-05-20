@@ -36,7 +36,7 @@
                         <h3 class="text-start">{{ blog.title }}</h3>
                         <span class="fst-italic">{{ blog.slug }}</span>
                         <small class="text-muted">{{ blog.added_on }}</small>
-                        <p class="pt-2 fw-light">{{ blog.body|safe|truncate(200) }}</p>
+                        <p class="pt-2 fw-light">{{ blog.body|safe }}</p>
                     </div>
                 </div>
                 <div class="controls d-flex flex-column align-items-center justify-content-around ms-4">

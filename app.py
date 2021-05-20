@@ -6,6 +6,7 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from functools import wraps
+from html5lib_truncation import truncate_html
 from datetime import date
 import random
 
@@ -112,11 +113,15 @@ def get_project(project):
 @register_breadcrumb(app, '.blog', 'Blog')
 def blog():
     blogs = list(mongo.db.blogs.find())
+    for i, blog in enumerate(blogs):
+        blog["body"] = truncate_html(
+            blog["body"], 200, end=' ...', break_words=True)
+        blogs[i] = blog
     return render_template("blog.html", blogs=blogs)
 
 
 def view_blog_dlc(*args, **kwargs):
-    """Get blg post details from requested url args
+    """Get blog post details from requested url args
 
     Returns:
         dict: text to be displayed into breadcrumb (Blog title)
@@ -300,6 +305,10 @@ def delete_testimonial(id):
 @login_required("You don't have the user privileges to access this section.")
 def get_blogs():
     blogs = list(mongo.db.blogs.find())
+    for i, blog in enumerate(blogs):
+        blog["body"] = truncate_html(
+            blog["body"], 200, end=' [...] ', break_words=True)
+        blogs[i] = blog
     return render_template("admin/blogs.html", blogs=blogs)
 
 
@@ -327,44 +336,13 @@ def add_blog():
 def edit_blog(id):
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
     if request.method == "POST":
-        if 'blog-data' in request.form:
-            updated = {
-                "title": request.form.get("title"),
-                "slug": request.form.get("slug"),
-                "body": request.form.get("body")
-            }
-            flash(Markup(
-                f"Blog <strong>{updated['title']}</strong> was successfully edited!"))
-        elif 'blog-photo' in request.form:
-            uploaded_file = request.files['photo']
-            filename = ''
-            if uploaded_file.filename != '':
-                new_filename = post["slug"][:25] + \
-                    str(random.randint(1111, 9999))
-                file_ext = os.path.splitext(uploaded_file.filename)[1]
-                if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
-                    # remove current photo
-                    if post["photos"].strip() and os.path.exists(os.path.join("uploads", post["photos"].strip())):
-                        os.remove(os.path.join(
-                            "uploads", post["photos"].strip()))
-                    filename = new_filename + file_ext.lower()
-                    uploaded_file.save(os.path.join(
-                        app.config['UPLOAD_PATH'], filename))
-                else:
-                    flash("Uploaded file not supported!")
-            else:
-                # remove current photo
-                if post["photos"].strip() and os.path.exists(os.path.join("uploads", post["photos"].strip())):
-                    os.remove(os.path.join("uploads", post["photos"].strip()))
-
-            updated = {
-                "photos": filename
-            }
-            flash(Markup(
-                f"Blog <strong>{post['title']}</strong> was successfully edited!"))
-        else:
-            flash("Something went wrong!")
-            return redirect(url_for("get_blogs"))
+        updated = {
+            "title": request.form.get("title"),
+            "slug": request.form.get("slug"),
+            "body": request.form.get("body")
+        }
+        flash(Markup(
+            f"Blog <strong>{updated['title']}</strong> was successfully edited!"))
 
         mongo.db.blogs.update({"_id": ObjectId(id)}, {
             "$set": updated})
