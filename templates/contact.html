@@ -29,7 +29,8 @@
             <div class="col-md-6">
                 <div class="card bg-accent card-contact-details">
                     <div class="card-body">
-                        <i class="bi bi-person-circle"></i>
+                        <img src="{{ url_for('uploads', filename=settings.photos.replace(' ', '')) }}"
+                            class="mb-3 w-50" alt="{{ settings.name }}">
                         <h4 class="card-title">Contact Info</h4>
                         <p class="card-text">
                         <dl class="row">

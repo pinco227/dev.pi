@@ -198,9 +198,15 @@ def files():
         # DELETE request
         if request.method == "DELETE":
             # Check if document id was sent as argument
-            if "docid" in request.args:
-                doc_id = request.args.get('docid')
-                coll_dict = mongo.db[coll].find_one({"_id": ObjectId(doc_id)})
+            if "docid" in request.args or coll == "settings":
+                if coll == "settings":
+                    doc_id = os.environ.get("DB_SETTINGS_ID")
+                    coll_dict = mongo.db[coll].find_one(
+                        {"_id": ObjectId(doc_id)})
+                else:
+                    doc_id = request.args.get('docid')
+                    coll_dict = mongo.db[coll].find_one(
+                        {"_id": ObjectId(doc_id)})
                 photos = list(filter(None, coll_dict["photos"].split(',')))
 
                 # Check if photo key (position starting with 0) was sent as argument and set to 0 if not
@@ -239,12 +245,25 @@ def files():
             filename = ''
             if uploaded_file.filename != '':
                 # Check if document id was sent as argument and set filename as truncated slug + random number
-                if "docid" in request.args:
-                    doc_id = request.args.get('docid')
-                    coll_dict = mongo.db[coll].find_one(
-                        {"_id": ObjectId(doc_id)})
-                    new_filename = coll_dict["slug"][:25] + \
-                        str(random.randint(1111, 9999))
+                if "docid" in request.args or coll == "settings":
+                    if coll == "settings":
+                        coll_dict = mongo.db[coll].find_one(
+                            {"_id": ObjectId(os.environ.get("DB_SETTINGS_ID"))})
+                        new_filename = "settings" + \
+                            str(random.randint(1111, 9999))
+                    else:
+                        doc_id = request.args.get('docid')
+                        coll_dict = mongo.db[coll].find_one(
+                            {"_id": ObjectId(doc_id)})
+                        has_slug = mongo.db[coll].find(
+                            {"_id": ObjectId(doc_id),
+                             "slug": {"$exists": True}})
+                        if has_slug:
+                            new_filename = coll_dict["slug"][:25] + \
+                                str(random.randint(1111, 9999))
+                        else:
+                            new_filename = coll + date.today().strftime("%d%m") + \
+                                str(random.randint(1111, 9999))
                 # Set filename as default collection name + day + month + random number
                 else:
                     coll_dict = False
@@ -264,7 +283,7 @@ def files():
                         updated_coll = {
                             "photos": ','.join(photos) if len(photos) > 1 else photos[0]
                         }
-                        mongo.db[coll].update({"_id": ObjectId(doc_id)}, {
+                        mongo.db[coll].update({"_id": ObjectId(coll_dict["_id"])}, {
                             "$set": updated_coll})
                     response = {
                         "name": uploaded_file.filename,
@@ -684,7 +703,6 @@ def settings():
             "email": request.form.get("email"),
             "phone": request.form.get("phone"),
             "address": request.form.get("address"),
-            "photo": request.form.get("photo"),
             "cv": request.form.get("cv"),
             "meta_title": request.form.get("meta_title"),
             "meta_desc": request.form.get("meta_desc"),

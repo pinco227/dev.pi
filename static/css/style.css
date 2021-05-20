@@ -722,6 +722,12 @@ nav[aria-label="breadcrumb"] {
     box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
 }
 
+.card-contact-details img {
+    border-radius: 50%;
+    border: 2px solid var(--text-light);
+    box-shadow: 2px 3px 4px rgb(0, 0, 0, .4);
+}
+
 .card-contact-details i {
     font-size: 6rem;
     text-shadow: 1px 2px 3px rgb(0, 0, 0, .5);
