@@ -50,12 +50,14 @@ def too_large(e):
     return make_response(jsonify({"message": "File is too large!"}), 413)
 
 
+@app.route('/uploads/', defaults={'filename': False})
 @app.route('/uploads/<filename>')
 def uploads(filename):
-    if os.path.exists(os.path.join(app.config['UPLOAD_PATH'], filename)):
+    if filename and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], filename)):
         return send_from_directory(app.config['UPLOAD_PATH'],
                                    filename)
-    return send_from_directory('static/images', 'no-photo.jpg')
+    else:
+        return send_from_directory('static/images', 'no-photo.jpg')
 
 
 @app.route("/home")

@@ -31,18 +31,22 @@
             <div class="col">
                 <div class="card card-project h-100">
                     {% if project.photos|length %}
-                        <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" class="card-img-top" alt="{{ project.title }}">
+                        <a href="{{ url_for('get_project', project=project.slug) }}"><img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" class="card-img-top" alt="{{ project.title }}"></a>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ project.title }}</h5>
+                        <h5 class="card-title"><a href="{{ url_for('get_project', project=project.slug) }}">{{ project.title }}</a></h5>
                         <p class="card-text">{{ project.description|truncate(80, True, ' ...') }}</p>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">{{ project.tech }}</li>
-                        <li class="list-group-item d-grid"><a href="{{ project.repo }}" target="_blank"
+                        {% if project.repo %}
+                            <li class="list-group-item d-grid"><a href="{{ project.repo }}" target="_blank"
                                 class="btn btn-sm btn-dark"> <i class="bi bi-github"></i> Source</a></li>
-                        <li class="list-group-item d-grid"><a href="{{ project.live_url }}" target="_blank"
+                        {% endif %}
+                        {% if project.live_url %}
+                            <li class="list-group-item d-grid"><a href="{{ project.live_url }}" target="_blank"
                                 class="btn btn-sm btn-accent-light"><i class="bi bi-display"></i> Demo</a></li>
+                        {% endif %}
                         <li class="list-group-item d-grid"><a href="{{ url_for('get_project', project=project.slug) }}"
                                 class="btn btn-sm btn-accent"><i class="bi bi-info-circle-fill"></i> Details</a></li>
                     </ul>
