@@ -166,6 +166,12 @@ main {
     border-top-right-radius: 0;
 }
 
+/*------------------------------------------ DASHBOARD */
+
+.card-news {
+    background-color: var(--text-light);
+}
+
 /*------------------------------------------ SKILLS */
 
 /* CREDIT

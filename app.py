@@ -176,7 +176,9 @@ def login_required(flash_message=False):
 @app.route('/admin')
 @login_required()
 def admin():
-    return render_template("admin/dashboard.html")
+    unapproved_testimonials = mongo.db.testimonials.count_documents({
+                                                                    "approved": False})
+    return render_template("admin/dashboard.html", testimonials=unapproved_testimonials)
 
 
 @app.route('/admin/files', methods=['PATCH', 'DELETE'])
