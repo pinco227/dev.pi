@@ -52,8 +52,10 @@ def too_large(e):
 
 @app.route('/uploads/<filename>')
 def uploads(filename):
-    return send_from_directory(app.config['UPLOAD_PATH'],
-                               filename)
+    if os.path.exists(os.path.join(app.config['UPLOAD_PATH'], filename)):
+        return send_from_directory(app.config['UPLOAD_PATH'],
+                                   filename)
+    return send_from_directory('static/images', 'no-photo.jpg')
 
 
 @app.route("/home")
@@ -207,15 +209,16 @@ def files():
                     "$set": updated_coll})
 
                 # Check if selected photo exists and delete from server
-                if photo and os.path.exists(os.path.join("uploads", photo)):
-                    os.remove(os.path.join("uploads", photo))
+                if photo and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], photo)):
+                    os.remove(os.path.join(app.config['UPLOAD_PATH'], photo))
                     return make_response(jsonify({"message": f"File {photo} successfully deleted!"}), 200)
                 else:
                     return make_response(jsonify({"message": "Something went wrong!"}), 400)
             else:
                 # Check if file src was sent as argument and delete file from server
-                if ("src" in request.args) and request.args.get('src') and os.path.exists(os.path.join("uploads", request.args.get('src'))):
-                    os.remove(os.path.join("uploads", request.args.get('src')))
+                if ("src" in request.args) and request.args.get('src') and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], request.args.get('src'))):
+                    os.remove(os.path.join(
+                        app.config['UPLOAD_PATH'], request.args.get('src')))
                     return make_response(jsonify({"message": f"File {request.args.get('src')} successfully deleted!"}), 200)
                 else:
                     return make_response(jsonify({"message": "Something went wrong!"}), 400)
@@ -359,8 +362,8 @@ def delete_blog(id):
 
     photos = list(filter(None, post["photos"].split(',')))
     for photo in photos:
-        if photo and os.path.exists(os.path.join("uploads", photo)):
-            os.remove(os.path.join("uploads", photo))
+        if photo and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], photo)):
+            os.remove(os.path.join(app.config['UPLOAD_PATH'], photo))
 
     mongo.db.blogs.remove({"_id": ObjectId(id)})
     flash("Blog was successfully deleted")
@@ -604,8 +607,8 @@ def delete_project(id):
     post = mongo.db.projects.find_one({"_id": ObjectId(id)})
     photos = list(filter(None, post["photos"].split(',')))
     for photo in photos:
-        if photo and os.path.exists(os.path.join("uploads", photo)):
-            os.remove(os.path.join("uploads", photo))
+        if photo and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], photo)):
+            os.remove(os.path.join(app.config['UPLOAD_PATH'], photo))
 
     mongo.db.projects.remove({"_id": ObjectId(id)})
     flash("Project was successfully deleted")
