@@ -5,6 +5,7 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
+from flask_mail import Mail, Message
 from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
@@ -15,9 +16,7 @@ if os.path.exists("env.py"):
 
 app = Flask(__name__)
 
-# Initialize Flask-Breadcrumbs
-Breadcrumbs(app=app)
-
+# Config app
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
@@ -25,11 +24,22 @@ app.config['UPLOAD_PATH'] = 'uploads'
 app.config['UPLOAD_EXTENSIONS'] = [
     '.txt', '.doc', '.docx', '.pdf', '.png', '.jpg', '.jpeg', '.gif']
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+mail_settings = {
+    "MAIL_SERVER": 'smtp.gmail.com',
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    "MAIL_USERNAME": os.environ['EMAIL_USER'],
+    "MAIL_PASSWORD": os.environ['EMAIL_PASSWORD']
+}
+app.config.update(mail_settings)
 
 if not os.path.exists(app.config['UPLOAD_PATH']):
     os.makedirs(app.config['UPLOAD_PATH'])
 
+Breadcrumbs(app=app)
 mongo = PyMongo(app)
+mail = Mail(app)
 
 
 @app.context_processor
@@ -142,9 +152,16 @@ def get_post(post):
     return render_template("blog-post.html", post=post)
 
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 @register_breadcrumb(app, '.contact', 'Contact')
 def contact():
+    if request.method == 'POST':
+        msg = Message(subject="[Dev.PI] " + request.form.get("subject"),
+                      sender=app.config.get("MAIL_USERNAME"),
+                      recipients=[app.config.get("MAIL_USERNAME")],
+                      body=request.form.get("name") + "(" + request.form.get("email") + "): " + request.form.get("message"))
+        mail.send(msg)
+        flash("Thank you for your message! I will get back to you shortly.")
     return render_template("contact.html")
 
 

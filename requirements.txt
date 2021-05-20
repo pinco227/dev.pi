@@ -1,6 +1,7 @@
 dnspython==2.1.0
 Flask==1.1.2
 Flask-Breadcrumbs==0.5.1
+Flask-Mail==0.9.1
 Flask-Menu==0.7.2
 Flask-PyMongo==2.3.0
 html5lib-truncation==0.1.0
