@@ -92,7 +92,7 @@ def add_testimonial():
             "approved": False
         }
         mongo.db.testimonials.insert_one(testimonial)
-        flash("Thank you for your feedback!")
+        flash("Thank you for your feedback!", "success")
         return redirect(url_for("home"))
 
     return render_template("write-testimonial.html")
@@ -161,7 +161,7 @@ def contact():
                       recipients=[app.config.get("MAIL_USERNAME")],
                       body=request.form.get("name") + "(" + request.form.get("email") + "): " + request.form.get("message"))
         mail.send(msg)
-        flash("Thank you for your message! I will get back to you shortly.")
+        flash("Thank you for your message! I will get back to you shortly.", "success")
     return render_template("contact.html")
 
 
@@ -184,7 +184,7 @@ def login_required(flash_message=False):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if not session.get("user"):
-                flash(flash_message) if flash_message else None
+                flash(flash_message, "danger") if flash_message else None
                 return redirect(url_for("login"))
             else:
                 return f(*args, **kwargs)
@@ -333,7 +333,7 @@ def get_testimonials():
                 is_approved = False
             mongo.db.testimonials.update({"_id": ObjectId(testimonial['_id'])}, {
                 "$set": {"approved": is_approved}})
-        flash("Testimonials were successfully updated!")
+        flash("Testimonials were successfully updated!", "success")
         # Redirect to avoid re-submission
         return redirect(url_for("get_testimonials"))
 
@@ -346,7 +346,7 @@ def get_testimonials():
 @login_required("You don't have the user privileges to access this section.")
 def delete_testimonial(id):
     mongo.db.testimonials.remove({"_id": ObjectId(id)})
-    flash("Testimonial was successfully deleted")
+    flash("Testimonial was successfully deleted", "warning")
     return redirect(url_for("get_testimonials"))
 
 
@@ -374,7 +374,7 @@ def add_blog():
         }
         mongo.db.blogs.insert_one(blog)
         flash(Markup(
-            f"Blog <strong>{blog['title']}</strong> was successfully Added!"))
+            f"Blog <strong>{blog['title']}</strong> was successfully Added!"), "success")
         return redirect(url_for("get_blogs"))
 
     return render_template("admin/add_blog.html")
@@ -391,7 +391,7 @@ def edit_blog(id):
             "body": request.form.get("body")
         }
         flash(Markup(
-            f"Blog <strong>{updated['title']}</strong> was successfully edited!"))
+            f"Blog <strong>{updated['title']}</strong> was successfully edited!"), "success")
 
         mongo.db.blogs.update({"_id": ObjectId(id)}, {
             "$set": updated})
@@ -412,7 +412,7 @@ def delete_blog(id):
             os.remove(os.path.join(app.config['UPLOAD_PATH'], photo))
 
     mongo.db.blogs.remove({"_id": ObjectId(id)})
-    flash("Blog was successfully deleted")
+    flash("Blog was successfully deleted", "warning")
     return redirect(url_for("get_blogs"))
 
 
@@ -430,7 +430,7 @@ def get_skills():
             mongo.db.skills.update({"_id": ObjectId(skill['_id'])}, {
                 "$set": updated})
 
-        flash("Skills were successfully updated!")
+        flash("Skills were successfully updated!", "success")
         # Redirect to avoid re-submission
         return redirect(url_for("get_skills"))
 
@@ -441,7 +441,7 @@ def get_skills():
 @ login_required("You don't have the user privileges to access this section.")
 def delete_skill(id):
     mongo.db.skills.remove({"_id": ObjectId(id)})
-    flash("Skill was successfully deleted")
+    flash("Skill was successfully deleted", "warning")
     return redirect(url_for("get_skills"))
 
 
@@ -455,7 +455,7 @@ def add_skill():
         }
         mongo.db.skills.insert_one(skill)
         flash(Markup(
-            f"Skill <strong>{skill['name']}</strong> was successfully Added!"))
+            f"Skill <strong>{skill['name']}</strong> was successfully Added!"), "success")
         return redirect(url_for("get_skills"))
 
     return render_template("admin/add_skill.html")
@@ -471,7 +471,7 @@ def get_education():
             mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
                 "$set": {"order": int(request.form.get(f"order[{school['_id']}]"))}})
 
-        flash("Education successfully updated!")
+        flash("Education successfully updated!", "success")
         # Redirect to avoid re-submission
         return redirect(url_for("get_education"))
 
@@ -492,7 +492,7 @@ def add_education():
         }
         mongo.db.education.insert_one(school)
         flash(Markup(
-            f"School <strong>{school['school']}</strong> was successfully Added!"))
+            f"School <strong>{school['school']}</strong> was successfully Added!"), "success")
         return redirect(url_for("get_education"))
 
     return render_template("admin/add_education.html")
@@ -513,7 +513,7 @@ def edit_education(id):
         mongo.db.education.update({"_id": ObjectId(id)}, {
             "$set": updated})
         flash(Markup(
-            f"School <strong>{updated['school']}</strong> was successfully edited!"))
+            f"School <strong>{updated['school']}</strong> was successfully edited!"), "success")
         # Redirect to avoid re-submission
         return redirect(url_for("get_education"))
 
@@ -539,7 +539,7 @@ def get_experience():
             mongo.db.experience.update({"_id": ObjectId(job['_id'])}, {
                 "$set": {"order": int(request.form.get(f"order[{job['_id']}]"))}})
 
-        flash("Work Experience successfully updated!")
+        flash("Work Experience successfully updated!", "success")
         # Redirect to avoid re-submission
         return redirect(url_for("get_experience"))
 
@@ -559,7 +559,7 @@ def add_experience():
         }
         mongo.db.experience.insert_one(job)
         flash(Markup(
-            f"Job at <strong>{job['company']}</strong> was successfully Added!"))
+            f"Job at <strong>{job['company']}</strong> was successfully Added!"), "success")
         return redirect(url_for("get_experience"))
 
     return render_template("admin/add_experience.html")
@@ -579,7 +579,7 @@ def edit_experience(id):
         mongo.db.experience.update({"_id": ObjectId(id)}, {
             "$set": updated})
         flash(Markup(
-            f"Job at <strong>{updated['company']}</strong> was successfully edited!"))
+            f"Job at <strong>{updated['company']}</strong> was successfully edited!"), "success")
         # Redirect to avoid re-submission
         return redirect(url_for("get_experience"))
 
@@ -617,7 +617,7 @@ def add_project():
         }
         mongo.db.projects.insert_one(project)
         flash(Markup(
-            f"Project <strong>{project['title']}</strong> was successfully Added!"))
+            f"Project <strong>{project['title']}</strong> was successfully Added!"), "success")
         return redirect(url_for("get_projects"))
 
     return render_template("admin/add_project.html")
@@ -639,7 +639,7 @@ def edit_project(id):
         mongo.db.projects.update({"_id": ObjectId(id)}, {
             "$set": updated})
         flash(Markup(
-            f"Project <strong>{updated['title']}</strong> was successfully edited!"))
+            f"Project <strong>{updated['title']}</strong> was successfully edited!"), "success")
         # Redirect to avoid re-submission
         return redirect(url_for("get_projects"))
 
@@ -657,7 +657,7 @@ def delete_project(id):
             os.remove(os.path.join(app.config['UPLOAD_PATH'], photo))
 
     mongo.db.projects.remove({"_id": ObjectId(id)})
-    flash("Project was successfully deleted")
+    flash("Project was successfully deleted", "warning")
     return redirect(url_for("get_projects"))
 
 
@@ -676,7 +676,7 @@ def get_links():
             mongo.db.links.update({"_id": ObjectId(link['_id'])}, {
                 "$set": updated})
 
-        flash("Links were successfully updated!")
+        flash("Links were successfully updated!", "success")
         # Redirect to avoid re-submission
         return redirect(url_for("get_links"))
 
@@ -687,7 +687,7 @@ def get_links():
 @ login_required("You don't have the user privileges to access this section.")
 def delete_link(id):
     mongo.db.links.remove({"_id": ObjectId(id)})
-    flash("Link was successfully deleted")
+    flash("Link was successfully deleted", "warning")
     return redirect(url_for("get_links"))
 
 
@@ -702,7 +702,7 @@ def add_link():
         }
         mongo.db.links.insert_one(link)
         flash(Markup(
-            f"Link <strong>{link['name']}</strong> was successfully Added!"))
+            f"Link <strong>{link['name']}</strong> was successfully Added!"), "success")
         return redirect(url_for("get_links"))
 
     return render_template("admin/add_link.html")
@@ -727,7 +727,7 @@ def settings():
         }
         mongo.db.settings.update({"_id": ObjectId(os.environ.get("DB_SETTINGS_ID"))}, {
             "$set": updated})
-        flash("Settings were successfully updated!")
+        flash("Settings were successfully updated!", "success")
         # Redirect to avoid re-submission
         return redirect(url_for("settings"))
 
@@ -743,7 +743,7 @@ def login():
             return redirect(url_for("admin"))
         else:
             # username doesn't exist
-            flash("Incorrect Username")
+            flash("Incorrect Username or Password!", "danger")
             return redirect(url_for("login"))
 
     return render_template("admin/login.html")
@@ -754,7 +754,7 @@ def logout():
     if session.get("user"):
         session.pop("user")
 
-    flash("You have been logged out")
+    flash("You have been logged out", "danger")
     return redirect(url_for("home"))
 
 
