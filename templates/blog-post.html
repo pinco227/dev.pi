@@ -52,9 +52,9 @@
                         </a>
                     </figure>
                 {% else %}
-                    <i class="bi bi-blockquote-left fs-1 float-start col-sm-6 col-md-4"></i>
+                    <i class="bi bi-blockquote-left fs-1 float-start mx-4"></i>
                 {% endif %}
-                <p>{{ post.body|safe }}</p>
+                <div class="blog-document-body">{{ post.body|safe }}</div>
             </div>
         </div>
         <div class="row">

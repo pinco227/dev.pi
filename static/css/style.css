@@ -652,13 +652,22 @@ nav[aria-label="breadcrumb"] {
     background-color: transparent;
 }
 
+.post-body {
+    overflow: hidden;
+}
+
+.post-body img {
+    max-width: 100%;
+    height: auto;
+}
+
 /*------------------------------------------ BLOG POST */
 
 #blog-post .separator {
     margin-bottom: 2rem;
 }
 
-#blog-post figure {
+.blog-document figure {
     margin-left: -1.3rem;
     margin-top: -1rem;
     margin-right: 1rem;
@@ -683,6 +692,16 @@ nav[aria-label="breadcrumb"] {
     padding: .5rem 1rem;
     box-shadow: inset 1px 1px 2px rgb(0 0 0 / 30%);
     border-radius: 1rem;
+}
+
+.blog-document-body {
+    display: unset;
+    overflow: hidden;
+}
+
+.blog-document-body img {
+    max-width: 100%;
+    height: auto;
 }
 
 /*------------------------------------------ CONTACT */
