@@ -6,10 +6,12 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_mail import Mail, Message
+from flask_recaptcha import ReCaptcha
 from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
 import random
+from form_classes import WriteTestimonialForm
 
 if os.path.exists("env.py"):
     import env
@@ -20,6 +22,8 @@ app = Flask(__name__)
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+app.config["RECAPTCHA_SITE_KEY"] = os.environ.get("RC_SITE_KEY")
+app.config["RECAPTCHA_SECRET_KEY"] = os.environ.get("RC_SECRET_KEY")
 app.config['UPLOAD_PATH'] = 'uploads'
 app.config['UPLOAD_EXTENSIONS'] = [
     '.txt', '.doc', '.docx', '.pdf', '.png', '.jpg', '.jpeg', '.gif']
@@ -40,6 +44,7 @@ if not os.path.exists(app.config['UPLOAD_PATH']):
 Breadcrumbs(app=app)
 mongo = PyMongo(app)
 mail = Mail(app)
+recaptcha = ReCaptcha(app=app)
 
 
 @app.context_processor
@@ -89,18 +94,27 @@ def home():
 @app.route('/write-testimonial', methods=["GET", "POST"])
 @register_breadcrumb(app, '.write-testimonial', 'Write Testimonial')
 def add_testimonial():
+    form = WriteTestimonialForm()
     if request.method == "POST":
-        testimonial = {
-            "author": request.form.get("name"),
-            "role": request.form.get("role"),
-            "text": request.form.get("text"),
-            "approved": False
-        }
-        mongo.db.testimonials.insert_one(testimonial)
-        flash("Thank you for your feedback!", "success")
-        return redirect(url_for("home"))
+        if form.validate_on_submit() and recaptcha.verify():
+            testimonial = {
+                "author": request.form.get("name"),
+                "role": request.form.get("role"),
+                "text": request.form.get("text"),
+                "approved": False
+            }
+            mongo.db.testimonials.insert_one(testimonial)
+            flash("Thank you for your feedback!", "success")
+            return redirect(url_for("home"))
+        else:
+            if not recaptcha.verify():
+                flash("Please check the security Recaptcha field!", "danger")
+            if form.errors.items():
+                for fieldName, errorMessages in form.errors.items():
+                    for err in errorMessages:
+                        flash(err, "danger")
 
-    return render_template("write-testimonial.html")
+    return render_template("write-testimonial.html", form=form)
 
 
 @app.route('/portfolio')

@@ -31,21 +31,20 @@
                     <div class="card-body">
                         <h4 class="card-title">Write your thoughts</h4>
                         <form class="d-grid" method="POST" action="{{ url_for('add_testimonial') }}">
+                            {{ form.csrf_token }}
                             <div class="form-floating">
-                                <input class="form-control" type="text" id="name" name="name" placeholder="Your Name"
-                                    aria-label="Name field">
-                                <label for="name">Your Name</label>
+                                {{ form.name(class="form-control", placeholder="Your Name") }}
+                                {{ form.name.label }}
                             </div>
                             <div class="form-floating">
-                                <input class="form-control" type="text" id="role" name="role"
-                                    placeholder="Your Role and Company" aria-label="Role field">
-                                <label for="role">[Role name] at [Company name]</label>
+                                {{ form.role(class="form-control", placeholder="Your Role and Company") }}
+                                {{ form.role.label }}
                             </div>
                             <div class="form-floating">
-                                <textarea class="form-control" rows="3" id="text" name="text"
-                                    placeholder="Your message here..." aria-label="Message field"></textarea>
-                                <label for="text">Your message</label>
+                                {{ form.text(class="form-control", rows="3", placeholder="Your message here...") }}
+                                {{ form.text.label }}
                             </div>
+                            <div class="my-2">{{ recaptcha }}</div>
                             <button type="submit" class="btn btn-lg btn-accent bg-accent">Submit</button>
                         </form>
                     </div>
