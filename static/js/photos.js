@@ -61,7 +61,7 @@ const unhighlight = () => {
 * Updates the hidden input with uploaded filenames list.
 */
 const fileListUpdate = () => {
-    const fileListInput = document.getElementById('photo-list');
+    const fileListInput = document.getElementById('photo_list');
     const fileList = [];
     document.querySelectorAll('.photo-container').forEach(el => {
         fileList.push(el.dataset.src);
@@ -134,7 +134,7 @@ const uploadFile = (file) => {
             if (document.getElementById('gallery')) {
                 const containerEl = document.getElementById('gallery');
                 const existingElCount = document.querySelectorAll(".photo-container").length;
-                const initialSlug = document.getElementById('initial-slug');
+                const initialSlug = document.getElementById('initial_slug');
                 let galleryClass;
                 let imgTag;
                 if (initialSlug) {

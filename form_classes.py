@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha.validators import Recaptcha
-from wtforms import StringField, TextAreaField, SubmitField
+from wtforms import StringField, TextAreaField, SubmitField, HiddenField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Email, NumberRange, URL
 
@@ -30,3 +30,29 @@ class ContactForm(FlaskForm):
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message="Please check the security Recaptcha field!")])
     submit = SubmitField('Send')
+
+
+class UpdateTestimonials(FlaskForm):
+    submit = SubmitField('Update')
+
+
+class AddBlogForm(FlaskForm):
+    title = StringField('Title', validators=[
+        DataRequired(message="Please fill in Title field!")])
+    slug = StringField('Slug', validators=[
+                       DataRequired(message="Slug is required!")])
+    url_for_files = HiddenField(id="url-for-files")
+    collection = HiddenField()
+    photo_list = HiddenField()
+    body = TextAreaField('Text')
+    submit = SubmitField('Add')
+
+
+class EditBlogForm(FlaskForm):
+    title = StringField('Title', validators=[
+        DataRequired(message="Please fill in Title field!")])
+    initial_slug = HiddenField()
+    slug = StringField('Slug', validators=[
+                       DataRequired(message="Slug is required!")])
+    body = TextAreaField('Text')
+    submit = SubmitField('Update')

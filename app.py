@@ -10,7 +10,7 @@ from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
 import random
-from form_classes import WriteTestimonialForm, ContactForm
+from form_classes import WriteTestimonialForm, ContactForm, UpdateTestimonials, AddBlogForm, EditBlogForm
 
 if os.path.exists("env.py"):
     import env
@@ -346,23 +346,27 @@ def files():
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
 @login_required("You don't have the user privileges to access this section.")
 def get_testimonials():
+    form = UpdateTestimonials()
     if request.method == "POST":
-        testimonials = list(mongo.db.testimonials.find())
+        if form.validate_on_submit():
+            testimonials = list(mongo.db.testimonials.find())
 
-        for testimonial in testimonials:
-            if request.form.get(f"approved[{testimonial['_id']}]"):
-                is_approved = True
-            else:
-                is_approved = False
-            mongo.db.testimonials.update({"_id": ObjectId(testimonial['_id'])}, {
-                "$set": {"approved": is_approved}})
-        flash("Testimonials were successfully updated!", "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_testimonials"))
+            for testimonial in testimonials:
+                if request.form.get(f"approved[{testimonial['_id']}]"):
+                    is_approved = True
+                else:
+                    is_approved = False
+                mongo.db.testimonials.update({"_id": ObjectId(testimonial['_id'])}, {
+                    "$set": {"approved": is_approved}})
+            flash("Testimonials were successfully updated!", "success")
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_testimonials"))
+        else:
+            flash("Error submitting the changes!", "danger")
 
     approved = list(mongo.db.testimonials.find({"approved": True}))
     unapproved = list(mongo.db.testimonials.find({"approved": False}))
-    return render_template("admin/testimonials.html", approved=approved, unapproved=unapproved)
+    return render_template("admin/testimonials.html", approved=approved, unapproved=unapproved, form=form)
 
 
 @app.route('/admin/delete_testimonial/<id>')
@@ -387,41 +391,54 @@ def get_blogs():
 @app.route('/admin/add_blog', methods=["GET", "POST"])
 @login_required("You don't have the user privileges to access this section.")
 def add_blog():
+    form = AddBlogForm()
     if request.method == "POST":
-        blog = {
-            "title": request.form.get("title"),
-            "slug": request.form.get("slug"),
-            "photos": request.form.get("photo-list"),
-            "body": request.form.get("body"),
-            "added_on": date.today().strftime("%B %d, %Y")
-        }
-        mongo.db.blogs.insert_one(blog)
-        flash(Markup(
-            f"Blog <strong>{blog['title']}</strong> was successfully Added!"), "success")
-        return redirect(url_for("get_blogs"))
+        if form.validate_on_submit():
+            blog = {
+                "title": form.title.data,
+                "slug": form.slug.data,
+                "photos": form.photo_list.data,
+                "body": form.body.data,
+                "added_on": date.today().strftime("%B %d, %Y")
+            }
+            mongo.db.blogs.insert_one(blog)
+            flash(Markup(
+                f"Blog <strong>{blog['title']}</strong> was successfully Added!"), "success")
+            return redirect(url_for("get_blogs"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
-    return render_template("admin/add_blog.html")
+    return render_template("admin/add_blog.html", form=form)
 
 
 @ app.route('/admin/edit_blog/<id>', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def edit_blog(id):
+    form = EditBlogForm()
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
     if request.method == "POST":
-        updated = {
-            "title": request.form.get("title"),
-            "slug": request.form.get("slug"),
-            "body": request.form.get("body")
-        }
-        flash(Markup(
-            f"Blog <strong>{updated['title']}</strong> was successfully edited!"), "success")
+        if form.validate_on_submit():
+            updated = {
+                "title": form.title.data,
+                "slug": form.slug.data,
+                "body": form.body.data
+            }
+            flash(Markup(
+                f"Blog <strong>{updated['title']}</strong> was successfully edited!"), "success")
 
-        mongo.db.blogs.update({"_id": ObjectId(id)}, {
-            "$set": updated})
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_blogs"))
+            mongo.db.blogs.update({"_id": ObjectId(id)}, {
+                "$set": updated})
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_blogs"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
-    return render_template("admin/edit_blog.html", post=post)
+    form.body.data = post["body"]
+    return render_template("admin/edit_blog.html", post=post, form=form)
 
 
 @ app.route('/admin/delete_blog/<id>')
@@ -636,7 +653,7 @@ def add_project():
             "description": request.form.get("description"),
             "repo": request.form.get("repo"),
             "live_url": request.form.get("live_url"),
-            "photos": request.form.get("photo-list")
+            "photos": request.form.get("photo_list")
         }
         mongo.db.projects.insert_one(project)
         flash(Markup(
