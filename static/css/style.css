@@ -1,3 +1,8 @@
+/*------------------------------------------ FONTS IMPORT */
+
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@300;400;500;700&family=Lato:wght@300;400;700&family=Source+Code+Pro:wght@400;500&display=swap');
+/*------------------------------------------ VARIABLES */
+
 :root {
     --accent: #168fd6;
     --accent-rgb: 22, 143, 214;
@@ -17,6 +22,7 @@
 html, body {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    font-family: 'Lato', sans-serif;
 }
 
 body {
@@ -50,7 +56,13 @@ h1, h2, h3, h4, h5 {
 }
 
 h1, h2, h3 {
+    font-family: 'Alegreya Sans', sans-serif;
     text-align: center;
+}
+
+.navbar-brand {
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 500;
 }
 
 .section-title {

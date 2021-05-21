@@ -60,6 +60,11 @@ def too_large(e):
     return make_response(jsonify({"message": "File is too large!"}), 413)
 
 
+@app.route('/browserconfig.xml')
+def sendfile():
+    return send_from_directory('static', 'browserconfig.xml')
+
+
 @app.route('/uploads/', defaults={'filename': False})
 @app.route('/uploads/<filename>')
 def uploads(filename):
