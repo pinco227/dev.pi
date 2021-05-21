@@ -61,28 +61,26 @@
                 <div class="card card-contact-form">
                     <div class="card-body">
                         <h4 class="card-title">Send me an email</h4>
-                        <form class="d-grid" method="POST">
+                        <form class="d-grid" method="POST" action="{{ url_for('contact') }}">
+                            {{ form.csrf_token }}
                             <div class="form-floating">
-                                <input class="form-control" type="text" id="name" name="name" placeholder="Your Name"
-                                    aria-label="Name field">
-                                <label for="name">Your Name</label>
+                                {{ form.name(class="form-control", placeholder="Your Name") }}
+                                {{ form.name.label }}
                             </div>
                             <div class="form-floating">
-                                <input class="form-control" type="email" id="email" name="email"
-                                    placeholder="Email Address" aria-label="Email field">
-                                <label for="name">Email Address</label>
+                                {{ form.email(class="form-control", placeholder="Email Address") }}
+                                {{ form.email.label }}
                             </div>
                             <div class="form-floating">
-                                <input class="form-control" type="text" id="subject" name="subject"
-                                    placeholder="Subject" aria-label="Subject field">
-                                <label for="subject">Subject</label>
+                                {{ form.subject(class="form-control", placeholder="Subject") }}
+                                {{ form.subject.label }}
                             </div>
                             <div class="form-floating">
-                                <textarea class="form-control" rows="3" id="message" name="message"
-                                    placeholder="Your message here..." aria-label="Message field"></textarea>
-                                <label for="message">Your message</label>
+                                {{ form.message(class="form-control", rows="3", placeholder="Your message here...") }}
+                                {{ form.message.label }}
                             </div>
-                            <button type="submit" class="btn btn-lg btn-accent bg-accent">Send</button>
+                            <div class="my-2">{{ form.recaptcha }}</div>
+                            {{ form.submit(class="btn btn-lg btn-accent bg-accent") }}
                         </form>
                     </div>
                 </div>

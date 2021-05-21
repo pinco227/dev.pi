@@ -90,6 +90,10 @@ h1, h2, h3 {
     color: var(--accent);
 }
 
+textarea.form-control {
+    min-height: 100px;
+}
+
 /*------------------------------------------ UTILS */
 
 .bg-accent {
