@@ -56,3 +56,31 @@ class EditBlogForm(FlaskForm):
                        DataRequired(message="Slug is required!")])
     body = TextAreaField('Text')
     submit = SubmitField('Update')
+
+
+class AddProjectForm(FlaskForm):
+    title = StringField('Title', validators=[
+        DataRequired(message="Please fill in Title field!")])
+    slug = StringField('Slug', validators=[
+                       DataRequired(message="Slug is required!")])
+    tech = StringField('Technologies Used')
+    repo = StringField('Source Code (repository URL)')
+    live_url = StringField('Live URL')
+    description = TextAreaField('Description')
+    url_for_files = HiddenField(id="url-for-files")
+    collection = HiddenField()
+    photo_list = HiddenField()
+    submit = SubmitField('Add')
+
+
+class EditProjectForm(FlaskForm):
+    title = StringField('Title', validators=[
+        DataRequired(message="Please fill in Title field!")])
+    initial_slug = HiddenField()
+    slug = StringField('Slug', validators=[
+                       DataRequired(message="Slug is required!")])
+    tech = StringField('Technologies Used')
+    repo = StringField('Source Code (repository URL)')
+    live_url = StringField('Live URL')
+    description = TextAreaField('Description')
+    submit = SubmitField('Update')

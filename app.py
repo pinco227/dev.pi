@@ -10,7 +10,7 @@ from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
 import random
-from form_classes import WriteTestimonialForm, ContactForm, UpdateTestimonials, AddBlogForm, EditBlogForm
+from form_classes import WriteTestimonialForm, ContactForm, UpdateTestimonials, AddBlogForm, EditBlogForm, AddProjectForm, EditProjectForm
 
 if os.path.exists("env.py"):
     import env
@@ -645,46 +645,58 @@ def get_projects():
 @ app.route('/admin/add_project', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_project():
+    form = AddProjectForm()
     if request.method == "POST":
-        project = {
-            "title": request.form.get("title"),
-            "slug": request.form.get("slug"),
-            "tech": request.form.get("tech"),
-            "description": request.form.get("description"),
-            "repo": request.form.get("repo"),
-            "live_url": request.form.get("live_url"),
-            "photos": request.form.get("photo_list")
-        }
-        mongo.db.projects.insert_one(project)
-        flash(Markup(
-            f"Project <strong>{project['title']}</strong> was successfully Added!"), "success")
-        return redirect(url_for("get_projects"))
+        if form.validate_on_submit():
+            project = {
+                "title": form.title.data,
+                "slug": form.slug.data,
+                "tech": form.tech.data,
+                "description": form.description.data,
+                "repo": form.repo.data,
+                "live_url": form.live_url.data,
+                "photos": form.photo_list.data
+            }
+            mongo.db.projects.insert_one(project)
+            flash(Markup(
+                f"Project <strong>{project['title']}</strong> was successfully Added!"), "success")
+            return redirect(url_for("get_projects"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
-    return render_template("admin/add_project.html")
+    return render_template("admin/add_project.html", form=form)
 
 
 @ app.route('/admin/edit_project/<id>', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def edit_project(id):
-    if request.method == "POST":
-        updated = {
-            "title": request.form.get("title"),
-            "slug": request.form.get("slug"),
-            "tech": request.form.get("tech"),
-            "description": request.form.get("description"),
-            "repo": request.form.get("repo"),
-            "live_url": request.form.get("live_url"),
-            "photos": request.form.get("photos")
-        }
-        mongo.db.projects.update({"_id": ObjectId(id)}, {
-            "$set": updated})
-        flash(Markup(
-            f"Project <strong>{updated['title']}</strong> was successfully edited!"), "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_projects"))
-
+    form = EditProjectForm()
     project = mongo.db.projects.find_one({"_id": ObjectId(id)})
-    return render_template("admin/edit_project.html", project=project)
+    if request.method == "POST":
+        if form.validate_on_submit():
+            updated = {
+                "title": form.title.data,
+                "slug": form.slug.data,
+                "tech": form.tech.data,
+                "description": form.description.data,
+                "repo": form.repo.data,
+                "live_url": form.live_url.data
+            }
+            mongo.db.projects.update({"_id": ObjectId(id)}, {
+                "$set": updated})
+            flash(Markup(
+                f"Project <strong>{updated['title']}</strong> was successfully edited!"), "success")
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_projects"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
+
+    form.description.data = project["description"]
+    return render_template("admin/edit_project.html", project=project, form=form)
 
 
 @ app.route('/admin/delete_project/<id>')

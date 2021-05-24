@@ -35,16 +35,37 @@
                             <div class="form-floating">
                                 {{ form.name(class="form-control", placeholder="Your Name") }}
                                 {{ form.name.label }}
+                                {% for error in form.name.errors %}
+                                    <div class="invalid-feedback">
+                                        {{error}}
+                                    </div>
+                                {% endfor %}
                             </div>
                             <div class="form-floating">
                                 {{ form.role(class="form-control", placeholder="Your Role and Company") }}
                                 {{ form.role.label }}
+                                {% for error in form.role.errors %}
+                                    <div class="invalid-feedback">
+                                        {{error}}
+                                    </div>
+                                {% endfor %}
                             </div>
                             <div class="form-floating">
                                 {{ form.text(class="form-control", rows="3", placeholder="Your message here...") }}
                                 {{ form.text.label }}
+                                {% for error in form.text.errors %}
+                                    <div class="invalid-feedback">
+                                        {{error}}
+                                    </div>
+                                {% endfor %}
                             </div>
-                            <div class="my-2">{{ form.recaptcha }}</div>
+                            <div class="my-2">{{ form.recaptcha }}
+                                {% for error in form.recaptcha.errors %}
+                                    <div class="invalid-feedback">
+                                        {{error}}
+                                    </div>
+                                {% endfor %}
+                            </div>
                             {{ form.submit(class="btn btn-lg btn-accent bg-accent") }}
                         </form>
                     </div>

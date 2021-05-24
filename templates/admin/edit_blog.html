@@ -27,7 +27,7 @@
                         </div>
                         <div class="form-floating mb-3">
                             {{ form.initial_slug(value="%s" | format(post.slug)) }}
-                            {{ form.slug(class="form-control", value="%s" | format(post.slug)) }}
+                            {{ form.slug(class="form-control", readonly="readonly", value="%s" | format(post.slug)) }}
                             {{ form.slug.label }}
                         </div>
                         <div class="form-floating mb-3">
