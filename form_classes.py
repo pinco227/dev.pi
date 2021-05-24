@@ -128,3 +128,13 @@ class ExperienceForm(FlaskForm):
                          NumberRange(message="Order should be a number!"),
                          InputRequired(message="Please enter Order!")])
     submit = SubmitField('Submit')
+
+
+class AddLinkForm(FlaskForm):
+    name = StringField('Link name', validators=[
+        DataRequired(message="Please fill in the Link name!")])
+    url = StringField('Live URL', validators=[DataRequired(message="Please fill in the Link URL!"),
+                                              URL(message="Invalid URL for Live Project!")])
+    icon = StringField('Icon', validators=[
+        DataRequired(message="Please fill in the Icon!")])
+    submit = SubmitField('Add')

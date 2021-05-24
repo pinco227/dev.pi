@@ -11,28 +11,29 @@
     </div>
     <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
         <form action="{{ url_for('add_link') }}" method="POST">
+            {{ form.csrf_token }}
             <div class="card-header">
                 <h4 class="text-center">New</h4>
             </div>
             <div class="card-body">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="GitHub">
-                    <label for="name">Link name</label>
+                    {{ form.name(class="form-control", placeholder="Link name") }}
+                    {{ form.name.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="url" name="url" placeholder="GitHub">
-                    <label for="url">URL</label>
+                    {{ form.url(class="form-control", placeholder="URL") }}
+                    {{ form.url.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="icon" name="icon" placeholder="github">
-                    <label for="icon">Icon</label>
+                    {{ form.icon(class="form-control", placeholder="Icon") }}
+                    {{ form.icon.label }}
                     <small class="text-muted"><a href="https://icons.getbootstrap.com/" target="_blank">Bootstrap
                             Icons</a></small>
                 </div>
             </div>
             <div class="card-footer text-center d-flex justify-content-between">
                 <a href="{{ url_for('get_links') }}" class="btn btn-lg btn-danger">Cancel</a>
-                <button type="submit" class="btn btn-lg btn-accent">Add</button>
+                {{ form.submit(class="btn btn-lg btn-accent") }}
             </div>
         </form>
     </div>

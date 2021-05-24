@@ -10,9 +10,11 @@ from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
 import random
+import re
 
 import pymongo
-from form_classes import UpdateForm, WriteTestimonialForm, ContactForm, AddBlogForm, EditBlogForm, AddProjectForm, EditProjectForm, AddSkillForm, EducationForm, ExperienceForm
+from form_classes import (UpdateForm, WriteTestimonialForm, ContactForm, AddBlogForm, EditBlogForm,
+                          AddProjectForm, EditProjectForm, AddSkillForm, EducationForm, ExperienceForm, AddLinkForm)
 
 if os.path.exists("env.py"):
     import env
@@ -522,12 +524,12 @@ def get_education():
         if form.validate_on_submit():
             for school in education:
                 order = request.form.get(f"order[{school['_id']}]")
-                if isinstance(order, int) or order.isdigit():
+                if order and (isinstance(order, int) or order.isdigit()):
                     mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
                         "$set": {"order": int(order)}})
                 else:
                     flash(Markup(
-                        f"School <strong>{school['school']}</strong> couldn't be updated! Submitted order was not numeric!"), "danger")
+                        f"School <strong>{school['school']}</strong>: Invalid Order!"), "danger")
 
             flash("Education successfully updated!", "success")
             # Redirect to avoid re-submission
@@ -615,12 +617,12 @@ def get_experience():
         if form.validate_on_submit():
             for job in experience:
                 order = request.form.get(f"order[{job['_id']}]")
-                if isinstance(order, int) or order.isdigit():
+                if order and (isinstance(order, int) or order.isdigit()):
                     mongo.db.experience.update({"_id": ObjectId(job['_id'])}, {
                         "$set": {"order": int(order)}})
                 else:
                     flash(Markup(
-                        f"Job at <strong>{job['company']}</strong> couldn't be updated! Submitted order was not numeric!"), "danger")
+                        f"Job at <strong>{job['company']}</strong>: Invalid Order"), "danger")
 
             flash("Work Experience successfully updated!", "success")
             # Redirect to avoid re-submission
@@ -779,22 +781,49 @@ def delete_project(id):
 @ login_required("You don't have the user privileges to access this section.")
 def get_links():
     links = list(mongo.db.links.find())
-
+    form = UpdateForm()
     if request.method == "POST":
-        for link in links:
-            updated = {
-                "name": request.form.get(f"name[{link['_id']}]"),
-                "icon": request.form.get(f"icon[{link['_id']}]"),
-                "url": request.form.get(f"url[{link['_id']}]")
-            }
-            mongo.db.links.update({"_id": ObjectId(link['_id'])}, {
-                "$set": updated})
+        if form.validate_on_submit():
+            for link in links:
+                name = request.form.get(f"name[{link['_id']}]")
+                icon = request.form.get(f"icon[{link['_id']}]")
+                url = request.form.get(f"url[{link['_id']}]")
+                url_regex = (
+                    r"^[a-z]+://"
+                    r"(?P<host>[^\/\?:]+)"
+                    r"(?P<port>:[0-9]+)?"
+                    r"(?P<path>\/.*?)?"
+                    r"(?P<query>\?.*)?$"
+                )
+                if name and icon and url and re.search(url_regex, url):
+                    updated = {
+                        "name": name,
+                        "icon": icon,
+                        "url": url
+                    }
+                    mongo.db.links.update({"_id": ObjectId(link['_id'])}, {
+                        "$set": updated})
+                else:
+                    if not name:
+                        flash(Markup(
+                            f"Link <strong>{link['name']}</strong>: Name required"), "danger")
+                    if not icon:
+                        flash(Markup(
+                            f"Link <strong>{link['name']}</strong>: Icon required"), "danger")
+                    if not url:
+                        flash(Markup(
+                            f"Link <strong>{link['name']}</strong>: URL required"), "danger")
+                    if not re.search(url_regex, url):
+                        flash(Markup(
+                            f"Link <strong>{link['name']}</strong>: Invalid URL"), "danger")
 
-        flash("Links were successfully updated!", "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_links"))
+            flash("Links were successfully updated!", "success")
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_links"))
+        else:
+            flash("Error submitting the changes!", "danger")
 
-    return render_template("admin/links.html", links=links)
+    return render_template("admin/links.html", links=links, form=form)
 
 
 @ app.route('/admin/delete_link/<id>')
@@ -808,18 +837,24 @@ def delete_link(id):
 @ app.route('/admin/add_link', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_link():
+    form = AddLinkForm()
     if request.method == "POST":
-        link = {
-            "name": request.form.get("name"),
-            "icon": request.form.get("icon"),
-            "url": request.form.get("url")
-        }
-        mongo.db.links.insert_one(link)
-        flash(Markup(
-            f"Link <strong>{link['name']}</strong> was successfully Added!"), "success")
-        return redirect(url_for("get_links"))
+        if form.validate_on_submit():
+            link = {
+                "name": form.name.data,
+                "icon": form.icon.data,
+                "url": form.url.data
+            }
+            mongo.db.links.insert_one(link)
+            flash(Markup(
+                f"Link <strong>{link['name']}</strong> was successfully Added!"), "success")
+            return redirect(url_for("get_links"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
-    return render_template("admin/add_link.html")
+    return render_template("admin/add_link.html", form=form)
 
 
 @ app.route('/admin/settings', methods=["GET", "POST"])
