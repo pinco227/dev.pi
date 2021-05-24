@@ -865,6 +865,7 @@ def get_settings():
             updated = {
                 "name": form.name.data,
                 "bio": form.bio.data,
+                "cover": form.cover.data,
                 "status": form.status.data,
                 "availability": form.availability.data,
                 "email": form.email.data,
@@ -888,6 +889,7 @@ def get_settings():
                     flash(err, "danger")
 
     form.bio.data = settings["bio"]
+    form.cover.data = settings["cover"]
     form.meta_desc.data = settings["meta_desc"]
     return render_template("admin/settings.html", form=form)
 

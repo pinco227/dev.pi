@@ -350,6 +350,11 @@ nav[aria-label="breadcrumb"] {
     text-align: left;
 }
 
+.hero .hero-subtitle {
+    color: var(--text-light);
+    text-align: left;
+}
+
 .hero-social {
     position: absolute;
     left: 50%;
@@ -398,6 +403,20 @@ nav[aria-label="breadcrumb"] {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.available {
+    text-shadow: 0px 0px 3px lightgreen;
+    color: lightgreen;
+    font-size: 1.5rem;
+    line-height: 1rem;
+}
+
+.unavailable {
+    text-shadow: 0px 0px 3px red;
+    color: red;
+    font-size: 1.5rem;
+    line-height: 1rem;
 }
 
 /*------------------------------------------ SKILLS */

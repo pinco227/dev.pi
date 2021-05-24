@@ -1,27 +1,39 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+{% endblock styles %}
 {% block content %}
 <!-- HERO SECTION -->
 <section id="hero" class="bg-accent">
     <div class="container-xl">
         <div class="row align-items-center justify-content-center g-5 py-5 hero">
             <div class="col-8 col-sm-6 col-md-5 col-lg-4">
-                <img src="{{ url_for('uploads', filename=settings.photos.replace(' ', '')) }}"
-                    class="hero-img d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500"
-                    loading="lazy">
+                <a href="{{ url_for('uploads', filename=settings.photos.replace(' ', '')) }}"
+                        class="gallery">
+                    <img src="{{ url_for('uploads', filename=settings.photos.replace(' ', '')) }}"
+                            alt="{{ settings.name }} - {{ settings.title }}" class="hero-img d-block mx-lg-auto img-fluid gallery-item">
+                </a>
             </div>
             <div class="col-12 col-md-7 col-lg-8">
                 <h1 class="hero-title display-5 fw-bold lh-1 mb-3 text-shadow">{{ settings.name }}</h1>
+                <h3 class="hero-subtitle mb-3">{{ settings.title }}</h3>
                 <div class="row">
                     <div class="col-4 col-md-3">Current status:</div>
                     <div class="col-8 col-md-9">{{ settings.status }}</div>
                 </div>
                 <div class="row">
                     <div class="col-4 col-md-3">Availability:</div>
-                    <div class="col-8 col-md-9">{{ settings.availability }}</div>
+                    <div class="col-8 col-md-9">
+                        {% if settings.availability == 'available' %}
+                            <span class="available">&#8226;</span>
+                        {% else %}
+                            <span class="unavailable">&#8226;</span>
+                        {% endif %}
+                        {{ settings.availability }}</div>
                 </div>
                 <p class="lead">{{ settings.bio }}</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <a href="#" class="btn btn-dark btn-lg px-4 me-md-2">Learn More</a>
+                    <button type="button" class="btn btn-dark btn-lg px-4 me-md-2" data-bs-toggle="modal" data-bs-target="#cover">Learn More</button>
                     <a href="{{ settings.cv }}" class="btn btn-light btn-lg px-4">Download CV</a>
                 </div>
             </div>
@@ -181,4 +193,28 @@
             </div>
         </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="cover" tabindex="-1" aria-labelledby="coverLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="coverLabel">Bio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{ settings.cover }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-accent" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<!-- CREDIT: https://github.com/biati-digital/glightbox -->
+<script type="text/javascript">
+    const lightbox = GLightbox({ 'selector': '.gallery' });
+</script>
+{% endblock scripts %}

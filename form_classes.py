@@ -152,6 +152,7 @@ class SettingsForm(FlaskForm):
     name = StringField('Dev Name', validators=[
         DataRequired(message="Please fill in the Developer's name!")])
     bio = TextAreaField('Short Bio')
+    cover = TextAreaField('Long Bio')
     status = StringField('Status', validators=[
         DataRequired(message="Please fill in the Status!")])
     availability = SelectField('Availability', choices=[('available', 'Available'), ('not available', 'Not Available')], validators=[

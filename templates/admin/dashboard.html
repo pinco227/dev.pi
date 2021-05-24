@@ -10,25 +10,25 @@
         </div>
     </div>
     {% if unapproved_testimonials > 0 %}
-        <div class="row mb-4">
-            <div class="col">
-                <div class="card bg-warning" id="card-news">
-                    <div class="card-header">
-                        <h4 class="text-center"><i class="bi bi-bell-fill"></i> Notifications</h4>
-                    </div>
-                    <div class="card-body text-center g-2">
-                        <h3 class="fw-normal">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card bg-warning" id="card-news">
+                <div class="card-header">
+                    <h4 class="text-center"><i class="bi bi-bell-fill"></i> Notifications</h4>
+                </div>
+                <div class="card-body text-center g-2">
+                    <h3 class="fw-normal">
                         {% if unapproved_testimonials == 1 %}
-                            There is <strong>1</strong> unapproved testimonial! 
+                        There is <strong>1</strong> unapproved testimonial!
                         {% else %}
-                            There are <strong>{{ unapproved_testimonials }}</strong> unapproved testimonials!
+                        There are <strong>{{ unapproved_testimonials }}</strong> unapproved testimonials!
                         {% endif %}
-                        </h3>
-                        <a href="{{ url_for('get_testimonials') }}" class="btn btn-lg btn-accent">View</a>
-                    </div>
+                    </h3>
+                    <a href="{{ url_for('get_testimonials') }}" class="btn btn-lg btn-accent">View</a>
                 </div>
             </div>
         </div>
+    </div>
     {% endif %}
     <div class="row mb-4">
         <div class="col">
@@ -38,22 +38,32 @@
                 </div>
                 <div class="card-body row justify-content-around g-2">
                     <div class="col">
-                        <a href="{{ url_for('add_blog') }}" class="col btn btn-success"><i class="bi bi-file-richtext-fill"></i> Add New Blog <i class="bi bi-plus-circle-dotted"></i></a>
+                        <a href="{{ url_for('add_blog') }}" class="col btn btn-success"><i
+                                class="bi bi-file-richtext-fill"></i> Add New Blog <i
+                                class="bi bi-plus-circle-dotted"></i></a>
                     </div>
                     <div class="col">
-                        <a href="{{ url_for('add_project') }}" class="col btn btn-success"><i class="bi bi-display-fill"></i> Add New Project <i class="bi bi-plus-circle-dotted"></i></a>
+                        <a href="{{ url_for('add_project') }}" class="col btn btn-success"><i
+                                class="bi bi-display-fill"></i> Add New Project <i
+                                class="bi bi-plus-circle-dotted"></i></a>
                     </div>
                     <div class="col">
-                        <a href="{{ url_for('add_skill') }}" class="col btn btn-success"><i class="bi bi-puzzle-fill"></i> Add New Skill <i class="bi bi-plus-circle-dotted"></i></a>
+                        <a href="{{ url_for('add_skill') }}" class="col btn btn-success"><i
+                                class="bi bi-puzzle-fill"></i> Add New Skill <i
+                                class="bi bi-plus-circle-dotted"></i></a>
                     </div>
                     <div class="col">
-                        <a href="{{ url_for('add_education') }}" class="col btn btn-success"><i class="bi bi-book-fill"></i> Add New School <i class="bi bi-plus-circle-dotted"></i></a>
+                        <a href="{{ url_for('add_education') }}" class="col btn btn-success"><i
+                                class="bi bi-book-fill"></i> Add New School <i class="bi bi-plus-circle-dotted"></i></a>
                     </div>
                     <div class="col">
-                        <a href="{{ url_for('add_experience') }}" class="col btn btn-success"><i class="bi bi-briefcase-fill"></i> Add New Job <i class="bi bi-plus-circle-dotted"></i></a>
+                        <a href="{{ url_for('add_experience') }}" class="col btn btn-success"><i
+                                class="bi bi-briefcase-fill"></i> Add New Job <i
+                                class="bi bi-plus-circle-dotted"></i></a>
                     </div>
                     <div class="col">
-                        <a href="{{ url_for('settings') }}" class="col btn btn-light"><i class="bi bi-sliders"></i> General Settings</a>
+                        <a href="{{ url_for('get_settings') }}" class="col btn btn-light"><i class="bi bi-sliders"></i>
+                            General Settings</a>
                     </div>
                 </div>
             </div>
