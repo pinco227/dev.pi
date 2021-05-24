@@ -1,9 +1,17 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha.validators import Recaptcha
 from pymongo import message
-from wtforms import StringField, TextAreaField, SubmitField, HiddenField, IntegerField, SelectField
+from wtforms import StringField, TextAreaField, SubmitField, HiddenField, IntegerField, SelectField, PasswordField
 from wtforms.fields.html5 import EmailField, IntegerRangeField, IntegerField, TelField
 from wtforms.validators import DataRequired, Email, NumberRange, Regexp, URL, Optional, InputRequired, AnyOf, Length
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', id="floatingInput", validators=[
+        DataRequired(message="Please enter Username!")])
+    password = PasswordField('Password', id="floatingPassword", validators=[
+        DataRequired(message="Please enter Password!")])
+    submit = SubmitField('Sign In')
 
 
 class UpdateForm(FlaskForm):

@@ -20,11 +20,11 @@
 
 <body class="body-login text-center">
     <!-- flash messages -->
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3 w-75" style="z-index: 5">
-                {% for message in messages %}
-                    <div class="d-flex w-100 toast" role="alert" aria-live="assertive" aria-atomic="true">
+                {% for category, message in messages %}
+                    <div class="d-flex w-100 toast bg-{{ category }}" role="alert" aria-live="assertive" aria-atomic="true">
                         <span class="m-auto px-2">
                             <i class="bi bi-bell-fill"></i>
                         </span>
@@ -39,17 +39,17 @@
     {% endwith %}
     <main class="form-signin">
         <form method="POST" action="{{ url_for('login') }}">
+            {{ form.csrf_token }}
             <h1 class="text-center">{&pi;}</h1>
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" name="username" placeholder="admin">
-                <label for="floatingInput">Username</label>
+                {{ form.username(class="form-control", placeholder="Username") }}
+                {{ form.username.label }}
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" name="password"
-                    placeholder="Password">
-                <label for="floatingPassword">Password</label>
+                {{ form.password(class="form-control", placeholder="Password") }}
+                {{ form.password.label }}
             </div>
             <button class="w-100 btn btn-lg btn-accent" type="submit">Sign in</button>
         </form>

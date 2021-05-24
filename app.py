@@ -14,7 +14,7 @@ import re
 
 import pymongo
 from form_classes import (UpdateForm, WriteTestimonialForm, ContactForm, AddBlogForm, EditBlogForm,
-                          AddProjectForm, EditProjectForm, AddSkillForm, EducationForm, ExperienceForm, AddLinkForm, SettingsForm)
+                          AddProjectForm, EditProjectForm, AddSkillForm, EducationForm, ExperienceForm, AddLinkForm, SettingsForm, LoginForm)
 
 if os.path.exists("env.py"):
     import env
@@ -894,17 +894,23 @@ def get_settings():
 
 @ app.route('/admin/login', methods=["GET", "POST"])
 def login():
+    form = LoginForm()
     if request.method == "POST":
-        if request.form.get("username").lower() == os.environ.get("ADMIN_USERNAME").lower() and request.form.get("password") == os.environ.get("ADMIN_PASSWORD"):
-            session["user"] = request.form.get("username").lower()
-            flash(f"Welcome, {request.form.get('username')}")
-            return redirect(url_for("admin"))
+        if form.validate_on_submit():
+            if form.username.data.lower() == os.environ.get("ADMIN_USERNAME").lower() and form.password.data == os.environ.get("ADMIN_PASSWORD"):
+                session["user"] = form.username.data.lower()
+                flash(f"Welcome, {form.username.data}")
+                return redirect(url_for("admin"))
+            else:
+                # username doesn't exist
+                flash("Incorrect Username or Password!", "danger")
+                return redirect(url_for("login"))
         else:
-            # username doesn't exist
-            flash("Incorrect Username or Password!", "danger")
-            return redirect(url_for("login"))
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
-    return render_template("admin/login.html")
+    return render_template("admin/login.html", form=form)
 
 
 @ app.route("/admin/logout")
