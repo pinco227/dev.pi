@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha.validators import Recaptcha
 from pymongo import message
-from wtforms import StringField, TextAreaField, SubmitField, HiddenField, IntegerField
-from wtforms.fields.html5 import EmailField, IntegerRangeField, IntegerField
-from wtforms.validators import DataRequired, Email, NumberRange, URL, Optional, InputRequired
+from wtforms import StringField, TextAreaField, SubmitField, HiddenField, IntegerField, SelectField
+from wtforms.fields.html5 import EmailField, IntegerRangeField, IntegerField, TelField
+from wtforms.validators import DataRequired, Email, NumberRange, Regexp, URL, Optional, InputRequired, AnyOf, Length
 
 
 class UpdateForm(FlaskForm):
@@ -138,3 +138,32 @@ class AddLinkForm(FlaskForm):
     icon = StringField('Icon', validators=[
         DataRequired(message="Please fill in the Icon!")])
     submit = SubmitField('Add')
+
+
+class SettingsForm(FlaskForm):
+    name = StringField('Dev Name', validators=[
+        DataRequired(message="Please fill in the Developer's name!")])
+    bio = TextAreaField('Short Bio')
+    status = StringField('Status', validators=[
+        DataRequired(message="Please fill in the Status!")])
+    availability = SelectField('Availability', choices=[('available', 'Available'), ('not available', 'Not Available')], validators=[
+        AnyOf(values=['available', 'not available'], message="Invalid Availability!")])
+    email = EmailField('Email Address', validators=[
+        DataRequired(message="Please fill in the Email address!"),
+        Email(message="Invalid email address!")])
+    phone_regex = "^\+((?:9[679]|8[035789]|6[789]|5[90]|42|3[578]|2[1-689])|9[0-58]|8[1246]|6[0-6]|5[1-8]|4[013-9]|3[0-469]|2[70]|7|1)(?:\W*\d){0,13}\d$"
+    phone = TelField("Phone Number", validators=[
+        DataRequired(message="Please enter the Phone Number!"),
+        Regexp(phone_regex, message="Invalid Phone Number")])
+    address = StringField('Address', validators=[
+        DataRequired(message="Please fill in the Address!")])
+    meta_title = StringField('META Title', validators=[
+        DataRequired(message="Please fill in the META Title!"),
+        Length(max=60, message="META Title is %(max)d characters max!")])
+    meta_keys = StringField('META Keywords', validators=[
+        DataRequired(message="Please fill in the META Keywords!"),
+        Length(max=255, message="META Keywords is %(max)d characters max!")])
+    meta_desc = TextAreaField('META Description', validators=[
+        DataRequired(message="Please fill in the META Description!"),
+        Length(max=160, message="META Description is %(max)d characters max!")])
+    submit = SubmitField('Update')

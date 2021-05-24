@@ -14,7 +14,7 @@ import re
 
 import pymongo
 from form_classes import (UpdateForm, WriteTestimonialForm, ContactForm, AddBlogForm, EditBlogForm,
-                          AddProjectForm, EditProjectForm, AddSkillForm, EducationForm, ExperienceForm, AddLinkForm)
+                          AddProjectForm, EditProjectForm, AddSkillForm, EducationForm, ExperienceForm, AddLinkForm, SettingsForm)
 
 if os.path.exists("env.py"):
     import env
@@ -47,6 +47,8 @@ if not os.path.exists(app.config['UPLOAD_PATH']):
 Breadcrumbs(app=app)
 mongo = PyMongo(app)
 mail = Mail(app)
+settings = mongo.db.settings.find_one(
+    {"_id": ObjectId(os.environ.get("DB_SETTINGS_ID"))})
 
 
 @app.context_processor
@@ -56,8 +58,6 @@ def context_processor():
     Returns:
         dict: settings and links db collections
     """
-    settings = mongo.db.settings.find_one(
-        {"_id": ObjectId('606a3310d5c7c22eeee180f6')})
     links = list(mongo.db.links.find())
     return dict(settings=settings, links=links)
 
@@ -244,9 +244,8 @@ def files():
             # Check if document id was sent as argument
             if "docid" in request.args or coll == "settings":
                 if coll == "settings":
-                    doc_id = os.environ.get("DB_SETTINGS_ID")
-                    coll_dict = mongo.db[coll].find_one(
-                        {"_id": ObjectId(doc_id)})
+                    doc_id = settings["_id"]
+                    coll_dict = settings
                 else:
                     doc_id = request.args.get('docid')
                     coll_dict = mongo.db[coll].find_one(
@@ -291,8 +290,7 @@ def files():
                 # Check if document id was sent as argument and set filename as truncated slug + random number
                 if "docid" in request.args or coll == "settings":
                     if coll == "settings":
-                        coll_dict = mongo.db[coll].find_one(
-                            {"_id": ObjectId(os.environ.get("DB_SETTINGS_ID"))})
+                        coll_dict = settings
                         new_filename = "settings" + \
                             str(random.randint(1111, 9999))
                     else:
@@ -859,28 +857,39 @@ def add_link():
 
 @ app.route('/admin/settings', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
-def settings():
+def get_settings():
+    global settings
+    form = SettingsForm()
     if request.method == "POST":
-        updated = {
-            "name": request.form.get("name"),
-            "bio": request.form.get("bio"),
-            "status": request.form.get("status"),
-            "availability": request.form.get("availability"),
-            "email": request.form.get("email"),
-            "phone": request.form.get("phone"),
-            "address": request.form.get("address"),
-            "cv": request.form.get("cv"),
-            "meta_title": request.form.get("meta_title"),
-            "meta_desc": request.form.get("meta_desc"),
-            "meta_keys": request.form.get("meta_keys")
-        }
-        mongo.db.settings.update({"_id": ObjectId(os.environ.get("DB_SETTINGS_ID"))}, {
-            "$set": updated})
-        flash("Settings were successfully updated!", "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("settings"))
+        if form.validate_on_submit():
+            updated = {
+                "name": form.name.data,
+                "bio": form.bio.data,
+                "status": form.status.data,
+                "availability": form.availability.data,
+                "email": form.email.data,
+                "phone": form.phone.data,
+                "address": form.address.data,
+                "meta_title": form.meta_title.data,
+                "meta_desc": form.meta_desc.data,
+                "meta_keys": form.meta_keys.data
+            }
+            mongo.db.settings.update({"_id": ObjectId(settings["_id"])}, {
+                "$set": updated})
+            flash("Settings were successfully updated!", "success")
+            # Update global settings variable
+            settings = mongo.db.settings.find_one(
+                {"_id": ObjectId(os.environ.get("DB_SETTINGS_ID"))})
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_settings"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
-    return render_template("admin/settings.html")
+    form.bio.data = settings["bio"]
+    form.meta_desc.data = settings["meta_desc"]
+    return render_template("admin/settings.html", form=form)
 
 
 @ app.route('/admin/login', methods=["GET", "POST"])

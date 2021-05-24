@@ -15,64 +15,56 @@
     <div class="row g-4">
         <div class="col-md-7">
             <div class="card">
-                <form action="{{ url_for('settings') }}" method="POST">
+                <form action="{{ url_for('get_settings') }}" method="POST">
+                    {{ form.csrf_token }}
                     <div class="card-header">
                         <h4 class="text-center">Edit</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="name" name="name" value="{{ settings.name }}">
-                            <label for="name">Dev Name</label>
+                            {{ form.name(class="form-control", value="%s" | format(settings.name)) }}
+                            {{ form.name.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" rows="3" id="bio" name="bio"
-                                style="height: 100px;">{{ settings.bio }}</textarea>
-                            <label for="bio">Bio</label>
+                            {{ form.bio(class="form-control") }}
+                            {{ form.bio.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="status" name="status" value="{{ settings.status }}">
-                            <label for="status">Status</label>
+                            {{ form.status(class="form-control", value="%s" | format(settings.status)) }}
+                            {{ form.status.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="availability" name="availability"
-                                value="{{ settings.availability }}">
-                            <label for="availability">Availability</label>
+                            {{ form.availability(class="form-control", value="%s" | format(settings.availability)) }}
+                            {{ form.availability.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="email" name="email" value="{{ settings.email }}">
-                            <label for="email">Email address</label>
+                            {{ form.email(class="form-control", value="%s" | format(settings.email)) }}
+                            {{ form.email.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="phone" name="phone" value="{{ settings.phone }}">
-                            <label for="phone">Phone number</label>
+                            {{ form.phone(class="form-control", value="%s" | format(settings.phone)) }}
+                            {{ form.phone.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="address" name="address" value="{{ settings.address }}">
-                            <label for="address">Address</label>
+                            {{ form.address(class="form-control", value="%s" | format(settings.address)) }}
+                            {{ form.address.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="cv" name="cv" value="{{ settings.cv }}">
-                            <label for="cv">CV</label>
+                            {{ form.meta_title(class="form-control", maxlength=60, value="%s" | format(settings.meta_title)) }}
+                            {{ form.meta_title.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="meta_title" name="meta_title"
-                                value="{{ settings.meta_title }}">
-                            <label for="meta_title">META Title</label>
+                            {{ form.meta_desc(class="form-control", maxlength=160) }}
+                            {{ form.meta_desc.label }}
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="meta_desc" name="meta_desc"
-                                value="{{ settings.meta_desc }}">
-                            <label for="meta_desc">META Description</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="meta_keys" name="meta_keys"
-                                value="{{ settings.meta_keys }}">
-                            <label for="meta_keys">META Keywords</label>
+                            {{ form.meta_keys(class="form-control mb-0", maxlength=255, value="%s" | format(settings.meta_keys)) }}
+                            {{ form.meta_keys.label }}
                             <small class="text-muted">separated by comma</small>
                         </div>
                     </div>
                     <div class="card-footer text-center">
-                        <button type="submit" class="btn btn-lg btn-accent">Update</button>
+                        {{ form.submit(class="btn btn-lg btn-accent confirm") }}
                     </div>
                 </form>
             </div>
