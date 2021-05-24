@@ -521,8 +521,13 @@ def get_education():
     if request.method == "POST":
         if form.validate_on_submit():
             for school in education:
-                mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
-                    "$set": {"order": int(request.form.get(f"order[{school['_id']}]"))}})
+                order = request.form.get(f"order[{school['_id']}]")
+                if isinstance(order, int) or order.isdigit():
+                    mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
+                        "$set": {"order": int(order)}})
+                else:
+                    flash(Markup(
+                        f"School <strong>{school['school']}</strong> couldn't be updated! Submitted order was not numeric!"), "danger")
 
             flash("Education successfully updated!", "success")
             # Redirect to avoid re-submission
@@ -609,8 +614,13 @@ def get_experience():
     if request.method == "POST":
         if form.validate_on_submit():
             for job in experience:
-                mongo.db.experience.update({"_id": ObjectId(job['_id'])}, {
-                    "$set": {"order": int(request.form.get(f"order[{job['_id']}]"))}})
+                order = request.form.get(f"order[{job['_id']}]")
+                if isinstance(order, int) or order.isdigit():
+                    mongo.db.experience.update({"_id": ObjectId(job['_id'])}, {
+                        "$set": {"order": int(order)}})
+                else:
+                    flash(Markup(
+                        f"Job at <strong>{job['company']}</strong> couldn't be updated! Submitted order was not numeric!"), "danger")
 
             flash("Work Experience successfully updated!", "success")
             # Redirect to avoid re-submission
