@@ -12,7 +12,7 @@ from datetime import date
 import random
 
 import pymongo
-from form_classes import UpdateForm, WriteTestimonialForm, ContactForm, AddBlogForm, EditBlogForm, AddProjectForm, EditProjectForm, AddSkillForm, EducationForm
+from form_classes import UpdateForm, WriteTestimonialForm, ContactForm, AddBlogForm, EditBlogForm, AddProjectForm, EditProjectForm, AddSkillForm, EducationForm, ExperienceForm
 
 if os.path.exists("env.py"):
     import env
@@ -558,6 +558,7 @@ def add_education():
 
     form.order.data = str(
         mongo.db.education.find_one(sort=[("order", pymongo.DESCENDING)])["order"] + 1)
+    form.submit.label.text = "Add"
     return render_template("admin/add_education.html", form=form)
 
 
@@ -588,6 +589,7 @@ def edit_education(id):
                     flash(err, "danger")
 
     form.description.data = school["description"]
+    form.submit.label.text = "Edit"
     return render_template("admin/edit_education.html", school=school, form=form)
 
 
@@ -603,58 +605,78 @@ def delete_education(id):
 @ login_required("You don't have the user privileges to access this section.")
 def get_experience():
     experience = list(mongo.db.experience.find().sort("order", 1))
-
+    form = UpdateForm()
     if request.method == "POST":
-        for job in experience:
-            mongo.db.experience.update({"_id": ObjectId(job['_id'])}, {
-                "$set": {"order": int(request.form.get(f"order[{job['_id']}]"))}})
+        if form.validate_on_submit():
+            for job in experience:
+                mongo.db.experience.update({"_id": ObjectId(job['_id'])}, {
+                    "$set": {"order": int(request.form.get(f"order[{job['_id']}]"))}})
 
-        flash("Work Experience successfully updated!", "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_experience"))
+            flash("Work Experience successfully updated!", "success")
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_experience"))
+        else:
+            flash("Error submitting the changes!", "danger")
 
-    return render_template("admin/experience.html", experience=experience)
+    return render_template("admin/experience.html", experience=experience, form=form)
 
 
 @ app.route('/admin/add_experience', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_experience():
+    form = ExperienceForm()
     if request.method == "POST":
-        job = {
-            "company": request.form.get("company"),
-            "period": request.form.get("period"),
-            "role": request.form.get("role"),
-            "description": request.form.get("description"),
-            "order": int(request.form.get("order"))
-        }
-        mongo.db.experience.insert_one(job)
-        flash(Markup(
-            f"Job at <strong>{job['company']}</strong> was successfully Added!"), "success")
-        return redirect(url_for("get_experience"))
+        if form.validate_on_submit():
+            job = {
+                "company": form.company.data,
+                "period": form.period.data,
+                "role": form.role.data,
+                "description": form.description.data,
+                "order": int(form.order.data)
+            }
+            mongo.db.experience.insert_one(job)
+            flash(Markup(
+                f"Job at <strong>{job['company']}</strong> was successfully Added!"), "success")
+            return redirect(url_for("get_experience"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
-    return render_template("admin/add_experience.html")
+    form.order.data = str(
+        mongo.db.experience.find_one(sort=[("order", pymongo.DESCENDING)])["order"] + 1)
+    form.submit.label.text = "Add"
+    return render_template("admin/add_experience.html", form=form)
 
 
 @ app.route('/admin/edit_experience/<id>', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def edit_experience(id):
-    if request.method == "POST":
-        updated = {
-            "company": request.form.get("company"),
-            "period": request.form.get("period"),
-            "role": request.form.get("role"),
-            "description": request.form.get("description"),
-            "order": int(request.form.get("order"))
-        }
-        mongo.db.experience.update({"_id": ObjectId(id)}, {
-            "$set": updated})
-        flash(Markup(
-            f"Job at <strong>{updated['company']}</strong> was successfully edited!"), "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_experience"))
-
+    form = ExperienceForm()
     job = mongo.db.experience.find_one({"_id": ObjectId(id)})
-    return render_template("admin/edit_experience.html", job=job)
+    if request.method == "POST":
+        if form.validate_on_submit():
+            updated = {
+                "company": form.company.data,
+                "period": form.period.data,
+                "role": form.role.data,
+                "description": form.description.data,
+                "order": int(form.order.data)
+            }
+            mongo.db.experience.update({"_id": ObjectId(id)}, {
+                "$set": updated})
+            flash(Markup(
+                f"Job at <strong>{updated['company']}</strong> was successfully edited!"), "success")
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_experience"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
+
+    form.description.data = job["description"]
+    form.submit.label.text = "Edit"
+    return render_template("admin/edit_experience.html", job=job, form=form)
 
 
 @ app.route('/admin/delete_experience/<id>')

@@ -16,8 +16,9 @@
     </div>
     <div class="card">
         <form action="{{ url_for('get_experience') }}" method="POST">
+        {{ form.csrf_token }}
         <div class="card-header text-center">
-            <h4 class="text-center">List</h4>
+            {{ form.submit(class="btn btn-lg btn-accent") }}
         </div>
         <ul class="list-group list-group-flush">
             {% for job in experience %}
@@ -47,7 +48,7 @@
             {% endfor %}
         </ul>
         <div class="card-footer text-center">
-            <button type="submit" class="btn btn-lg btn-accent">Update</button>
+            {{ form.submit(class="btn btn-lg btn-accent") }}
         </div>
         </form>
     </div>

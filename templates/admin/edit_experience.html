@@ -11,35 +11,35 @@
     </div>
     <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
         <form action="{{ url_for('edit_experience', id=job._id) }}" method="POST">
+            {{ form.csrf_token }}
             <div class="card-header">
                 <h4 class="text-center">Edit</h4>
             </div>
             <div class="card-body">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="company" name="company" value="{{ job.company }}">
-                    <label for="company">Company Name</label>
+                    {{ form.company(class="form-control", value="%s" | format(job.company)) }}
+                    {{ form.company.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="period" name="period" value="{{ job.period }}">
-                    <label for="period">Period of work</label>
+                    {{ form.period(class="form-control", value="%s" | format(job.period)) }}
+                    {{ form.period.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="role" name="role" value="{{ job.role }}">
-                    <label for="role">Role/Title</label>
+                    {{ form.role(class="form-control", value="%s" | format(job.role)) }}
+                    {{ form.role.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <textarea class="form-control" rows="3" id="description" name="description"
-                        style="height: 100px;">{{ job.description }}</textarea>
-                    <label for="description">Description</label>
+                    {{ form.description(class="form-control") }}
+                    {{ form.description.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="number" class="form-control" id="order" name="order" value="{{ job.order }}">
-                    <label for="order">Sort Order</label>
+                    {{ form.order(class="form-control", value="%s" | format(job.order)) }}
+                    {{ form.order.label }}
                 </div>
             </div>
             <div class="card-footer text-center d-flex justify-content-between">
                 <a href="{{ url_for('get_experience') }}" class="btn btn-lg btn-danger">Cancel</a>
-                <button type="submit" class="btn btn-lg btn-accent confirm">Update</button>
+                {{ form.submit(class="btn btn-lg btn-accent confirm", id="submit-form") }}
             </div>
         </form>
     </div>

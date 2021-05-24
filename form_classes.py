@@ -110,7 +110,21 @@ class EducationForm(FlaskForm):
     department = StringField('Department', validators=[
         DataRequired(message="Please fill in the Department!")])
     description = TextAreaField('Description')
-    order = IntegerField('Order', validators=[
+    order = IntegerField('Sort Order', validators=[
+                         NumberRange(message="Order should be a number!"),
+                         InputRequired(message="Please enter Order!")])
+    submit = SubmitField('Submit')
+
+
+class ExperienceForm(FlaskForm):
+    company = StringField('Company Name', validators=[
+        DataRequired(message="Please fill in the Company name!")])
+    period = StringField('Period of work', validators=[
+        DataRequired(message="Please enter the Period of work!")])
+    role = StringField('Role/Title', validators=[
+        DataRequired(message="Please fill in youre Role at this company!")])
+    description = TextAreaField('Description')
+    order = IntegerField('Sort Order', validators=[
                          NumberRange(message="Order should be a number!"),
                          InputRequired(message="Please enter Order!")])
     submit = SubmitField('Submit')
