@@ -142,12 +142,12 @@
 - Other
 
 ## Testing
-  ### [future TEST.md link](#)
+  ### [Click Here for Full Testing Process](https://github.com/pinco227/dev.pi/blob/main/TEST.md)
   ### Overview
   - #### Issues
-    | Issue                      | Fixed              |
-    | -------------------------- | ------------------ |
-    | [Issue link on TEST.md](#) | :heavy_check_mark: |
+    | Issue                                                                                              | Fixed              |
+    | -------------------------------------------------------------------------------------------------- | ------------------ |
+    | [Pylint(no-member) error](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues) | :heavy_check_mark: |
   - #### Tests
     | Test                               | Result             |
     | ---------------------------------- | ------------------ |
