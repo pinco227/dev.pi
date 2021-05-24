@@ -10,7 +10,7 @@ from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
 import random
-from form_classes import WriteTestimonialForm, ContactForm, UpdateTestimonials, AddBlogForm, EditBlogForm, AddProjectForm, EditProjectForm
+from form_classes import WriteTestimonialForm, ContactForm, UpdateTestimonials, AddBlogForm, EditBlogForm, AddProjectForm, EditProjectForm, AddSkillForm, UpdateSkills
 
 if os.path.exists("env.py"):
     import env
@@ -460,21 +460,25 @@ def delete_blog(id):
 @ login_required("You don't have the user privileges to access this section.")
 def get_skills():
     skills = list(mongo.db.skills.find())
+    form = UpdateTestimonials()
 
     if request.method == "POST":
-        for skill in skills:
-            updated = {
-                "name": request.form.get(f"name[{skill['_id']}]"),
-                "percentage": int(request.form.get(f"percentage[{skill['_id']}]"))
-            }
-            mongo.db.skills.update({"_id": ObjectId(skill['_id'])}, {
-                "$set": updated})
+        if form.validate_on_submit():
+            for skill in skills:
+                updated = {
+                    "name": request.form.get(f"name[{skill['_id']}]"),
+                    "percentage": int(request.form.get(f"percentage[{skill['_id']}]"))
+                }
+                mongo.db.skills.update({"_id": ObjectId(skill['_id'])}, {
+                    "$set": updated})
 
-        flash("Skills were successfully updated!", "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_skills"))
+            flash("Skills were successfully updated!", "success")
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_skills"))
+        else:
+            flash("Error submitting the changes!", "danger")
 
-    return render_template("admin/skills.html", skills=skills)
+    return render_template("admin/skills.html", skills=skills, form=form)
 
 
 @ app.route('/admin/delete_skill/<id>')
@@ -488,6 +492,7 @@ def delete_skill(id):
 @ app.route('/admin/add_skill', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_skill():
+    form = AddSkillForm()
     if request.method == "POST":
         skill = {
             "name": request.form.get("name"),
@@ -498,7 +503,7 @@ def add_skill():
             f"Skill <strong>{skill['name']}</strong> was successfully Added!"), "success")
         return redirect(url_for("get_skills"))
 
-    return render_template("admin/add_skill.html")
+    return render_template("admin/add_skill.html", form=form)
 
 
 @ app.route('/admin/education', methods=["GET", "POST"])

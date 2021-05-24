@@ -16,8 +16,9 @@
     </div>
     <div class="card">
         <form action="{{ url_for('get_skills') }}" method="POST">
+        {{ form.csrf_token }}
         <div class="card-header text-center">
-            <button type="submit" class="btn btn-lg btn-accent">Update</button>
+            {{ form.submit(class="btn btn-lg btn-accent") }}
         </div>
         <ul class="list-group list-group-flush">
             {% for skill in skills %}
@@ -44,7 +45,7 @@
             {% endfor %}
         </ul>
         <div class="card-footer text-center">
-            <button type="submit" class="btn btn-lg btn-accent">Update</button>
+            {{ form.submit(class="btn btn-lg btn-accent") }}
         </div>
         </form>
     </div>

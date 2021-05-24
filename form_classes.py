@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha.validators import Recaptcha
 from wtforms import StringField, TextAreaField, SubmitField, HiddenField
-from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired, Email, NumberRange, URL
+from wtforms.fields.html5 import EmailField, IntegerRangeField
+from wtforms.validators import DataRequired, Email, NumberRange, URL, Optional
 
 
 class WriteTestimonialForm(FlaskForm):
@@ -64,8 +64,10 @@ class AddProjectForm(FlaskForm):
     slug = StringField('Slug', validators=[
                        DataRequired(message="Slug is required!")])
     tech = StringField('Technologies Used')
-    repo = StringField('Source Code (repository URL)')
-    live_url = StringField('Live URL')
+    repo = StringField('Source Code (repository URL)', validators=[Optional(),
+                       URL(message="Invalid URL for Source Code!")])
+    live_url = StringField('Live URL', validators=[Optional(),
+                           URL(message="Invalid URL for Live Project!")])
     description = TextAreaField('Description')
     url_for_files = HiddenField(id="url-for-files")
     collection = HiddenField()
@@ -80,7 +82,21 @@ class EditProjectForm(FlaskForm):
     slug = StringField('Slug', validators=[
                        DataRequired(message="Slug is required!")])
     tech = StringField('Technologies Used')
-    repo = StringField('Source Code (repository URL)')
-    live_url = StringField('Live URL')
+    repo = StringField('Source Code (repository URL)', validators=[Optional(),
+                       URL(message="Invalid URL for Source Code!")])
+    live_url = StringField('Live URL', validators=[Optional(),
+                           URL(message="Invalid URL for Live Project!")])
     description = TextAreaField('Description')
+    submit = SubmitField('Update')
+
+
+class AddSkillForm(FlaskForm):
+    name = StringField('Skill name', validators=[
+        DataRequired(message="Please fill in the Skill name!")])
+    percentage = IntegerRangeField(
+        'Percentage', default=50, validators=[NumberRange(min=0, max=100, message='Percentage should be between 0 and 100!')])
+    submit = SubmitField('Add')
+
+
+class UpdateSkills(FlaskForm):
     submit = SubmitField('Update')

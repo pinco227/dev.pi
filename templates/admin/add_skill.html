@@ -11,23 +11,24 @@
     </div>
     <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
         <form action="{{ url_for('add_skill') }}" method="POST">
+            {{ form.csrf_token }}
             <div class="card-header">
                 <h4 class="text-center">New</h4>
             </div>
             <div class="card-body">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="HTML">
-                    <label for="name">Skill name</label>
+                    {{ form.name(class="form-control", placeholder="Skill Name") }}
+                    {{ form.name.label }}
                 </div>
                 <div class="range-wrap">
-                    <label for="percentage" class="form-label">Percentage</label>
-                    <input type="range" class="range form-range" id="percentage" name="percentage" min="0" max="100">
+                    {{ form.percentage.label }}
+                    {{ form.percentage(class="range form-range", min="0", max="100") }}
                     <output class="bubble"></output>
                 </div>
             </div>
             <div class="card-footer text-center d-flex justify-content-between">
                 <a href="{{ url_for('get_skills') }}" class="btn btn-lg btn-danger">Cancel</a>
-                <button type="submit" class="btn btn-lg btn-accent">Add</button>
+                {{ form.submit(class="btn btn-lg btn-accent") }}
             </div>
         </form>
     </div>
