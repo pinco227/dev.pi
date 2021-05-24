@@ -1,8 +1,14 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha.validators import Recaptcha
-from wtforms import StringField, TextAreaField, SubmitField, HiddenField
-from wtforms.fields.html5 import EmailField, IntegerRangeField
-from wtforms.validators import DataRequired, Email, NumberRange, URL, Optional
+from pymongo import message
+from wtforms import StringField, TextAreaField, SubmitField, HiddenField, IntegerField
+from wtforms.fields.html5 import EmailField, IntegerRangeField, IntegerField
+from wtforms.validators import DataRequired, Email, NumberRange, URL, Optional, InputRequired
+
+
+class UpdateForm(FlaskForm):
+    """CSRF only validation"""
+    submit = SubmitField('Update')
 
 
 class WriteTestimonialForm(FlaskForm):
@@ -30,10 +36,6 @@ class ContactForm(FlaskForm):
     recaptcha = RecaptchaField(
         validators=[Recaptcha(message="Please check the security Recaptcha field!")])
     submit = SubmitField('Send')
-
-
-class UpdateTestimonials(FlaskForm):
-    submit = SubmitField('Update')
 
 
 class AddBlogForm(FlaskForm):
@@ -98,5 +100,17 @@ class AddSkillForm(FlaskForm):
     submit = SubmitField('Add')
 
 
-class UpdateSkills(FlaskForm):
-    submit = SubmitField('Update')
+class EducationForm(FlaskForm):
+    school = StringField('Institution', validators=[
+        DataRequired(message="Please fill in the Institution name!")])
+    period = StringField('Period of study', validators=[
+        DataRequired(message="Please enter the Period of study!")])
+    title = StringField('Title/Award', validators=[
+        DataRequired(message="Please fill in the Title/Award!")])
+    department = StringField('Department', validators=[
+        DataRequired(message="Please fill in the Department!")])
+    description = TextAreaField('Description')
+    order = IntegerField('Order', validators=[
+                         NumberRange(message="Order should be a number!"),
+                         InputRequired(message="Please enter Order!")])
+    submit = SubmitField('Submit')

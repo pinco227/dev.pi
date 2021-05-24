@@ -10,7 +10,9 @@ from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
 import random
-from form_classes import WriteTestimonialForm, ContactForm, UpdateTestimonials, AddBlogForm, EditBlogForm, AddProjectForm, EditProjectForm, AddSkillForm, UpdateSkills
+
+import pymongo
+from form_classes import UpdateForm, WriteTestimonialForm, ContactForm, AddBlogForm, EditBlogForm, AddProjectForm, EditProjectForm, AddSkillForm, EducationForm
 
 if os.path.exists("env.py"):
     import env
@@ -346,7 +348,7 @@ def files():
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
 @login_required("You don't have the user privileges to access this section.")
 def get_testimonials():
-    form = UpdateTestimonials()
+    form = UpdateForm()
     if request.method == "POST":
         if form.validate_on_submit():
             testimonials = list(mongo.db.testimonials.find())
@@ -460,7 +462,7 @@ def delete_blog(id):
 @ login_required("You don't have the user privileges to access this section.")
 def get_skills():
     skills = list(mongo.db.skills.find())
-    form = UpdateTestimonials()
+    form = UpdateForm()
 
     if request.method == "POST":
         if form.validate_on_submit():
@@ -494,14 +496,19 @@ def delete_skill(id):
 def add_skill():
     form = AddSkillForm()
     if request.method == "POST":
-        skill = {
-            "name": request.form.get("name"),
-            "percentage": int(request.form.get("percentage"))
-        }
-        mongo.db.skills.insert_one(skill)
-        flash(Markup(
-            f"Skill <strong>{skill['name']}</strong> was successfully Added!"), "success")
-        return redirect(url_for("get_skills"))
+        if form.validate_on_submit():
+            skill = {
+                "name": form.name.data,
+                "percentage": int(form.percentage.data)
+            }
+            mongo.db.skills.insert_one(skill)
+            flash(Markup(
+                f"Skill <strong>{skill['name']}</strong> was successfully Added!"), "success")
+            return redirect(url_for("get_skills"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
     return render_template("admin/add_skill.html", form=form)
 
@@ -510,60 +517,78 @@ def add_skill():
 @ login_required("You don't have the user privileges to access this section.")
 def get_education():
     education = list(mongo.db.education.find().sort("order", 1))
-
+    form = UpdateForm()
     if request.method == "POST":
-        for school in education:
-            mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
-                "$set": {"order": int(request.form.get(f"order[{school['_id']}]"))}})
+        if form.validate_on_submit():
+            for school in education:
+                mongo.db.education.update({"_id": ObjectId(school['_id'])}, {
+                    "$set": {"order": int(request.form.get(f"order[{school['_id']}]"))}})
 
-        flash("Education successfully updated!", "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_education"))
+            flash("Education successfully updated!", "success")
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_education"))
+        else:
+            flash("Error submitting the changes!", "danger")
 
-    return render_template("admin/education.html", education=education)
+    return render_template("admin/education.html", education=education, form=form)
 
 
 @ app.route('/admin/add_education', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_education():
+    form = EducationForm()
     if request.method == "POST":
-        school = {
-            "school": request.form.get("school"),
-            "period": request.form.get("period"),
-            "title": request.form.get("title"),
-            "department": request.form.get("department"),
-            "description": request.form.get("description"),
-            "order": int(request.form.get("order"))
-        }
-        mongo.db.education.insert_one(school)
-        flash(Markup(
-            f"School <strong>{school['school']}</strong> was successfully Added!"), "success")
-        return redirect(url_for("get_education"))
+        if form.validate_on_submit():
+            school = {
+                "school": form.school.data,
+                "period": form.period.data,
+                "title": form.title.data,
+                "department": form.department.data,
+                "description": form.description.data,
+                "order": int(form.order.data)
+            }
+            mongo.db.education.insert_one(school)
+            flash(Markup(
+                f"School <strong>{school['school']}</strong> was successfully Added!"), "success")
+            return redirect(url_for("get_education"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
 
-    return render_template("admin/add_education.html")
+    form.order.data = str(
+        mongo.db.education.find_one(sort=[("order", pymongo.DESCENDING)])["order"] + 1)
+    return render_template("admin/add_education.html", form=form)
 
 
 @ app.route('/admin/edit_education/<id>', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def edit_education(id):
-    if request.method == "POST":
-        updated = {
-            "school": request.form.get("school"),
-            "period": request.form.get("period"),
-            "title": request.form.get("title"),
-            "department": request.form.get("department"),
-            "description": request.form.get("description"),
-            "order": int(request.form.get("order"))
-        }
-        mongo.db.education.update({"_id": ObjectId(id)}, {
-            "$set": updated})
-        flash(Markup(
-            f"School <strong>{updated['school']}</strong> was successfully edited!"), "success")
-        # Redirect to avoid re-submission
-        return redirect(url_for("get_education"))
-
+    form = EducationForm()
     school = mongo.db.education.find_one({"_id": ObjectId(id)})
-    return render_template("admin/edit_education.html", school=school)
+    if request.method == "POST":
+        if form.validate_on_submit():
+            updated = {
+                "school": form.school.data,
+                "period": form.period.data,
+                "title": form.title.data,
+                "department": form.department.data,
+                "description": form.description.data,
+                "order": int(form.order.data)
+            }
+            mongo.db.education.update({"_id": ObjectId(id)}, {
+                "$set": updated})
+            flash(Markup(
+                f"School <strong>{updated['school']}</strong> was successfully edited!"), "success")
+            # Redirect to avoid re-submission
+            return redirect(url_for("get_education"))
+        else:
+            for fieldName, errorMessages in form.errors.items():
+                for err in errorMessages:
+                    flash(err, "danger")
+
+    form.description.data = school["description"]
+    return render_template("admin/edit_education.html", school=school, form=form)
 
 
 @ app.route('/admin/delete_education/<id>')

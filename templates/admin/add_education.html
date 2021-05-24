@@ -11,40 +11,39 @@
     </div>
     <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
         <form action="{{ url_for('add_education') }}" method="POST">
+            {{ form.csrf_token }}
             <div class="card-header">
                 <h4 class="text-center">New</h4>
             </div>
             <div class="card-body">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="school" name="school" placeholder="School's name">
-                    <label for="school">School</label>
+                    {{ form.school(class="form-control", placeholder="School's Name") }}
+                    {{ form.school.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="period" name="period" placeholder="2005 - 2006">
-                    <label for="period">Period of study</label>
+                    {{ form.period(class="form-control", placeholder="Period of study") }}
+                    {{ form.period.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Diploma in Domain">
-                    <label for="title">Title/Award</label>
+                    {{ form.title(class="form-control", placeholder="Title/Award") }}
+                    {{ form.title.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="department" name="department"
-                        placeholder="Department of Engineering">
-                    <label for="department">Department</label>
+                    {{ form.department(class="form-control", placeholder="Department") }}
+                    {{ form.department.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <textarea class="form-control" rows="3" id="description" name="description" style="height: 100px;"
-                        placeholder="..."></textarea>
-                    <label for="description">Description</label>
+                    {{ form.description(class="form-control", placeholder="Description") }}
+                    {{ form.description.label }}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="number" class="form-control" id="order" name="order" placeholder="3">
-                    <label for="order">Sort Order</label>
+                    {{ form.order(class="form-control", placeholder="Order") }}
+                    {{ form.order.label }}
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-between">
                 <a href="{{ url_for('get_education') }}" class="btn btn-lg btn-danger">Cancel</a>
-                <button type="submit" class="btn btn-lg btn-accent">Add</button>
+                {{ form.submit(class="btn btn-lg btn-accent") }}
             </div>
         </form>
     </div>
