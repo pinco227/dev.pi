@@ -28,7 +28,10 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="card bg-accent card-contact-details">
-                    <div class="card-body">
+                    <div class="card-body position-relative">
+                        {% if session['user'] %}
+                            <a href="{{ url_for('get_settings') }}" class="btn btn-light position-absolute top-0 end-0 mt-2 mx-2"><i class="bi bi-pencil"></i></a>
+                        {% endif %}
                         <img src="{{ url_for('uploads', filename=settings.photos.replace(' ', '')) }}"
                             class="mb-3 w-50" alt="{{ settings.name }}">
                         <h4 class="card-title">Contact Info</h4>

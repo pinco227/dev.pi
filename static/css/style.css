@@ -764,11 +764,6 @@ nav[aria-label="breadcrumb"] {
     box-shadow: 2px 3px 4px rgb(0, 0, 0, .4);
 }
 
-.card-contact-details i {
-    font-size: 6rem;
-    text-shadow: 1px 2px 3px rgb(0, 0, 0, .5);
-}
-
 .card-contact-details .card-title {
     color: var(--text-light);
     text-shadow: 1px 2px 3px rgb(0, 0, 0, .5);

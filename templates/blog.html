@@ -24,11 +24,9 @@
         </g>
     </svg>
     {% if session['user'] %}
-        <div class="container-xl position-relative p-4">
-            <div class="position-absolute top-0 end-0 mt-2">
-                <a href="{{ url_for('add_blog') }}" class="btn btn-lg btn-success rounded-circle"><i class="bi bi-plus"></i></a>
-                <a href="{{ url_for('get_blogs') }}" class="btn btn-lg btn-accent-light"><i class="bi bi-pencil"></i></a>
-            </div>
+        <div class="container-xl text-end mb-3">
+            <a href="{{ url_for('add_blog') }}" class="btn btn-lg btn-success rounded-circle"><i class="bi bi-plus"></i></a>
+            <a href="{{ url_for('get_blogs') }}" class="btn btn-lg btn-accent-light ms-1 me-3"><i class="bi bi-pencil"></i></a>
         </div>
     {% endif %}
     <div class="container-xl">
