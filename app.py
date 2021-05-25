@@ -9,6 +9,7 @@ from flask_mail import Mail, Message
 from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
+import secure
 import pydf
 import random
 import re
@@ -48,8 +49,15 @@ if not os.path.exists(app.config['UPLOAD_PATH']):
 Breadcrumbs(app=app)
 mongo = PyMongo(app)
 mail = Mail(app)
+secure_headers = secure.Secure()
 settings = mongo.db.settings.find_one(
     {"_id": ObjectId(os.environ.get("DB_SETTINGS_ID"))})
+
+
+@app.after_request
+def set_secure_headers(response):
+    secure_headers.framework.flask(response)
+    return response
 
 
 @app.context_processor
