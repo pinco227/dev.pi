@@ -10,7 +10,7 @@ document.querySelectorAll('[data-toggle="offcavas"]').forEach(item => {
 const toastContainer = document.querySelectorAll('.toast-container')[0];
 const toastSettings = {
     autohide: true,
-    delay: 4000
+    delay: 5000
 };
 
 // Create Botstrap toasts from existing DOM elements
