@@ -1,26 +1,25 @@
-import os
+from bson.objectid import ObjectId
+from datetime import date
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for, Markup, send_from_directory, jsonify, make_response)
-from flask_pymongo import PyMongo
-from bson.objectid import ObjectId
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_mail import Mail, Message
+from flask_pymongo import PyMongo
+from forms import *
 from functools import wraps
 from html5lib_truncation import truncate_html
-from datetime import date
-import secure
 import pydf
+import pymongo
 import random
 import re
-
-import pymongo
-from form_classes import (UpdateForm, WriteTestimonialForm, ContactForm, AddBlogForm, EditBlogForm,
-                          AddProjectForm, EditProjectForm, AddSkillForm, EducationForm, ExperienceForm, AddLinkForm, SettingsForm, LoginForm)
+import os
+import secure
 
 if os.path.exists("env.py"):
     import env
 
+# Initialize app
 app = Flask(__name__)
 
 # Config app
@@ -30,22 +29,22 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 app.config["RECAPTCHA_PUBLIC_KEY"] = os.environ.get("RC_SITE_KEY")
 app.config["RECAPTCHA_PRIVATE_KEY"] = os.environ.get("RC_SECRET_KEY")
 app.config['UPLOAD_PATH'] = 'uploads'
-app.config['UPLOAD_EXTENSIONS'] = [
-    '.txt', '.doc', '.docx', '.pdf', '.png', '.jpg', '.jpeg', '.gif']
+app.config['UPLOAD_EXTENSIONS'] = ['.png', '.jpg', '.jpeg', '.gif']
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 mail_settings = {
     "MAIL_SERVER": 'smtp.gmail.com',
     "MAIL_PORT": 465,
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": os.environ['EMAIL_USER'],
-    "MAIL_PASSWORD": os.environ['EMAIL_PASSWORD']
+    "MAIL_USERNAME": os.environ.get("EMAIL_USER"),
+    "MAIL_PASSWORD": os.environ.get("EMAIL_PASSWORD")
 }
 app.config.update(mail_settings)
 
 if not os.path.exists(app.config['UPLOAD_PATH']):
     os.makedirs(app.config['UPLOAD_PATH'])
 
+# Initializations / Global vars
 Breadcrumbs(app=app)
 mongo = PyMongo(app)
 mail = Mail(app)
@@ -56,6 +55,14 @@ settings = mongo.db.settings.find_one(
 
 @app.after_request
 def set_secure_headers(response):
+    """Set Secure HTTP Headers
+
+    Args:
+        response (obj): response object to modify
+
+    Returns:
+        obj: modified response
+    """
     secure_headers.framework.flask(response)
     return response
 
@@ -73,11 +80,27 @@ def context_processor():
 
 @app.errorhandler(413)
 def too_large(e):
+    """Error handler for error 413 TOO LARGE
+
+    Args:
+        e (obj): error obj
+
+    Returns:
+        obj: json response
+    """
     return make_response(jsonify({"message": "File is too large!"}), 413)
 
 
 @app.errorhandler(404)
 def page_not_found(e):
+    """Error handler for error 404 NOT FOUND
+
+    Args:
+        e (obj): error obj
+
+    Returns:
+        function: redirect to home or dashboard
+    """
     flash("Page not found!", "danger")
     if request.path.split('/')[1] == "admin":
         return redirect(url_for('admin'))
@@ -87,12 +110,25 @@ def page_not_found(e):
 
 @app.route('/browserconfig.xml')
 def sendfile():
+    """Sends browserconfig.xml from static folder when accessed from root
+
+    Returns:
+        funct: returns file
+    """
     return send_from_directory('static', 'browserconfig.xml')
 
 
 @app.route('/uploads/', defaults={'filename': False})
 @app.route('/uploads/<filename>')
 def uploads(filename):
+    """Route to access uploaded files and to have url_for uploads as flask variable
+
+    Args:
+        filename (string): requested file name
+
+    Returns:
+        function: returns requested file if exists or no-photo.jpg if it doesn't
+    """
     if filename and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], filename)):
         return send_from_directory(app.config['UPLOAD_PATH'],
                                    filename)
@@ -102,6 +138,11 @@ def uploads(filename):
 
 @app.route('/cv')
 def get_cv():
+    """Route that generates pdf file from html jinja template
+
+    Returns:
+        obj: response with pdf headers and content
+    """
     root = request.url_root
     jobs = list(mongo.db.experience.find().sort("order", 1))
     schools = list(mongo.db.education.find().sort("order", 1))
@@ -126,6 +167,11 @@ def get_cv():
 @app.route('/')
 @register_breadcrumb(app, '.', 'Home')
 def home():
+    """Landing page route
+
+    Returns:
+        function: renders landing page from html jinja template
+    """
     skills = list(mongo.db.skills.find())
     education = list(mongo.db.education.find().sort("order", 1))
     experience = list(mongo.db.experience.find().sort("order", 1))
@@ -136,6 +182,11 @@ def home():
 @app.route('/write-testimonial', methods=["GET", "POST"])
 @register_breadcrumb(app, '.write-testimonial', 'Write Testimonial')
 def add_testimonial():
+    """Write testimonial page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = WriteTestimonialForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -159,6 +210,11 @@ def add_testimonial():
 @app.route('/portfolio')
 @register_breadcrumb(app, '.portfolio', 'Portfolio')
 def portfolio():
+    """Portfolio page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     projects = list(mongo.db.projects.find())
     return render_template("portfolio.html", projects=projects)
 
@@ -177,6 +233,14 @@ def view_project_dlc(*args, **kwargs):
 @app.route('/portfolio/<project>')
 @register_breadcrumb(app, '.portfolio.project', '', dynamic_list_constructor=view_project_dlc)
 def get_project(project):
+    """Project page route
+
+    Args:
+        project (string): requested project slug
+
+    Returns:
+        function: renders page from html jinja template
+    """
     project = mongo.db.projects.find_one({"slug": project})
     return render_template("project.html", project=project)
 
@@ -184,6 +248,11 @@ def get_project(project):
 @app.route('/blog')
 @register_breadcrumb(app, '.blog', 'Blog')
 def blog():
+    """Blogs page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     blogs = list(mongo.db.blogs.find())
     for i, blog in enumerate(blogs):
         blog["body"] = truncate_html(
@@ -206,6 +275,14 @@ def view_blog_dlc(*args, **kwargs):
 @app.route('/blog/<post>')
 @register_breadcrumb(app, '.blog.post', '', dynamic_list_constructor=view_blog_dlc)
 def get_post(post):
+    """Blog post page route
+
+    Args:
+        post (string): requested post slug
+
+    Returns:
+        function: renders page from html jinja template
+    """
     post = mongo.db.blogs.find_one({"slug": post})
     return render_template("blog-post.html", post=post)
 
@@ -213,6 +290,11 @@ def get_post(post):
 @app.route('/contact', methods=['GET', 'POST'])
 @register_breadcrumb(app, '.contact', 'Contact')
 def contact():
+    """Conact page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = ContactForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -262,6 +344,11 @@ def login_required(flash_message=False):
 @app.route('/admin')
 @login_required()
 def admin():
+    """ADMIN Dashboard page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     testimonials = mongo.db.testimonials.count_documents({})
     blogs = mongo.db.blogs.count_documents({})
     projects = mongo.db.projects.count_documents({})
@@ -276,6 +363,11 @@ def admin():
 @app.route('/admin/files', methods=['PATCH', 'DELETE'])
 @login_required()
 def files():
+    """Route for file manipulation (upload, delete) that works with API calls
+
+    Returns:
+        obj: json response
+    """
     if "collection" in request.args:
         coll = request.args.get('collection')
 
@@ -388,6 +480,11 @@ def files():
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
 @login_required("You don't have the user privileges to access this section.")
 def get_testimonials():
+    """ADMIN Testionials page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = UpdateForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -414,6 +511,14 @@ def get_testimonials():
 @app.route('/admin/delete_testimonial/<id>')
 @login_required("You don't have the user privileges to access this section.")
 def delete_testimonial(id):
+    """ADMIN Delete testimonial page route
+
+    Args:
+        id (string): requested testimonial id
+
+    Returns:
+        function: redirects to testimonials page
+    """
     mongo.db.testimonials.remove({"_id": ObjectId(id)})
     flash("Testimonial was successfully deleted", "warning")
     return redirect(url_for("get_testimonials"))
@@ -422,6 +527,11 @@ def delete_testimonial(id):
 @app.route('/admin/blogs')
 @login_required("You don't have the user privileges to access this section.")
 def get_blogs():
+    """ADMIN Blogs page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     blogs = list(mongo.db.blogs.find())
     for i, blog in enumerate(blogs):
         blog["body"] = truncate_html(
@@ -433,6 +543,11 @@ def get_blogs():
 @app.route('/admin/add_blog', methods=["GET", "POST"])
 @login_required("You don't have the user privileges to access this section.")
 def add_blog():
+    """ADMIN Add Blog page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = AddBlogForm()
     if request.method == "POST":
         slug_exists = mongo.db.blogs.find_one({"slug": form.slug.data})
@@ -461,6 +576,14 @@ def add_blog():
 @ app.route('/admin/edit_blog/<id>', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def edit_blog(id):
+    """ADMIN Edit Blog page route
+
+    Args:
+        id (string): requested blog id
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = EditBlogForm()
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
     if request.method == "POST":
@@ -489,6 +612,14 @@ def edit_blog(id):
 @ app.route('/admin/delete_blog/<id>')
 @ login_required("You don't have the user privileges to access this section.")
 def delete_blog(id):
+    """ADMIN Delete Blog page route
+
+    Args:
+        id (string): requested blog id
+
+    Returns:
+        function: redirects to blogs page
+    """
     post = mongo.db.blogs.find_one({"_id": ObjectId(id)})
 
     photos = list(filter(None, post["photos"].split(',')))
@@ -504,6 +635,11 @@ def delete_blog(id):
 @ app.route('/admin/skills', methods=['GET', 'POST'])
 @ login_required("You don't have the user privileges to access this section.")
 def get_skills():
+    """ADMIN Skills page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     skills = list(mongo.db.skills.find())
     form = UpdateForm()
 
@@ -529,6 +665,14 @@ def get_skills():
 @ app.route('/admin/delete_skill/<id>')
 @ login_required("You don't have the user privileges to access this section.")
 def delete_skill(id):
+    """ADMIN Delete Skill page route
+
+    Args:
+        id (string): requested skill id
+
+    Returns:
+        function: redirect to skills page
+    """
     mongo.db.skills.remove({"_id": ObjectId(id)})
     flash("Skill was successfully deleted", "warning")
     return redirect(url_for("get_skills"))
@@ -537,6 +681,11 @@ def delete_skill(id):
 @ app.route('/admin/add_skill', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_skill():
+    """ADMIN Add Skill page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = AddSkillForm()
     if request.method == "POST":
         skill_exists = mongo.db.skills.find_one({"name": form.name.data})
@@ -562,6 +711,11 @@ def add_skill():
 @ app.route('/admin/education', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def get_education():
+    """ADMIN Education page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     education = list(mongo.db.education.find().sort("order", 1))
     form = UpdateForm()
     if request.method == "POST":
@@ -587,6 +741,11 @@ def get_education():
 @ app.route('/admin/add_education', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_education():
+    """ADMIN Add Education page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = EducationForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -616,6 +775,14 @@ def add_education():
 @ app.route('/admin/edit_education/<id>', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def edit_education(id):
+    """ADMIN Edit Education page route
+
+    Args:
+        id (string): requested education id
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = EducationForm()
     school = mongo.db.education.find_one({"_id": ObjectId(id)})
     if request.method == "POST":
@@ -647,6 +814,14 @@ def edit_education(id):
 @ app.route('/admin/delete_education/<id>')
 @ login_required("You don't have the user privileges to access this section.")
 def delete_education(id):
+    """ADMIN Delete Education page route
+
+    Args:
+        id (string): requested education id
+
+    Returns:
+        function: redirect to education page
+    """
     mongo.db.education.remove({"_id": ObjectId(id)})
     flash("School was successfully deleted")
     return redirect(url_for("get_education"))
@@ -655,6 +830,11 @@ def delete_education(id):
 @ app.route('/admin/experience', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def get_experience():
+    """ADMIN Experience page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     experience = list(mongo.db.experience.find().sort("order", 1))
     form = UpdateForm()
     if request.method == "POST":
@@ -680,6 +860,11 @@ def get_experience():
 @ app.route('/admin/add_experience', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_experience():
+    """ADMIN Add Experience page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = ExperienceForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -708,6 +893,14 @@ def add_experience():
 @ app.route('/admin/edit_experience/<id>', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def edit_experience(id):
+    """ADMIN Edit Experience page route
+
+    Args:
+        id (string): requested experience id
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = ExperienceForm()
     job = mongo.db.experience.find_one({"_id": ObjectId(id)})
     if request.method == "POST":
@@ -738,6 +931,14 @@ def edit_experience(id):
 @ app.route('/admin/delete_experience/<id>')
 @ login_required("You don't have the user privileges to access this section.")
 def delete_experience(id):
+    """ADMIN Delete Experience page route
+
+    Args:
+        id (string): requested experience id
+
+    Returns:
+        function: redirect to experience page
+    """
     mongo.db.experience.remove({"_id": ObjectId(id)})
     flash("Job was successfully deleted")
     return redirect(url_for("get_experience"))
@@ -746,6 +947,11 @@ def delete_experience(id):
 @ app.route('/admin/projects')
 @ login_required("You don't have the user privileges to access this section.")
 def get_projects():
+    """ADMIN Projects page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     projects = list(mongo.db.projects.find())
     return render_template("admin/projects.html", projects=projects)
 
@@ -753,6 +959,11 @@ def get_projects():
 @ app.route('/admin/add_project', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_project():
+    """ADMIN Add Project page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = AddProjectForm()
     if request.method == "POST":
         slug_exists = mongo.db.projects.find_one({"slug": form.slug.data})
@@ -783,6 +994,14 @@ def add_project():
 @ app.route('/admin/edit_project/<id>', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def edit_project(id):
+    """ADMIN Edit Project page route
+
+    Args:
+        id (string): requested project id
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = EditProjectForm()
     project = mongo.db.projects.find_one({"_id": ObjectId(id)})
     if request.method == "POST":
@@ -813,6 +1032,14 @@ def edit_project(id):
 @ app.route('/admin/delete_project/<id>')
 @ login_required("You don't have the user privileges to access this section.")
 def delete_project(id):
+    """ADMIN Delete Project page route
+
+    Args:
+        id (string): requested project id
+
+    Returns:
+        function: redirect to projects page
+    """
     post = mongo.db.projects.find_one({"_id": ObjectId(id)})
     photos = list(filter(None, post["photos"].split(',')))
     for photo in photos:
@@ -827,6 +1054,11 @@ def delete_project(id):
 @ app.route('/admin/links', methods=['GET', 'POST'])
 @ login_required("You don't have the user privileges to access this section.")
 def get_links():
+    """ADMIN Links page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     links = list(mongo.db.links.find())
     form = UpdateForm()
     if request.method == "POST":
@@ -876,6 +1108,14 @@ def get_links():
 @ app.route('/admin/delete_link/<id>')
 @ login_required("You don't have the user privileges to access this section.")
 def delete_link(id):
+    """ADMIN Delete Link page route
+
+    Args:
+        id (string): requested link id
+
+    Returns:
+        function: redirect to links page
+    """
     mongo.db.links.remove({"_id": ObjectId(id)})
     flash("Link was successfully deleted", "warning")
     return redirect(url_for("get_links"))
@@ -884,6 +1124,11 @@ def delete_link(id):
 @ app.route('/admin/add_link', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def add_link():
+    """ADMIN Add Link page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = AddLinkForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -907,6 +1152,11 @@ def add_link():
 @ app.route('/admin/settings', methods=["GET", "POST"])
 @ login_required("You don't have the user privileges to access this section.")
 def get_settings():
+    """ADMIN Settins page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     global settings
     form = SettingsForm()
     if request.method == "POST":
@@ -945,6 +1195,11 @@ def get_settings():
 
 @ app.route('/admin/login', methods=["GET", "POST"])
 def login():
+    """ADMIN Login page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     form = LoginForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -966,6 +1221,11 @@ def login():
 
 @ app.route("/admin/logout")
 def logout():
+    """ADMIN Logout page route
+
+    Returns:
+        function: renders page from html jinja template
+    """
     if session.get("user"):
         session.pop("user")
 
