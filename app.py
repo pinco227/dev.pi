@@ -68,6 +68,15 @@ def too_large(e):
     return make_response(jsonify({"message": "File is too large!"}), 413)
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    flash("Page not found!", "danger")
+    if request.path.split('/')[1] == "admin":
+        return redirect(url_for('admin'))
+
+    return redirect(url_for('home'))
+
+
 @app.route('/browserconfig.xml')
 def sendfile():
     return send_from_directory('static', 'browserconfig.xml')
