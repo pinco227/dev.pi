@@ -15,7 +15,11 @@
                 </a>
             </div>
             <div class="col-12 col-md-7 col-lg-8">
-                <h1 class="hero-title display-5 fw-bold lh-1 mb-3 text-shadow">{{ settings.name }}</h1>
+                <h1 class="hero-title display-5 fw-bold lh-1 mb-3 text-shadow position-relative">{{ settings.name }}
+                    {% if session['user'] %}
+                        <a href="{{ url_for('get_settings') }}" class="position-absolute top-0 end-0 btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
+                    {% endif %}
+                </h1>
                 <h3 class="hero-subtitle mb-3">{{ settings.title }}</h3>
                 <div class="row">
                     <div class="col-4 col-md-3">Current status:</div>
@@ -58,7 +62,13 @@
             </path>
         </g>
     </svg>
-    <div class="container-xl">
+    <div class="container-xl position-relative">
+        {% if session['user'] %}
+            <div class="position-absolute top-0 end-0 mt-2">
+                <a href="{{ url_for('add_skill') }}" class="btn btn-sm btn-success"><i class="bi bi-plus"></i></a>
+                <a href="{{ url_for('get_skills') }}" class="btn btn-sm btn-dark"><i class="bi bi-pencil"></i></a>
+            </div>
+        {% endif %}
         <h2 class="section-title">Skills</h2>
         <div class="row">
             {% for skill in skills %}
@@ -87,7 +97,13 @@
                 d="M 9.3544335,83.626877 H 209.68181 V 120.29057 L 110.46368,93.705147 9.4490103,120.77195 Z" />
         </g>
     </svg>
-    <div class="container-xl">
+    <div class="container-xl position-relative">
+        {% if session['user'] %}
+            <div class="position-absolute top-0 end-0 mt-2">
+                <a href="{{ url_for('add_education') }}" class="btn btn-sm btn-success"><i class="bi bi-plus"></i></a>
+                <a href="{{ url_for('get_education') }}" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
+            </div>
+        {% endif %}
         <h2 class="section-title">Education</h2>
         {% for school in education %}
         <div class="card card-education mb-3 w-100">
@@ -121,7 +137,13 @@
                 d="M 9.3544335,83.626877 H 209.68181 V 120.29057 L 110.46368,93.705147 9.4490103,120.77195 Z" />
         </g>
     </svg>
-    <div class="container-xl">
+    <div class="container-xl position-relative">
+        {% if session['user'] %}
+            <div class="position-absolute top-0 end-0 mt-2">
+                <a href="{{ url_for('add_experience') }}" class="btn btn-sm btn-success"><i class="bi bi-plus"></i></a>
+                <a href="{{ url_for('get_experience') }}" class="btn btn-sm btn-dark"><i class="bi bi-pencil"></i></a>
+            </div>
+        {% endif %}
         <h2 class="section-title">Experience</h2>
         {% for job in experience %}
         <div class="card card-experience bg-accent mb-3 w-100">
@@ -154,7 +176,12 @@
                 d="M 9.3544335,83.626877 H 209.68181 V 120.29057 L 110.46368,93.705147 9.4490103,120.77195 Z" />
         </g>
     </svg>
-    <div class="container-xl">
+    <div class="container-xl position-relative">
+        {% if session['user'] %}
+            <div class="position-absolute top-0 end-0 mt-2">
+                <a href="{{ url_for('get_testimonials') }}" class="btn btn-sm btn-light"><i class="bi bi-pencil"></i></a>
+            </div>
+        {% endif %}
         <h2 class="section-title text-shadow">Testimonials</h2>
         <div class="card card-testimonials mb-3 w-100">
             <div class="card-body">

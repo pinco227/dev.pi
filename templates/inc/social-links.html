@@ -2,4 +2,9 @@
     {% for link in links %}
     <div><a href="{{ link.url }}" target="_blank"><i class="bi bi-{{ link.icon }}"></i></a></div>
     {% endfor %}
+    {% if session['user'] %}
+        <div>
+            <a href="{{ url_for('get_links') }}" class="text-danger"><i class="bi bi-pencil"></i></a>
+        </div>
+    {% endif %}
 </div>
