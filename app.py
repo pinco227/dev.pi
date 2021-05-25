@@ -113,11 +113,11 @@ def get_cv():
                            schools=schools, skills=skills, projects=projects, testimonials=testimonials, root=root)
     filename = settings['name'].replace(' ', '-').lower()
     pdf = pydf.generate_pdf(html, page_size="A4", margin_bottom="0.75in",
-                            margin_top="0.75in", margin_left="0.5in", margin_right="0.5in")
+                            margin_top="0.75in", margin_left="0.5in", margin_right="0.5in", image_dpi="300")
     # pdf = pdfkit.from_string(html, False, options=options)
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline; filename=" + \
+    response.headers["Content-Disposition"] = "attachment; filename=" + \
         filename+".pdf"
     return response
 
@@ -435,7 +435,8 @@ def get_blogs():
 def add_blog():
     form = AddBlogForm()
     if request.method == "POST":
-        if form.validate_on_submit():
+        slug_exists = mongo.db.blogs.find_one({"slug": form.slug.data})
+        if form.validate_on_submit() and not slug_exists:
             blog = {
                 "title": form.title.data,
                 "slug": form.slug.data,
@@ -448,6 +449,8 @@ def add_blog():
                 f"Blog <strong>{blog['title']}</strong> was successfully Added!"), "success")
             return redirect(url_for("get_blogs"))
         else:
+            if slug_exists:
+                flash("This title/slug already exists!", "danger")
             for fieldName, errorMessages in form.errors.items():
                 for err in errorMessages:
                     flash(err, "danger")
@@ -536,7 +539,8 @@ def delete_skill(id):
 def add_skill():
     form = AddSkillForm()
     if request.method == "POST":
-        if form.validate_on_submit():
+        skill_exists = mongo.db.skills.find_one({"name": form.name.data})
+        if form.validate_on_submit() and not skill_exists:
             skill = {
                 "name": form.name.data,
                 "percentage": int(form.percentage.data)
@@ -546,6 +550,8 @@ def add_skill():
                 f"Skill <strong>{skill['name']}</strong> was successfully Added!"), "success")
             return redirect(url_for("get_skills"))
         else:
+            if skill_exists:
+                flash("This skill already exists!", "danger")
             for fieldName, errorMessages in form.errors.items():
                 for err in errorMessages:
                     flash(err, "danger")
@@ -749,7 +755,8 @@ def get_projects():
 def add_project():
     form = AddProjectForm()
     if request.method == "POST":
-        if form.validate_on_submit():
+        slug_exists = mongo.db.projects.find_one({"slug": form.slug.data})
+        if form.validate_on_submit() and not slug_exists:
             project = {
                 "title": form.title.data,
                 "slug": form.slug.data,
@@ -764,6 +771,8 @@ def add_project():
                 f"Project <strong>{project['title']}</strong> was successfully Added!"), "success")
             return redirect(url_for("get_projects"))
         else:
+            if slug_exists:
+                flash("This title/slug already exists!", "danger")
             for fieldName, errorMessages in form.errors.items():
                 for err in errorMessages:
                     flash(err, "danger")
