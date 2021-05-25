@@ -14,6 +14,25 @@
             font-family: 'Lato', sans-serif;
             color: #023060;
         }
+        hr.separator {
+            border-top: 2px dashed #1a9ce9;
+        }
+        span.icon {
+            font-size: 2rem;
+            margin-top: 3rem;
+            color: #1a9ce9;
+            border-radius: 50%;
+            border: 1px solid #1a9ce9;
+            display:inline-block;
+            width: 3.5rem;
+            height: 3.5rem;
+            line-height: 3.5rem;
+        }
+        div.item {
+            border-left: 3px solid #ccdde8;
+            padding-left: 1.5rem;
+            margin-bottom: 3rem;
+        }
 
         /*------------------------------------------ TYPOGRAPHY */
         h1, h2, h3, h4, h5 {
@@ -32,19 +51,22 @@
         .text-center {
             text-align: center;
         }
-        hr.separator {
-            border-top: 2px dashed #1a9ce9;
+
+        /*------------------------------------------ SKILLS */
+        .skills li {
+            display:inline;
+            padding: 0.5rem;
+            margin-right: 0.5rem;
+            border-radius:0.5rem;
+            color: #fff;
+            background-color: #1a9ce9;
+            line-height: 3rem;
         }
-        span.icon {
-            font-size: 2rem;
-            margin-top: 3rem;
-            color: #1a9ce9;
-            border-radius: 50%;
-            border: 1px solid #1a9ce9;
-            display:inline-block;
-            width: 3.5rem;
-            height: 3.5rem;
-            line-height: 3.5rem;
+
+        /*------------------------------------------ IMAGES */
+        img {
+            height: 100px;
+            width: auto;
         }
     </style>
 </head>
@@ -62,21 +84,57 @@
     <hr class="separator">
     <h2 class="text-center">Work Experience</h2>
     {% for job in jobs %}
-        <h3 class="no-margin">{{ job.role }}</h3>
-        <h4 class="no-margin">{{ job.company }}</h4>
-        <p class="no-margin">{{ job.period }}</p>
-        <p>{{ job.description }}</p>
+        <div class="item">
+            <h3>{{ job.role }}</h3>
+            <h4 class="no-margin">{{ job.company }}</h4>
+            <p class="no-margin">{{ job.period }}</p>
+            <p>{{ job.description }}</p>
+        </div>
     {% endfor %}
     <!-- EDUCATION -->
     <div class="text-center"><span class="icon"><i class="fas fa-university"></i></span></div>
     <hr class="separator">
     <h2 class="text-center">Education</h2>
     {% for school in schools %}
-        <h3 class="no-margin">{{ school.title }}</h3>
-        <h4 class="no-margin">{{ school.school }}</h4>
-        <p class="no-margin">{{ school.period }}</p>
-        <p class="no-margin">{{ school.department }}</p>
-        <p>{{ school.description }}</p>
+        <div class="item">
+            <h3>{{ school.title }}</h3>
+            <h4 class="no-margin">{{ school.school }}</h4>
+            <p class="no-margin">{{ school.period }}</p>
+            <p class="no-margin">{{ school.department }}</p>
+            <p>{{ school.description }}</p>
+        </div>
+    {% endfor %}
+    <!-- SKILLS -->
+    <div class="text-center"><span class="icon"><i class="fas fa-lightbulb"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Skills</h2>
+    <ul class="skills text-center">
+    {% for skill in skills %}
+        <li>{{ skill.name }}</li>
+    {% endfor %}
+    </ul>
+    <!-- PORTFOLIO -->
+    <div class="text-center"><span class="icon"><i class="fas fa-folder-open"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Portfolio</h2>
+    {% for project in projects %}
+        <div class="item">
+            <h3>{{ project.title }}</h3>
+            <h4 class="fw-normal no-margin">{{ project.tech }}</h4>
+            {% if project.live_url %}
+                <h4 class="fw-normal no-margin"><strong>Demo:</strong> {{ project.live_url }}</h4>
+            {% endif %}
+            {% if project.repo %}
+                <h4 class="fw-normal no-margin"><strong>Source:</strong> {{ project.repo }}</h4>
+            {% endif %}
+            <p>{{ project.description }}</p>
+            {% if project.photos|length %}
+                {% set photos = project.photos.split(',') %}
+                {% for photo in photos %}
+                    <img src="{{ root }}uploads/{{ photo.replace(' ', '') }}" alt="Photo {{ loop.index }}">
+                {% endfor %}
+            {% endif %}
+        </div>
     {% endfor %}
 </body>
 

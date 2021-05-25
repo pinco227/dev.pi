@@ -85,9 +85,13 @@ def uploads(filename):
 
 @app.route('/cv')
 def get_cv():
+    root = request.url_root
     jobs = list(mongo.db.experience.find().sort("order", 1))
     schools = list(mongo.db.education.find().sort("order", 1))
-    html = render_template("cv.html", jobs=jobs, schools=schools)
+    skills = list(mongo.db.skills.find().sort("percentage", -1))
+    projects = list(mongo.db.projects.find())
+    html = render_template("cv.html", jobs=jobs,
+                           schools=schools, skills=skills, projects=projects, root=root)
     filename = settings['name'].replace(' ', '-').lower()
     pdf = pydf.generate_pdf(html, page_size="A4", margin_bottom="0.75in",
                             margin_top="0.75in", margin_left="0.5in", margin_right="0.5in")
