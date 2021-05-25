@@ -1,1 +1,83 @@
-    <p>{{ settings.bio }}</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ settings.name }}</title>
+    <style>
+        /*------------------------------------------ IMPORT */
+        @import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@300;400;500;700&family=Lato:wght@300;400;700&family=Source+Code+Pro:wght@400;500&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+        /*------------------------------------------ DOCUMENT */
+        html, body {
+            font-family: 'Lato', sans-serif;
+            color: #023060;
+        }
+
+        /*------------------------------------------ TYPOGRAPHY */
+        h1, h2, h3, h4, h5 {
+            color: #044488;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Alegreya Sans', sans-serif;
+        }
+        .fw-normal {
+            font-weight: normal;
+        }
+        .no-margin {
+            margin: 0;
+        }
+        .text-center {
+            text-align: center;
+        }
+        hr.separator {
+            border-top: 2px dashed #1a9ce9;
+        }
+        span.icon {
+            font-size: 2rem;
+            margin-top: 3rem;
+            color: #1a9ce9;
+            border-radius: 50%;
+            border: 1px solid #1a9ce9;
+            display:inline-block;
+            width: 3.5rem;
+            height: 3.5rem;
+            line-height: 3.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="text-center">{{ settings.name }}</h1>
+    <h2 class="text-center">{{ settings.title }}</h2>
+    <h3 class="fw-normal no-margin text-center">{{ settings.address }}</h3>
+    <h3 class="fw-normal no-margin text-center">{{ settings.email }}</h3>
+    <h3 class="fw-normal no-margin text-center">{{ settings.phone }}</h3>
+    <p class="text-center">{{ settings.bio }}</p>
+    <p class="text-center">{{ settings.cover }}</p>
+    <!-- WORK EXPERIENCE -->
+    <div class="text-center"><span class="icon"><i class="fas fa-briefcase"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Work Experience</h2>
+    {% for job in jobs %}
+        <h3 class="no-margin">{{ job.role }}</h3>
+        <h4 class="no-margin">{{ job.company }}</h4>
+        <p class="no-margin">{{ job.period }}</p>
+        <p>{{ job.description }}</p>
+    {% endfor %}
+    <!-- EDUCATION -->
+    <div class="text-center"><span class="icon"><i class="fas fa-university"></i></span></div>
+    <hr class="separator">
+    <h2 class="text-center">Education</h2>
+    {% for school in schools %}
+        <h3 class="no-margin">{{ school.title }}</h3>
+        <h4 class="no-margin">{{ school.school }}</h4>
+        <p class="no-margin">{{ school.period }}</p>
+        <p class="no-margin">{{ school.department }}</p>
+        <p>{{ school.description }}</p>
+    {% endfor %}
+</body>
+
+</html>

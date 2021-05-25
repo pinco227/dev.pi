@@ -85,16 +85,12 @@ def uploads(filename):
 
 @app.route('/cv')
 def get_cv():
-    options = {
-        'page-size': 'A4',
-        'margin-top': '0.75in',
-        'margin-right': '0.5in',
-        'margin-bottom': '0.75in',
-        'margin-left': '0.5in',
-    }
+    jobs = list(mongo.db.experience.find().sort("order", 1))
+    schools = list(mongo.db.education.find().sort("order", 1))
+    html = render_template("cv.html", jobs=jobs, schools=schools)
     filename = settings['name'].replace(' ', '-').lower()
-    html = render_template("cv.html")
-    pdf = pydf.generate_pdf(html)
+    pdf = pydf.generate_pdf(html, page_size="A4", margin_bottom="0.75in",
+                            margin_top="0.75in", margin_left="0.5in", margin_right="0.5in")
     # pdf = pdfkit.from_string(html, False, options=options)
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
