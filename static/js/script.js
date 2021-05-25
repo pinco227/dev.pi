@@ -47,3 +47,19 @@ const alertToast = message => {
     const newToast = new bootstrap.Toast(newToastEl, toastSettings);
     newToast.show();
 };
+
+/** 
+* Prevents event's default action if is not confirmed by user.
+* @param {obj} e - Event
+*/
+const confirmIt = e => {
+    if (!confirm('Are you sure?')) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+};
+
+// Confirm action event listener for items with class .confirm
+document.querySelectorAll('.confirm').forEach(item => {
+    item.addEventListener('click', confirmIt, false);
+});

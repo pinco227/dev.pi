@@ -1,14 +1,3 @@
-/** 
-* Prevents event's default action if is not confirmed by user.
-* @param {obj} e - Event
-*/
-const confirmIt = e => {
-    if (!confirm('Are you sure?')) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-};
-
 /**
 * Display bootstrap spinner by creating element and appending it to body
 */
@@ -51,11 +40,6 @@ const setBubble = (range, bubble) => {
     // Sorta magic numbers based on size of the native UI thumb
     bubble.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
 }
-
-// Confirm action event listener for items with class .confirm
-document.querySelectorAll('.confirm').forEach(item => {
-    item.addEventListener('click', confirmIt, false);
-});
 
 // Make value bubble for range inputs
 // CREDIT: https://css-tricks.com/value-bubbles-for-range-inputs/
