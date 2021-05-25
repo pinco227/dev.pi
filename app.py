@@ -90,8 +90,10 @@ def get_cv():
     schools = list(mongo.db.education.find().sort("order", 1))
     skills = list(mongo.db.skills.find().sort("percentage", -1))
     projects = list(mongo.db.projects.find())
+    testimonials = list(mongo.db.testimonials.find(
+        {"approved": True}).limit(5))
     html = render_template("cv.html", jobs=jobs,
-                           schools=schools, skills=skills, projects=projects, root=root)
+                           schools=schools, skills=skills, projects=projects, testimonials=testimonials, root=root)
     filename = settings['name'].replace(' ', '-').lower()
     pdf = pydf.generate_pdf(html, page_size="A4", margin_bottom="0.75in",
                             margin_top="0.75in", margin_left="0.5in", margin_right="0.5in")
