@@ -60,9 +60,13 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3rem;
-    color: var(--text-light);
     text-shadow: -1px -1px rgb(0 0 0 / 40%);
+    color: var(--text-light);
+    font-size: 2rem;
+}
+
+.btn-round.btn-success {
+    font-size: 3rem;
 }
 
 /*------------------------------------------ NAVBAR */
