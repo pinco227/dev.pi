@@ -36,7 +36,15 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
+            <div class="col position-relative">
+                {% if session['user'] %}
+                    <div class="position-absolute top-0 end-0 mt-2">
+                        <a href="{{ url_for('edit_blog', id=post._id) }}" class="btn btn-sm btn-accent-light"><i
+                                class="bi bi-pencil"></i></a>
+                        <a href="{{ url_for('delete_blog', id=post._id) }}" class="btn btn-sm btn-danger confirm"><i
+                                class="bi bi-trash"></i></a>
+                    </div>
+                {% endif %}
                 <h3 class="post-title">{{ post.title }}</h3>
                 <p><small class="text-muted">{{ post.added_on }}</small></p>
             </div>

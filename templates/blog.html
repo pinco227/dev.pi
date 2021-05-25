@@ -23,6 +23,14 @@
             </path>
         </g>
     </svg>
+    {% if session['user'] %}
+        <div class="container-xl position-relative p-4">
+            <div class="position-absolute top-0 end-0 mt-2">
+                <a href="{{ url_for('add_blog') }}" class="btn btn-lg btn-success rounded-circle"><i class="bi bi-plus"></i></a>
+                <a href="{{ url_for('get_blogs') }}" class="btn btn-lg btn-accent-light"><i class="bi bi-pencil"></i></a>
+            </div>
+        </div>
+    {% endif %}
     <div class="container-xl">
         {% include "inc/breadcrumbs.html" %}
         <div class="row row-cols-1">
@@ -46,6 +54,10 @@
                                 <p class="card-text"><small class="text-muted">{{ blog.added_on }}</small></p>
                             </div>
                             <div class="card-footer text-end">
+                                {% if session['user'] %}
+                                    <a href="{{ url_for('edit_blog', id=blog._id) }}" class="btn btn-sm btn-accent-light float-start m-2"><i class="bi bi-pencil"></i></a>
+                                    <a href="{{ url_for('delete_blog', id=blog._id) }}" class="btn btn-sm btn-danger confirm float-start m-2"><i class="bi bi-trash"></i></a>
+                                {% endif %}
                                 <a href="{{ url_for('get_post', post=blog.slug) }}"
                                     class="btn btn-sm btn-accent bg-accent">Read More ...</a>
                             </div>
