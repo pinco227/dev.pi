@@ -9,7 +9,7 @@ from flask_mail import Mail, Message
 from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
-import pdfkit
+import pydf
 import random
 import re
 
@@ -85,13 +85,20 @@ def uploads(filename):
 
 @app.route('/cv')
 def get_cv():
+    options = {
+        'page-size': 'A4',
+        'margin-top': '0.75in',
+        'margin-right': '0.5in',
+        'margin-bottom': '0.75in',
+        'margin-left': '0.5in',
+    }
     filename = settings['name'].replace(' ', '-').lower()
-    pdfkit.from_string(render_template("cv.html"), filename + ".pdf")
     html = render_template("cv.html")
-    pdf = pdfkit.from_string(html, False)
+    pdf = pydf.generate_pdf(html)
+    # pdf = pdfkit.from_string(html, False, options=options)
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "attachment; filename=" + \
+    response.headers["Content-Disposition"] = "inline; filename=" + \
         filename+".pdf"
     return response
 
