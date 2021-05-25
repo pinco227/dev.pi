@@ -9,6 +9,7 @@ from flask_mail import Mail, Message
 from functools import wraps
 from html5lib_truncation import truncate_html
 from datetime import date
+import pdfkit
 import random
 import re
 
@@ -80,6 +81,19 @@ def uploads(filename):
                                    filename)
     else:
         return send_from_directory('static/images', 'no-photo.jpg')
+
+
+@app.route('/cv')
+def get_cv():
+    filename = settings['name'].replace(' ', '-').lower()
+    pdfkit.from_string(render_template("cv.html"), filename + ".pdf")
+    html = render_template("cv.html")
+    pdf = pdfkit.from_string(html, False)
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "attachment; filename=" + \
+        filename+".pdf"
+    return response
 
 
 @app.route("/home")
