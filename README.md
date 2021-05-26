@@ -92,12 +92,27 @@
       - Settings [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/settings_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/settings_desktop.png)
   - ### Improvements
     - #### **Client Side**:
-      - #### Improved section:
-        - improvement description
-    - #### **Dashboard**:
-      - #### Improved section:
-        - improvement description
-- ### Design Choices
+      - #### All pages:
+        - Breadcrumbs between header and content
+      - #### Landing page
+        - Icons for education and experience items but no icon for testimonials.
+      - #### Blog Post page
+        - The post cover photo is displayed on the left.
+      - #### Contact page
+        - Profile Picture is displayed instead of person icon and is not hidden on mobile.
+    - #### **Admin Panel**:
+      - #### All pages:
+        - The layout is completely separate and different from the client side, different navbar which only includes **App** and **Logout** buttons and the menu panel is now a full height sidebar, no footer.
+        - On mobile, menu is expandable from the navbar and it covers the whole page.
+        - A svg image on top right of every page (centered on mobile), representing the page's subject.
+      - #### Dashboard:
+        - Notifications panel is displayed in yellow and only if there are notifications.
+        - Extra panel with quick links.
+      - #### Get Items (list) page
+        - Preview button for blogs and projects and no edit button for testimonials, skills and links.
+      - #### Update (item) page and Settings page
+        - There is a new panel for drag&drop photo upload on blog and project and edit page and on settings page, displayed beside the initial form.
+- ### Design Choices 
   - #### Colours
   - #### Typography
   - #### Media
