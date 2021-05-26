@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block styles %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 {% endblock styles %}
 {% block content %}
 <!-- HERO SECTION -->
@@ -73,7 +73,7 @@
         </h2>
         <div class="row">
             {% for skill in skills %}
-            <div class="col-12 col-sm-6">
+            <div class="col-6 col-md-4">
                 <div class="skill-container">
                     <span class="skill-label">{{ skill.name }}</span>
                     <div class="progress">

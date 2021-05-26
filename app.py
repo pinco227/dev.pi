@@ -341,6 +341,7 @@ def login_required(flash_message=False):
     return inner_function
 
 
+@app.route('/admin/')
 @app.route('/admin')
 @login_required()
 def admin():
