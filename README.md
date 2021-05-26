@@ -234,16 +234,30 @@
       Resolving deltas: 100% (156/156), done.
       ```
       > Click [Here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
-  7. Create a [MongoDB](https://www.mongodb.com/) account, project, cluster and database.
+  7. Create a [MongoDB](https://www.mongodb.com/) account, project, cluster and database. Create collections (see db schema) and create an empty document into ***settings*** collection.
   8. Create `env.py` file and include the following code (note that the values should be replaced with your own db credentials)
       ```python
       import os
 
+      # App IP and PORT
       os.environ.setdefault("IP", "0.0.0.0")
       os.environ.setdefault("PORT", "5000")
+      # Generate a secret key, use https://randomkeygen.com/
       os.environ.setdefault("SECRET_KEY", "<secret_key>")
+      # Mongo DB credentials
       os.environ.setdefault("MONGO_URI", "<mongo_uri>")
       os.environ.setdefault("MONGO_DBNAME", "<db_name>")
+      # Create an empty document into settings collection using the db schema and get its id
+      os.environ.setdefault("DB_SETTINGS_ID", "<settings_collection_doc_id>")
+      # Admin panel user and password
+      os.environ.setdefault("ADMIN_USERNAME", "<username>")
+      os.environ.setdefault("ADMIN_PASSWORD", "<password>")
+      # Gmail user and password. For othe mail server change mail_settings in app.py
+      os.environ.setdefault("EMAIL_USER", "<email>")
+      os.environ.setdefault("EMAIL_PASSWORD", "<email_password>")
+      # Recaptcha keys. Go to https://www.google.com/recaptcha/admin/create and create a new site
+      os.environ.setdefault("RC_SITE_KEY", "<recaptcha_site_key>")
+      os.environ.setdefault("RC_SECRET_KEY", "<recaptcha_secret_key>")
       ```
       > Make sure you add this file to **.gitignore** file so it will not be published.
   9. Install required `python` packages by running the following command into terminal:
@@ -266,7 +280,7 @@
       ```
   2. Commit and push changes to forked repository.
   3. Create a [Heroku](https://heroku.com) account and click **New** on top right of the dashboard to **Create a new app**.
-  4. Within the newly created app go to **Settings** tab and press **Reveal Config Vars**. Here you can add the variables initially stored into local `env.py` file: IP, PORT, SECRET_KEY, MONGO_URI, MONGO_DBNAME.
+  4. Within the newly created app go to **Settings** tab and press **Reveal Config Vars**. Here you can add the variables initially stored into local `env.py` file: IP, PORT, SECRET_KEY, MONGO_URI, MONGO_DBNAME, DB_SETTINGS_ID, ADMIN_USERNAME, ADMIN_PASSWORD, EMAIL_USER, EMAIL_PASSWORD, RC_SITE_KEY, RC_SECRET_KEY.
   5. Go to **Deploy** tab and under the **Deployment method** click on the **Github** icon.
   6. Right under this section, type the `dev.pi` and search for the forked repository into your GitHub account. Select the right repository and click **Connect**.
   7. Under the **Automatic deploys** section, click **Enable Automatic Deploys**. The deployment will be now automatic with every github `push` command.
