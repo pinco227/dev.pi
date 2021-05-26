@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha.validators import Recaptcha
-from pymongo import message
 from wtforms import StringField, TextAreaField, SubmitField, HiddenField, IntegerField, SelectField, PasswordField
 from wtforms.fields.html5 import EmailField, IntegerRangeField, IntegerField, TelField
 from wtforms.validators import DataRequired, Email, NumberRange, Regexp, URL, Optional, InputRequired, AnyOf, Length

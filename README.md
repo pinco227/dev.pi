@@ -160,11 +160,38 @@
   * [Ubuntu20.04](https://ubuntu.com/) as Operating System
   * [Visual Studio Code](https://code.visualstudio.com/) as Integrated Development Environment
 - Languages
+  * [HTML5](https://en.wikipedia.org/wiki/HTML5)
+  * [CSS3](https://en.wikipedia.org/wiki/CSS)
+  * [JS](https://en.wikipedia.org/wiki/JavaScript)
+  * [Python](https://www.python.org/)
 - Frameworks & Libraries
+  * [Bootstrap5](https://getbootstrap.com/) is used for its great responsivness, styling classes, icons and its javascript functionality.
+  * [Font Awesome](https://fontawesome.com/) icons were used for writing the auto-generated CV.
+  * [Google Fonts](https://fonts.google.com/) is used as the main font resource.
+  * [Hover.css](https://ianlunn.github.io/Hover/) is used for hover effects over buttons/links.
+  * [GLightBox](https://biati-digital.github.io/glightbox/) is used for the lightbox phot gallery.
+  * [TinyMCE](https://www.tiny.cloud/) is used for blog rich text editor.
+  * [Flask](https://flask.palletsprojects.com/en/2.0.x/) is used as back-end framework.
+  * Python modules:
+    * [flask_breadcrumbs](https://flask-breadcrumbs.readthedocs.io/en/latest/): is used to generate breadcrumbs for routes.
+    * [flask_mail](https://pythonhosted.org/Flask-Mail/) is used to send email from contact form.
+    * [pymongo](https://pymongo.readthedocs.io/en/stable/) and [flask_pymongo](https://flask-pymongo.readthedocs.io/en/latest/) are used to connect the app to a MongoDB database.
+    * [wtforms](https://wtforms.readthedocs.io/en/2.3.x/) and [flask_wtf](https://flask-wtf.readthedocs.io/en/0.15.x/) are used to generate secure forms with server side validation (inc. token validation).
+    * [html5lib_truncation](https://github.com/tonyseek/html5lib-truncation) is used to truncate blogs html text in blogs list page while keeping html opening and closing tags.
+    * [python-pdf (pydf)](https://github.com/tutorcruncher/pydf) is used to generate PDF file from html.
+    * [secure.py](https://secure.readthedocs.io/en/latest/) is used to add security headers to http response.
 - Version Control
+  * [Git](https://git-scm.com/) as Version Control System.
+  * [Github](https://www.github.com) for repository hosting.
+  * [Commitizen](https://github.com/commitizen/cz-cli) for commit linting.
 - Wireframes
   * [Balsamiq](https://balsamiq.com/) for creating [wireframes](#wireframes).
 - Media
+  * [Photopea](https://www.photopea.com/) online photo editor tool for creating the favicon and the no-photo image.
+  * [Adobe Photoshop Express](https://photoshop.adobe.com/resize) for quick resizing and cropping images for improving performance.
+  * [RealFaviconGenerator](https://realfavicongenerator.net/) for converting created favicon to all browser formats.
+  * [Coolors](https://coolors.co/) for palette image generation.
+  * [dbdiagram.io](https://dbdiagram.io/) for database diagram creation.
 - Other
 
 ## Testing
@@ -248,9 +275,9 @@
 
 ## Credits
 - ### Content
-  - [Colorpalettes.net](https://colorpalettes.net/color-palette-3728/) for the color palette (#3728).
-  - [Coolors](https://coolors.co/) for palette image generation.
 - ### Media
+  - [XYZZY estudio web](https://codepen.io/xyzzyestudioweb) codepen user for [svg section separators](https://codepen.io/xyzzyestudioweb/pen/JgdKOR).
+  - [Colorpalettes.net](https://colorpalettes.net/color-palette-3728/) for the color palette (#3728).
 - ### Code
 
 ## Aknowledgements
