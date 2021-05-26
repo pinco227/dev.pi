@@ -114,12 +114,16 @@
         - There is a new panel for drag&drop photo upload on blog and project and edit page and on settings page, displayed beside the initial form.
 - ### Design Choices 
   - #### Colours
-    ![Colour Palette](https://github.com/pinco227/dev.pi/blob/main/docs/palette.png)
     - The colour palette consists of different shades of blue inspired by the "Colours of Santorini".  
-    ![Colour Psychology Wheel](https://github.com/pinco227/dev.pi/blob/main/docs/colour-wheel.jpg)  
+    ![Colour Palette](https://github.com/pinco227/dev.pi/blob/main/docs/palette.png)
     - According to [The Psychology of Color](https://www.toptal.com/designers/ux/color-in-ux), the chosen colours represent optimism, loyalty and reliability.
+    ![Colour Psychology Wheel](https://github.com/pinco227/dev.pi/blob/main/docs/colour-wheel.jpg)  
     - The 60-30-10 Rule was also taken into consideration when building the project. The light shades which are used mostly for background are considered neutral and makes up to 60% of the palette. The dark shades are complementary and makes up to 30% while the accent colours completes the remaining 10% of the design. The landing page is an exception from this rule as it is divided into multiple sections and uses all colours to create contrast between these.
   - #### Typography
+    There are three fonts used throughout the project. Two main fonts used for content and headings, both having a ```sans-serif``` typeface and fallback . These font-faces inspire a clean and modern aspect. The third font is a ```monospace``` typeface used for brand text (logo) only to make it look like a piece of code:
+    - [Lato](https://fonts.google.com/specimen/Lato?query=lato) is used as a general font.
+    - [Alegreya Sans](https://fonts.google.com/specimen/Alegreya+Sans?query=Alegreya+Sans) is used for h1, h2 and h3 headings.
+    - [Source Code Pro](https://fonts.google.com/specimen/Source+Code+Pro?query=Source+Code+Pro) is used for brand text and it has a ```monospace``` fallback.
   - #### Media
   - #### Iconography
 
