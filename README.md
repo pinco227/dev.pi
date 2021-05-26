@@ -125,7 +125,9 @@
     - [Alegreya Sans](https://fonts.google.com/specimen/Alegreya+Sans?query=Alegreya+Sans) is used for h1, h2 and h3 headings.
     - [Source Code Pro](https://fonts.google.com/specimen/Source+Code+Pro?query=Source+Code+Pro) is used for brand text and it has a ```monospace``` fallback.
   - #### Media
+    The only media used on building this project are svg (inline html paths) section separators on the client side, svg minimalistic images on admin panel on top of every page and a ***"no-photo"*** image used as a fallback for any image issue. Any other media found on the app is added through the admin panel and is relevant to its container.
   - #### Iconography
+    Icons are used throughout the project to help user understand more efficiently the meaning of the content. They are a very good asset to improve UX.
 
 ## Features
 - ### Initial features
