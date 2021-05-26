@@ -114,6 +114,11 @@
         - There is a new panel for drag&drop photo upload on blog and project and edit page and on settings page, displayed beside the initial form.
 - ### Design Choices 
   - #### Colours
+    ![Colour Palette](https://github.com/pinco227/dev.pi/blob/main/docs/palette.png)
+    - The colour palette consists of different shades of blue inspired by the "Colours of Santorini".  
+    ![Colour Psychology Wheel](https://github.com/pinco227/dev.pi/blob/main/docs/colour-wheel.jpg)  
+    - According to [The Psychology of Color](https://www.toptal.com/designers/ux/color-in-ux), the chosen colours represent optimism, loyalty and reliability.
+    - The 60-30-10 Rule was also taken into consideration when building the project. The light shades which are used mostly for background are considered neutral and makes up to 60% of the palette. The dark shades are complementary and makes up to 30% while the accent colours completes the remaining 10% of the design. The landing page is an exception from this rule as it is divided into multiple sections and uses all colours to create contrast between these.
   - #### Typography
   - #### Media
   - #### Iconography
@@ -237,6 +242,8 @@
 
 ## Credits
 - ### Content
+  - [Colorpalettes.net](https://colorpalettes.net/color-palette-3728/) for the color palette (#3728).
+  - [Coolors](https://coolors.co/) for palette image generation.
 - ### Media
 - ### Code
 
