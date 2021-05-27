@@ -167,6 +167,10 @@ const uploadFile = (file) => {
     });
 }
 
+/** 
+* Generates an array out of dom photos src of a particular class
+* @return {array} generated array of photo sources
+*/
 const getPhotoList = () => {
     if (document.querySelectorAll('.photo-container').length) {
         const photoList = [];

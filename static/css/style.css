@@ -13,7 +13,7 @@
     --accent-dark-rgb: 4, 68, 136;
     --accent-dark-hover: #023060;
     --text-light: #fffcf6;
-    --text-dark: #044488;
+    --text-dark: var(--accent-dark);
     --main-bg-color: #edece8;
 }
 

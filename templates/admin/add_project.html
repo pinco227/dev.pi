@@ -1,65 +1,65 @@
 {% extends "admin/base.html" %}
 {% block content %}
-<section id="add_project">
-    <div class="row my-2 align-items-center">
-        <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
-            <h1 class="text-start my-2">Add New Project</h1>
+    <section id="add_project">
+        <div class="row my-2 align-items-center">
+            <div class="order-1 order-sm-0 col-sm-8 col-md-9 col-lg-10">
+                <h1 class="text-start my-2">Add New Project</h1>
+            </div>
+            <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
+                <img src="{{ url_for('static', filename='images/project.svg') }}" alt="Project" class="section-image">
+            </div>
         </div>
-        <div class="order-0 order-sm-1 col-8 offset-2 offset-sm-0 col-sm-4 col-md-3 col-lg-2 text-center">
-            <img src="{{ url_for('static', filename='images/project.svg') }}" alt="Project" class="section-image">
+        <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            <form action="{{ url_for('add_project') }}" method="POST" id="dropzoneForm">
+                {{ form.csrf_token }}
+                <div class="card-header">
+                    <h4 class="text-center">New</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-floating mb-3">
+                        {{ form.title(class="form-control", placeholder="Title") }}
+                        {{ form.title.label }}
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.slug(class="form-control", readonly="readonly", placeholder="Slug") }}
+                        {{ form.slug.label }}
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.tech(class="form-control", placeholder="Technologies Used") }}
+                        {{ form.tech.label }}
+                        <small class="text-muted">Separated by comma.</small>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.repo(class="form-control", placeholder="Source Code (repository URL)") }}
+                        {{ form.repo.label }}
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.live_url(class="form-control", placeholder="Live URL") }}
+                        {{ form.live_url.label }}
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.description(class="form-control", placeholder="Description") }}
+                        {{ form.description.label }}
+                    </div>
+                    {{ form.url_for_files(value="%s" | format(url_for('files'))) }}
+                    {{ form.collection(value="projects") }}
+                    {{ form.photo_list() }}
+                    <input type="file" name="files" id="drop-file-elem" accept="image/*" multiple>
+                    <div id="drop-area" data-multiple="true">
+                        <i class="bi bi-upload"></i>
+                        Drag&drop files here or click to select...
+                    </div>
+                    <div id="gallery" class="row"></div>
+                </div>
+                <div class="card-footer text-center d-flex justify-content-between">
+                    <a href="{{ url_for('get_projects') }}" class="btn btn-lg btn-danger">Cancel</a>
+                    {{ form.submit(class="btn btn-lg btn-accent", id="submit-form") }}
+                </div>
+            </form>
         </div>
-    </div>
-    <div class="card col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-        <form action="{{ url_for('add_project') }}" method="POST" id="dropzoneForm">
-            {{ form.csrf_token }}
-            <div class="card-header">
-                <h4 class="text-center">New</h4>
-            </div>
-            <div class="card-body">
-                <div class="form-floating mb-3">
-                    {{ form.title(class="form-control", placeholder="Title") }}
-                    {{ form.title.label }}
-                </div>
-                <div class="form-floating mb-3">
-                    {{ form.slug(class="form-control", readonly="readonly", placeholder="Slug") }}
-                    {{ form.slug.label }}
-                </div>
-                <div class="form-floating mb-3">
-                    {{ form.tech(class="form-control", placeholder="Technologies Used") }}
-                    {{ form.tech.label }}
-                    <small class="text-muted">Separated by comma.</small>
-                </div>
-                <div class="form-floating mb-3">
-                    {{ form.repo(class="form-control", placeholder="Source Code (repository URL)") }}
-                    {{ form.repo.label }}
-                </div>
-                <div class="form-floating mb-3">
-                    {{ form.live_url(class="form-control", placeholder="Live URL") }}
-                    {{ form.live_url.label }}
-                </div>
-                <div class="form-floating mb-3">
-                    {{ form.description(class="form-control", placeholder="Description") }}
-                    {{ form.description.label }}
-                </div>
-                {{ form.url_for_files(value="%s" | format(url_for('files'))) }}
-                {{ form.collection(value="projects") }}
-                {{ form.photo_list() }}
-                <input type="file" name="files" id="drop-file-elem" accept="image/*" multiple>
-                <div id="drop-area" data-multiple="true">
-                    <i class="bi bi-upload"></i>
-                    Drag&drop files here or click to select...
-                </div>
-                <div id="gallery" class="row"></div>
-            </div>
-            <div class="card-footer text-center d-flex justify-content-between">
-                <a href="{{ url_for('get_projects') }}" class="btn btn-lg btn-danger">Cancel</a>
-                {{ form.submit(class="btn btn-lg btn-accent", id="submit-form") }}
-            </div>
-        </form>
-    </div>
-</section>
+    </section>
 {% endblock content %}
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
-<script src="{{ url_for('static', filename='js/photos.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/photos.js') }}"></script>
 {% endblock scripts %}

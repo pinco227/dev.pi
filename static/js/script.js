@@ -1,29 +1,3 @@
-// Offcanvas toggle click event listener
-document.querySelectorAll('[data-toggle="offcavas"]').forEach(item => {
-    item.addEventListener('click', () => {
-        document.querySelector('.offcanvas-collapse').classList.toggle('open');
-        document.querySelector('#navbar-toggler .bi').classList.toggle('bi-x');
-    })
-});
-
-// Declare used variables
-const toastContainer = document.querySelectorAll('.toast-container')[0];
-const toastSettings = {
-    autohide: true,
-    delay: 5000
-};
-
-// Create Botstrap toasts from existing DOM elements
-const toastElList = [].slice.call(document.querySelectorAll('.toast'));
-const toastList = toastElList.map(function (toastEl) {
-    return new bootstrap.Toast(toastEl, toastSettings);
-});
-
-// Show toasts
-toastList.forEach(toast => {
-    toast.show();
-});
-
 /**
 * Creates a new toast element and displays it
 * @param {string} message - message to be displayed.
@@ -58,6 +32,32 @@ const confirmIt = e => {
         e.stopPropagation();
     }
 };
+
+// Offcanvas toggle click event listener
+document.querySelectorAll('[data-toggle="offcavas"]').forEach(item => {
+    item.addEventListener('click', () => {
+        document.querySelector('.offcanvas-collapse').classList.toggle('open');
+        document.querySelector('#navbar-toggler .bi').classList.toggle('bi-x');
+    })
+});
+
+// Declare used variables
+const toastContainer = document.querySelectorAll('.toast-container')[0];
+const toastSettings = {
+    autohide: true,
+    delay: 5000
+};
+
+// Create Botstrap toasts from existing DOM elements
+const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+const toastList = toastElList.map(function (toastEl) {
+    return new bootstrap.Toast(toastEl, toastSettings);
+});
+
+// Show toasts
+toastList.forEach(toast => {
+    toast.show();
+});
 
 // Confirm action event listener for items with class .confirm
 document.querySelectorAll('.confirm').forEach(item => {
