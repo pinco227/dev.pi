@@ -150,16 +150,16 @@
   - #### **Admin panel**
     - Hidden dashboard and buttons, only accessible when logged as admin.
 - ### Extra Features
-  - #### **Navigation** is hidden offcanvas on small screens and is opening full screen.
-  - #### **Footer** is displayed on every page of the main app and it features a &copy; copyright message, a list of social links and two columns of app links, including the **Download CV** CTA and the **Write Testimonial** link.
+  - **Navigation** is hidden offcanvas on small screens and is opening full screen.
+  - **Footer** is displayed on every page of the main app and it features a &copy; copyright message, a list of social links and two columns of app links, including the **Download CV** CTA and the **Write Testimonial** link.
   - #### **Landing Page**
     - **Hero** section extra features: Profile Picture, title (profession), social links and the CTA buttons act as follows:
-      - ***Learn More*** opens a modal dialog containing a long bio
+      - ***Learn More*** opens a modal dialog containing a long bio.
       - ***Download CV*** opens an auto-generated PDF attachment containing all the relevant information extracted from the database.
     - **Project** individual page features a photo gallery.
   - #### **Admin panel**
     - **Login Page** asks for user and password when trying to access any ```/admin``` url. While admin is logged in and until is logged out, the main app features quick links for each item/section to **Add new**, **Edit** and **Delete**. It also display a **Dashboard** and **Log out** buttons in both navbar and footer for quick access.
-    - Full height collapsible (for small screen) **Sidebar Navigation**
+    - Full height collapsible (for small screen) **Sidebar Navigation**.
     - **Testimonials** page allows admin to approve/disapprove and delete testimonials.
     - **Blogs** and **Projects** shows a list of items and allows admin to access they're individual edit page, to delete any item on the list or to preview them on the main app. Also gives access to **[+ Add new]** item page and preview the list page on the app. **Add New** and **Edit existing** pages features a drag&drop multiple photo upload section. The first uploaded photo will be displayed as the main photo of the item. For ***Projects***, the rest of photos will be displayed as a gallery on they're individual page. For ***Blogs***, the rest of the photos can be used while writing/editing the post as inserted objects from the rich text editor field.
     - **Education** and **Experience** shows a list of items and allows admin to update they're order, access they're individual edit page and delete any of them from the database. Also gives access to **[+ Add new]** item page.
@@ -185,7 +185,6 @@
   * [Bootstrap5](https://getbootstrap.com/) is used for its great responsivness, styling classes, icons and its javascript functionality.
   * [Font Awesome](https://fontawesome.com/) icons were used for writing the auto-generated CV.
   * [Google Fonts](https://fonts.google.com/) is used as the main font resource.
-  * [Hover.css](https://ianlunn.github.io/Hover/) is used for hover effects over buttons/links.
   * [GLightBox](https://biati-digital.github.io/glightbox/) is used for the lightbox phot gallery.
   * [TinyMCE](https://www.tiny.cloud/) is used for blog rich text editor.
   * [Flask](https://flask.palletsprojects.com/en/2.0.x/) is used as back-end framework.
@@ -305,10 +304,17 @@
   9. You can now browse the deployed app by clicking **Open app** button on top right of the dashboard.
 
 ## Credits
-- ### Content
 - ### Media
   - [XYZZY estudio web](https://codepen.io/xyzzyestudioweb) codepen user for [svg section separators](https://codepen.io/xyzzyestudioweb/pen/JgdKOR).
   - [Colorpalettes.net](https://colorpalettes.net/color-palette-3728/) for the color palette (#3728).
 - ### Code
+  - [CSS TRICKS](https://css-tricks.com/) as a general resource.
+  - [Stack Overflow](https://stackoverflow.com/) as a general resource.
+  - [w3schools](https://www.w3schools.com/) as a general resource.
+  - [Hover.css](https://ianlunn.github.io/Hover/) for *Grow* and *Sweep to top* hover effects used in buttons navigation links.
+  - [CSS Tricks user: Chris Coyier](https://css-tricks.com/author/chriscoyier/) for [Value Bubbles for Range Inputs](https://css-tricks.com/value-bubbles-for-range-inputs/) which was used on the **Skills** and **Add New Skill** page of the admin panel.
+  - [Joseph Zimmerman](https://www.joezimjs.com/) for writing [How To Make A Drag-and-Drop File Uploader With Vanilla JavaScript](https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/) which was adapted and used in admin panel for photo uploads.
+  - [Gal Weizman's article](https://www.perimeterx.com/tech-blog/2019/beforeunload-and-unload-events/) about ```unload``` And ```beforeunload``` javascripts events for the ```sleep(delay)``` function which was used in admin panel when discarding a form that has uploaded images in order to get the files deleted before unload.
+  - [GitHub Gist user: Mathew Byrne](https://gist.github.com/mathewbyrne) for the javascript ```slugify(text)``` function ([Gist](https://gist.github.com/mathewbyrne/1280286)) that was used in admin panel to generate slugs for blogs and projects.
 
 ## Aknowledgements
