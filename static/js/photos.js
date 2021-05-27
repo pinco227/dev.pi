@@ -191,7 +191,7 @@ const sleep = (delay) => {
 
 // Event Delegation for dynamic created elements
 // Click event listener for file delete button
-document.addEventListener('click', (e) => {
+document.getElementById('gallery').addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-photo') && e.target.dataset.photoKey) {
         e.preventDefault;
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
