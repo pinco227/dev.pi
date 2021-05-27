@@ -130,7 +130,7 @@
     Icons are used throughout the project to help user understand more efficiently the meaning of the content. They are a very good asset to improve UX.
 
 ## Features
-- ### Initial features
+- ### Planned features
   - #### **Navigation Bar**
     - Allows users to navigate through the website. The navigation will be fixed to top and visible all the time. Links will be collapsed on small screens.
   - #### **Landing Page**
@@ -149,6 +149,23 @@
     - Individual page with a simple form to write testimonials, accessible to all users.
   - #### **Admin panel**
     - Hidden dashboard and buttons, only accessible when logged as admin.
+- ### Extra Features
+  - #### **Navigation** is hidden offcanvas on small screens and is opening full screen.
+  - #### **Footer** is displayed on every page of the main app and it features a &copy; copyright message, a list of social links and two columns of app links, including the **Download CV** CTA and the **Write Testimonial** link.
+  - #### **Landing Page**
+    - **Hero** section extra features: Profile Picture, title (profession), social links and the CTA buttons act as follows:
+      - ***Learn More*** opens a modal dialog containing a long bio
+      - ***Download CV*** opens an auto-generated PDF attachment containing all the relevant information extracted from the database.
+    - **Project** individual page features a photo gallery.
+  - #### **Admin panel**
+    - **Login Page** asks for user and password when trying to access any ```/admin``` url. While admin is logged in and until is logged out, the main app features quick links for each item/section to **Add new**, **Edit** and **Delete**. It also display a **Dashboard** and **Log out** buttons in both navbar and footer for quick access.
+    - Full height collapsible (for small screen) **Sidebar Navigation**
+    - **Testimonials** page allows admin to approve/disapprove and delete testimonials.
+    - **Blogs** and **Projects** shows a list of items and allows admin to access they're individual edit page, to delete any item on the list or to preview them on the main app. Also gives access to **[+ Add new]** item page and preview the list page on the app. **Add New** and **Edit existing** pages features a drag&drop multiple photo upload section. The first uploaded photo will be displayed as the main photo of the item. For ***Projects***, the rest of photos will be displayed as a gallery on they're individual page. For ***Blogs***, the rest of the photos can be used while writing/editing the post as inserted objects from the rich text editor field.
+    - **Education** and **Experience** shows a list of items and allows admin to update they're order, access they're individual edit page and delete any of them from the database. Also gives access to **[+ Add new]** item page.
+    - **Skills** and **Links** shows a list of items and allows admin to update they're data directly to the list, multiple items at once. It also allows admin to delete any of the items from database and gives access to **[+ Add new]** item page.
+    - **Setings** page features a form and a drag&drop single photo upload section where admin can update any information about the showcased developer or dynamic site data as META information.
+    - **Log out** button which logs the admin out and deletes the session item.
 
 ## Database
   All the information in the database is only in relation with showcased developer. Therefore database used for this project is the document-based database **MongoDB** as a relational database is not needed.
@@ -235,7 +252,7 @@
       ```
       > Click [Here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
   7. Create a [MongoDB](https://www.mongodb.com/) account, project, cluster and database. Create collections (see db schema) and create an empty document into ***settings*** collection.
-  8. Create `env.py` file and include the following code (note that the values should be replaced with your own db credentials)
+  8. Create `env.py` file and include the following code (note that the values should be replaced with your own credentials)
       ```python
       import os
 
