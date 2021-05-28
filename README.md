@@ -92,14 +92,10 @@
       - Settings [mobile](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/settings_mobile.png) / [desktop](https://github.com/pinco227/dev.pi/blob/main/docs/wireframes/settings_desktop.png)
   - ### Improvements
     - #### **Client Side**:
-      - #### All pages:
-        - Breadcrumbs between header and content
-      - #### Landing page
-        - Icons for education and experience items but no icon for testimonials.
-      - #### Blog Post page
-        - The post cover photo is displayed on the left.
-      - #### Contact page
-        - Profile Picture is displayed instead of person icon and is not hidden on mobile.
+      - **All pages**: Breadcrumbs between header and content
+      - **Landing page**: Icons for education and experience items but no icon for testimonials.
+      - **Blog Post page**: The post cover photo is displayed on the left.
+      - **Contact page**: Profile Picture is displayed instead of person icon and is not hidden on mobile.
     - #### **Admin Panel**:
       - #### All pages:
         - The layout is completely separate and different from the client side, different navbar which only includes **App** and **Logout** buttons and the menu panel is now a full height sidebar, no footer.
@@ -159,6 +155,7 @@
     - **Project** individual page features a photo gallery.
   - #### **Admin panel**
     - **Login Page** asks for user and password when trying to access any ```/admin``` url. While admin is logged in and until is logged out, the main app features quick links for each item/section to **Add new**, **Edit** and **Delete**. It also display a **Dashboard** and **Log out** buttons in both navbar and footer for quick access.
+    - **Dashboard** page features a stand-out (yellow) **Notifications** panel for new (unapproved) testimonials, a **Quick Links** panel and a **Statistics** panel which shows count tiles for each item in database.
     - Full height collapsible (for small screen) **Sidebar Navigation**.
     - **Testimonials** page allows admin to approve/disapprove and delete testimonials.
     - **Blogs** and **Projects** shows a list of items and allows admin to access they're individual edit page, to delete any item on the list or to preview them on the main app. Also gives access to **[+ Add new]** item page and preview the list page on the app. **Add New** and **Edit existing** pages features a drag&drop multiple photo upload section. The first uploaded photo will be displayed as the main photo of the item. For ***Projects***, the rest of photos will be displayed as a gallery on they're individual page. For ***Blogs***, the rest of the photos can be used while writing/editing the post as inserted objects from the rich text editor field.
@@ -318,3 +315,7 @@
   - [GitHub Gist user: Mathew Byrne](https://gist.github.com/mathewbyrne) for the javascript ```slugify(text)``` function ([Gist](https://gist.github.com/mathewbyrne/1280286)) that was used in admin panel to generate slugs for blogs and projects.
 
 ## Aknowledgements
+  - **My Mentor**: Nishant Kumar for continuous helpful feedback.
+  - **Tutor** support at Code Institute for their support.
+  - **Slack** Code Institute community for feedback.
+  - **Peer student**: [Alexandru Valentin Grapa](https://github.com/alexandruvalentin) for helpful feedback along the coding progress and for help with testing.
