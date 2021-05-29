@@ -30,8 +30,6 @@ const formElement = document.getElementById('dropzoneForm');
 let formSubmitted = false;
 const dropArea = document.getElementById('drop-area');
 const fileElem = document.getElementById('drop-file-elem');
-const urlForSignS3 = document.getElementById('url-for-signs3').value;
-const urlForDeleteS3 = document.getElementById('url-for-deletes3').value;
 const collection = document.getElementById('collection').value;
 const docId = document.getElementById('doc-id') ? document.getElementById('doc-id').value : 0;
 
@@ -102,12 +100,11 @@ const handleFiles = (files) => {
         ([...files]).forEach(getSignedRequest);
     } else {
         // check if there is a current file
-        if (document.querySelectorAll('[data-photo-key]')[0]) {
+        if (document.querySelectorAll('.photo-container')[0]) {
             if (confirm('Are you sure?\r\n This will replace the current file!')) {
                 if (getSignedRequest(files[0])) {
-                    const target = document.querySelectorAll('[data-photo-key]')[0]
-                    const fileName = target.parentElement.dataset.src.split('/').pop();
-                    deleteFile(target, fileName);
+                    const el = document.querySelectorAll('.photo-container')[0];
+                    deleteFile(el);
                 }
             } else {
                 return;
@@ -119,14 +116,15 @@ const handleFiles = (files) => {
     }
 }
 
-const deleteFile = (target, fileName) => {
+const deleteFile = (el) => {
+    const fileName = el.dataset.src.split('/').pop();
     const xhr = new XMLHttpRequest();
     xhr.open("GET", urlForDeleteS3 + "?file_name=" + fileName);
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                target.parentElement.remove();
+                el.remove();
                 fileListUpdate();
                 alertToast("Image '" + fileName + "' was successfully deleted!");
             }
@@ -172,6 +170,9 @@ const uploadFile = (file, s3Data, url) => {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             if (xhr.status === 200 || xhr.status === 204) {
+                if (docId) {
+                    addFileToDb(url);
+                }
                 if (document.getElementById('gallery')) {
                     const containerEl = document.getElementById('gallery');
                     const existingElCount = document.querySelectorAll(".photo-container").length;
@@ -188,8 +189,8 @@ const uploadFile = (file, s3Data, url) => {
                     newEl.dataset.src = url;
                     containerEl.appendChild(newEl);
                     alertToast("Image '" + file.name + "' was successfully uploaded!");
-                    fileListUpdate();
                 }
+                fileListUpdate();
             }
             else {
                 alertToast("Could not upload file.");
@@ -197,6 +198,18 @@ const uploadFile = (file, s3Data, url) => {
         }
     };
     xhr.send(postData);
+}
+
+const addFileToDb = (photo) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", urlForAddPhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo);
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            const response = JSON.parse(xhr.responseText);
+            alertToast(response.message)
+        }
+    };
+    xhr.send();
 }
 /**
 * Uploads a file element by sending at through an PATCH ajax call to a python route
@@ -276,11 +289,11 @@ const sleep = (delay) => {
 // Event Delegation for dynamic created elements
 // Click event listener for file delete button
 document.getElementById('gallery').addEventListener('click', (e) => {
-    if (e.target.classList.contains('delete-photo') && e.target.dataset.photoKey) {
+    if (e.target.classList.contains('delete-photo')) {
         e.preventDefault;
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
             const fileName = e.target.parentElement.dataset.src.split('/').pop()
-            deleteFile(e.target, fileName);
+            deleteFile(e.target.parentElement);
         }
     }
 });
@@ -309,10 +322,7 @@ if (!docId) {
     window.onunload = () => {
         if (document.querySelectorAll('.photo-container').length && !formSubmitted) {
             document.querySelectorAll('.photo-container').forEach(el => {
-                // const url = urlForFiles + "?collection=" + collection + "&src=" + el.dataset.src;
-                const target = el.querySelectorAll('[data-photo-key]')[0]
-                const fileName = el.dataset.src.split('/').pop();
-                deleteFile(target, fileName);
+                deleteFile(el);
             });
             sleep(2000);
         }

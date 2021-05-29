@@ -27,8 +27,7 @@
                         <div class="row w-100 align-items-center">
                             <div class="col-6 offset-3 col-sm-2 offset-sm-0 text-center">
                                 {% if blog.photos|length %}
-                                    {% set photos = blog.photos.split(',') %}
-                                    <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" alt="{{ blog.title }}"
+                                    <img src="{{ blog.photos[0] }}" alt="{{ blog.title }}"
                                         class="img-fluid">
                                 {% else %}
                                     <i class="bi bi-blockquote-left fs-1"></i>

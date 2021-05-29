@@ -27,12 +27,11 @@
                         <div class="row w-100 align-items-center">
                             <div class="col-6 offset-3 col-sm-2 offset-sm-0 text-center">
                                 {% if project.photos|length %}
-                                    {% set photos = project.photos.split(',') %}
-                                    <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}"
+                                    <img src="{{ project.photos[0] }}"
                                         alt="{{ project.title }}" class="img-fluid mb-1">
-                                    {% for photo in photos %}
+                                    {% for photo in project.photos %}
                                         {% if loop.index0 != 0 %}
-                                            <img src="{{ url_for('uploads', filename=photo.replace(' ', '')) }}"
+                                            <img src="{{ photo }}"
                                                 alt="Photo {{ loop.index }}" class="w-25">
                                         {% endif %}
                                     {% endfor %}

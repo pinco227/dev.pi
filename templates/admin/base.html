@@ -30,6 +30,12 @@
     <meta name="msapplication-TileColor" content="#168fd6">
     <meta name="theme-color" content="#168fd6">
     {% block styles %}{% endblock styles %}
+    <script>
+        // GLOBAL VARS
+        const urlForSignS3 = "{{ url_for('sign_s3') }}";
+        const urlForDeleteS3 = "{{ url_for('delete_s3') }}";
+        const urlForAddPhoto = "{{ url_for('add_photo') }}";
+    </script>
 </head>
 
 <body>

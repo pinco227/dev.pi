@@ -363,6 +363,24 @@ def admin():
     return render_template('admin/dashboard.html', blogs=blogs, projects=projects, skills=skills, education=education, experience=experience, testimonials=testimonials, unapproved_testimonials=unapproved_testimonials)
 
 
+@app.route('/admin/add_photo', methods=["PUT"])
+@login_required()
+def add_photo():
+    collection = request.args.get('coll')
+    document_id = request.args.get('docid')
+    photo = request.args.get('photo')
+
+    try:
+        mongo.db[collection].update(
+            {'_id': ObjectId(document_id)},
+            {'$push': {'photos': photo}}
+        )
+    except:
+        return make_response(jsonify({'message': 'Error updating database'}), 500)
+    else:
+        return make_response(jsonify({'message': 'Photo was successfully added to database'}), 200)
+
+
 @app.route('/admin/sign_s3')
 @login_required()
 def sign_s3():
@@ -1227,9 +1245,6 @@ def get_settings():
             mongo.db.settings.update({'_id': ObjectId(settings['_id'])}, {
                 '$set': updated})
             flash('Settings were successfully updated!', 'success')
-            # Update global settings variable
-            settings = mongo.db.settings.find_one(
-                {'_id': ObjectId(os.environ.get('DB_SETTINGS_ID'))})
             # Redirect to avoid re-submission
             return redirect(url_for('get_settings'))
         else:
@@ -1240,6 +1255,9 @@ def get_settings():
     form.bio.data = settings['bio']
     form.cover.data = settings['cover']
     form.meta_desc.data = settings['meta_desc']
+    # Update global settings variable
+    settings = mongo.db.settings.find_one(
+        {'_id': ObjectId(os.environ.get('DB_SETTINGS_ID'))})
     return render_template('admin/settings.html', form=form)
 
 

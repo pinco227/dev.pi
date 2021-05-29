@@ -83,9 +83,9 @@
                         <div id="gallery" class="row">
                             {% if settings.photos|length %}
                                 <div class="photo-container col-sm-4 col-md-6 col-lg-4">
-                                    <a href="{{ url_for('uploads', filename=settings.photos) }}" class="settings-gallery">
+                                    <a href="{{ settings.photos[0] }}" class="settings-gallery">
                                         <img class="img-thumbnail gallery-item"
-                                            src="{{ url_for('uploads', filename=settings.photos) }}"
+                                            src="{{ settings.photos[0] }}"
                                             alt="Profile Photo">
                                     </a>
                                     <a class="delete-photo btn btn-danger" data-photo-key="0">
@@ -95,8 +95,6 @@
                             {% endif %}
                         </div>
                         <div class="mb-3">
-                            <input type="hidden" id="url-for-signs3" value="{{ url_for('sign_s3')}}">
-                            <input type="hidden" id="url-for-deletes3" value="{{ url_for('delete_s3')}}">
                             <input type="hidden" id="collection" value="settings">
                             <input type="hidden" id="doc-id" value="{{ settings._id }}">
                             <label for="drop-area" class="form-label">New Photo</label>
