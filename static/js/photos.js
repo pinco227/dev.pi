@@ -3,35 +3,35 @@
 * @param {string} url - Api url to be called
 * @param {function} callback - Callback function
 */
-const ajax_call = async (url, method, body, callback) => {
-    await fetch(url, {
-        method: method,
-        credentials: "include",
-        body: body
-    }).then((response) => {
-        if (response.status < 200 && response.status > 299) {
-            console.log(`Looks like there was a problem. Status code: ${response.status}`);
-            callback("", response.statusText);
-        }
-        else {
-            response.json().then((data) => {
-                // console.log(data);
-                callback(data, response.status);
-            });
-        }
-    }).catch((error) => {
-        console.log("Fetch error: " + error);
-        callback("", error);
-    });
-};
+// const ajax_call = async (url, method, body, callback) => {
+//     await fetch(url, {
+//         method: method,
+//         credentials: "include",
+//         body: body
+//     }).then((response) => {
+//         if (response.status < 200 && response.status > 299) {
+//             console.log(`Looks like there was a problem. Status code: ${response.status}`);
+//             callback("", response.statusText);
+//         }
+//         else {
+//             response.json().then((data) => {
+//                 // console.log(data);
+//                 callback(data, response.status);
+//             });
+//         }
+//     }).catch((error) => {
+//         console.log("Fetch error: " + error);
+//         callback("", error);
+//     });
+// };
 
 // Declare used variables
 const formElement = document.getElementById('dropzoneForm');
 let formSubmitted = false;
 const dropArea = document.getElementById('drop-area');
 const fileElem = document.getElementById('drop-file-elem');
-const urlForFiles = document.getElementById('url-for-files').value;
 const urlForSignS3 = document.getElementById('url-for-signs3').value;
+const urlForDeleteS3 = document.getElementById('url-for-deletes3').value;
 const collection = document.getElementById('collection').value;
 const docId = document.getElementById('doc-id') ? document.getElementById('doc-id').value : 0;
 
@@ -68,6 +68,9 @@ const fileListUpdate = () => {
         fileList.push(el.dataset.src);
     });
     if (fileListInput) fileListInput.value = fileList.join(',');
+    if (lightbox) {
+        lightbox.reload();
+    }
 }
 
 /**
@@ -102,14 +105,9 @@ const handleFiles = (files) => {
         if (document.querySelectorAll('[data-photo-key]')[0]) {
             if (confirm('Are you sure?\r\n This will replace the current file!')) {
                 if (getSignedRequest(files[0])) {
-                    // const delete_url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId + "&photokey=0" :
-                    //     urlForFiles + "?collection=" + collection + "&src=" + document.querySelectorAll('[data-photo-key]')[0].parentElement.dataset.src;
-                    // ajax_call(delete_url, 'DELETE', '', (data, stat) => {
-                    //     if (stat === 200) {
-                    //         document.querySelectorAll('[data-photo-key]')[0].parentElement.remove();
-                    //         alertToast(data.message);
-                    //     }
-                    // });
+                    const target = document.querySelectorAll('[data-photo-key]')[0]
+                    const fileName = target.parentElement.dataset.src.split('/').pop();
+                    deleteFile(target, fileName);
                 }
             } else {
                 return;
@@ -119,6 +117,25 @@ const handleFiles = (files) => {
             getSignedRequest(files[0]);
         }
     }
+}
+
+const deleteFile = (target, fileName) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", urlForDeleteS3 + "?file_name=" + fileName);
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                target.parentElement.remove();
+                fileListUpdate();
+                alertToast("Image '" + fileName + "' was successfully deleted!");
+            }
+            else {
+                alertToast("Could not delete.");
+            }
+        }
+    };
+    xhr.send();
 }
 
 const getSignedRequest = (file) => {
@@ -168,12 +185,10 @@ const uploadFile = (file, s3Data, url) => {
                                         <i class="bi bi-trash-fill"></i>
                                     </a>`
                     });
-                    // newEl.dataset.src = url;
+                    newEl.dataset.src = url;
                     containerEl.appendChild(newEl);
+                    alertToast("Image '" + file.name + "' was successfully uploaded!");
                     fileListUpdate();
-                    if (lightbox) {
-                        lightbox.reload();
-                    }
                 }
             }
             else {
@@ -233,6 +248,7 @@ const uploadFile = (file, s3Data, url) => {
 
 /** 
 * Generates an array out of dom photos src of a particular class
+* for use of image insertion in TinyMCE rich text editor
 * @return {array} generated array of photo sources
 */
 const getPhotoList = () => {
@@ -263,16 +279,8 @@ document.getElementById('gallery').addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-photo') && e.target.dataset.photoKey) {
         e.preventDefault;
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
-            const url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId + "&photokey=" + e.target.dataset.photoKey :
-                urlForFiles + "?collection=" + collection + "&src=" + e.target.parentElement.dataset.src;
-            console.log(url);
-            ajax_call(url, 'DELETE', '', (data, stat) => {
-                if (stat === 200) {
-                    e.target.parentElement.remove();
-                    alertToast(data.message);
-                    fileListUpdate();
-                }
-            });
+            const fileName = e.target.parentElement.dataset.src.split('/').pop()
+            deleteFile(e.target, fileName);
         }
     }
 });
@@ -290,7 +298,7 @@ if (!docId) {
     // Prevent leaving page if any existing uploads (except for submit)
     window.onbeforeunload = () => {
         showSpinner();
-        setTimeout(() => { hideSpinner() }, 1000); // Only hides the spinner if user cancels unload
+        setTimeout(() => { hideSpinner() }, 2000); // Only hides the spinner if user cancels unload
         if (document.querySelectorAll('.photo-container').length && !formSubmitted) {
             return "Are you sure you want to leave?";
         } else {
@@ -301,8 +309,10 @@ if (!docId) {
     window.onunload = () => {
         if (document.querySelectorAll('.photo-container').length && !formSubmitted) {
             document.querySelectorAll('.photo-container').forEach(el => {
-                const url = urlForFiles + "?collection=" + collection + "&src=" + el.dataset.src;
-                ajax_call(url, 'DELETE', '', () => { });
+                // const url = urlForFiles + "?collection=" + collection + "&src=" + el.dataset.src;
+                const target = el.querySelectorAll('[data-photo-key]')[0]
+                const fileName = el.dataset.src.split('/').pop();
+                deleteFile(target, fileName);
             });
             sleep(2000);
         }

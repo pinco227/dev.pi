@@ -27,8 +27,8 @@
                         {{ form.slug(class="form-control", readonly="readonly", placeholder="Slug") }}
                         {{ form.slug.label }}
                     </div>
-                    {{ form.url_for_files(value="%s" | format(url_for('files'))) }}
                     {{ form.url_for_sign_s3(value="%s" | format(url_for('sign_s3'))) }}
+                    {{ form.url_for_delete_s3(value="%s" | format(url_for('delete_s3'))) }}
                     {{ form.collection(value="blogs") }}
                     {{ form.photo_list() }}
                     <input type="file" name="files" id="drop-file-elem" accept="image/*" multiple>

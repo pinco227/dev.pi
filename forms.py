@@ -54,8 +54,8 @@ class AddBlogForm(FlaskForm):
         DataRequired(message='Please fill in Title field!')])
     slug = StringField('Slug', validators=[
                        DataRequired(message='Slug is required!')])
-    url_for_files = HiddenField(id='url-for-files')
     url_for_sign_s3 = HiddenField(id='url-for-signs3')
+    url_for_delete_s3 = HiddenField(id='url-for-deletes3')
     collection = HiddenField()
     photo_list = HiddenField()
     body = TextAreaField('Text')
@@ -84,8 +84,8 @@ class AddProjectForm(FlaskForm):
     live_url = StringField('Live URL', validators=[Optional(),
                            URL(message='Invalid URL for Live Project!')])
     description = TextAreaField('Description')
-    url_for_files = HiddenField(id='url-for-files')
     url_for_sign_s3 = HiddenField(id='url-for-signs3')
+    url_for_delete_s3 = HiddenField(id='url-for-deletes3')
     collection = HiddenField()
     photo_list = HiddenField()
     submit = SubmitField('Add')

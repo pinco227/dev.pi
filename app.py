@@ -390,6 +390,26 @@ def sign_s3():
     })
 
 
+@app.route('/admin/delete_s3')
+@login_required()
+def delete_s3():
+    S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
+
+    file_name = request.args.get('file_name')
+    file_type = request.args.get('file_type')
+
+    s3 = boto3.client('s3')
+
+    response = s3.delete_object(
+        Bucket=S3_BUCKET,
+        Key=file_name
+    )
+
+    return json.dumps({
+        'data': response
+    })
+
+
 @app.route('/admin/files', methods=['PATCH', 'DELETE'])
 @login_required()
 def files():

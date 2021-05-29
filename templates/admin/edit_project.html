@@ -80,8 +80,8 @@
                             {% endif %}
                         </div>
                         <div class="mb-3">
-                            <input type="hidden" id="url-for-files" value="{{ url_for('files')}}">
                             <input type="hidden" id="url-for-signs3" value="{{ url_for('sign_s3')}}">
+                            <input type="hidden" id="url-for-deletes3" value="{{ url_for('delete_s3')}}">
                             <input type="hidden" id="collection" value="projects">
                             <input type="hidden" id="doc-id" value="{{ project._id }}">
                             <label for="drop-area" class="form-label">Add Photos</label>
