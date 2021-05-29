@@ -1,4 +1,7 @@
 {% extends "admin/base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+{% endblock styles %}
 {% block content %}
     <section id="add_project">
         <div class="row my-2 align-items-center">
@@ -42,6 +45,7 @@
                         {{ form.description.label }}
                     </div>
                     {{ form.url_for_files(value="%s" | format(url_for('files'))) }}
+                    {{ form.url_for_sign_s3(value="%s" | format(url_for('sign_s3'))) }}
                     {{ form.collection(value="projects") }}
                     {{ form.photo_list() }}
                     <input type="file" name="files" id="drop-file-elem" accept="image/*" multiple>
@@ -60,6 +64,11 @@
     </section>
 {% endblock content %}
 {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+    <!-- CREDIT: https://github.com/biati-digital/glightbox -->
+    <script type="text/javascript">
+        const lightbox = GLightbox({ 'selector': '.projects-gallery' });
+    </script>
     <script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
     <script src="{{ url_for('static', filename='js/photos.js') }}"></script>
 {% endblock scripts %}

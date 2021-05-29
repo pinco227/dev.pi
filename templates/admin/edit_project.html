@@ -26,7 +26,6 @@
                                 {{ form.title.label }}
                             </div>
                             <div class="form-floating mb-3">
-                                {{ form.initial_slug(value="%s" | format(project.slug)) }}
                                 {{ form.slug(class="form-control", readonly="readonly", value="%s" | format(project.slug)) }}
                                 {{ form.slug.label }}
                             </div>
@@ -82,6 +81,7 @@
                         </div>
                         <div class="mb-3">
                             <input type="hidden" id="url-for-files" value="{{ url_for('files')}}">
+                            <input type="hidden" id="url-for-signs3" value="{{ url_for('sign_s3')}}">
                             <input type="hidden" id="collection" value="projects">
                             <input type="hidden" id="doc-id" value="{{ project._id }}">
                             <label for="drop-area" class="form-label">Add Photos</label>
@@ -98,11 +98,11 @@
     </section>
 {% endblock content %}
 {% block scripts %}
-    <script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/photos.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <!-- CREDIT: https://github.com/biati-digital/glightbox -->
     <script type="text/javascript">
-        const lightbox = GLightbox({ 'selector': '.{{ project.slug }}-gallery' });
+        const lightbox = GLightbox({ 'selector': '.projects-gallery' });
     </script>
+    <script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/photos.js') }}"></script>
 {% endblock scripts %}

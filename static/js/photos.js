@@ -31,6 +31,7 @@ let formSubmitted = false;
 const dropArea = document.getElementById('drop-area');
 const fileElem = document.getElementById('drop-file-elem');
 const urlForFiles = document.getElementById('url-for-files').value;
+const urlForSignS3 = document.getElementById('url-for-signs3').value;
 const collection = document.getElementById('collection').value;
 const docId = document.getElementById('doc-id') ? document.getElementById('doc-id').value : 0;
 
@@ -95,77 +96,140 @@ const handleDrop = (e) => {
 */
 const handleFiles = (files) => {
     if (dropArea.dataset.multiple == "true") {
-        ([...files]).forEach(uploadFile);
+        ([...files]).forEach(getSignedRequest);
     } else {
         // check if there is a current file
         if (document.querySelectorAll('[data-photo-key]')[0]) {
             if (confirm('Are you sure?\r\n This will replace the current file!')) {
-                if (uploadFile(files[0])) {
-                    const delete_url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId + "&photokey=0" :
-                        urlForFiles + "?collection=" + collection + "&src=" + document.querySelectorAll('[data-photo-key]')[0].parentElement.dataset.src;
-                    ajax_call(delete_url, 'DELETE', '', (data, stat) => {
-                        if (stat === 200) {
-                            document.querySelectorAll('[data-photo-key]')[0].parentElement.remove();
-                            alertToast(data.message);
-                        }
-                    });
+                if (getSignedRequest(files[0])) {
+                    // const delete_url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId + "&photokey=0" :
+                    //     urlForFiles + "?collection=" + collection + "&src=" + document.querySelectorAll('[data-photo-key]')[0].parentElement.dataset.src;
+                    // ajax_call(delete_url, 'DELETE', '', (data, stat) => {
+                    //     if (stat === 200) {
+                    //         document.querySelectorAll('[data-photo-key]')[0].parentElement.remove();
+                    //         alertToast(data.message);
+                    //     }
+                    // });
                 }
             } else {
                 return;
             }
         } else {
-            uploadFile(files[0]);
+            // uploadFile(files[0]);
+            getSignedRequest(files[0]);
         }
     }
 }
 
+const getSignedRequest = (file) => {
+    const fileExt = file.name.split('.').pop();
+    const date = new Date();
+    const newFileName = collection + String(date.getDate()) + String(date.getMonth() + 1) + Math.floor(Math.random() * 999) + '.' + fileExt;
+    const renamedFile = new File([file], newFileName, { type: file.type });
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", urlForSignS3 + "?file_name=" + renamedFile.name + "&file_type=" + renamedFile.type);
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                uploadFile(renamedFile, response.data, response.url);
+            }
+            else {
+                alertToast("Could not get signed URL.");
+            }
+        }
+    };
+    xhr.send();
+}
+
+const uploadFile = (file, s3Data, url) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", s3Data.url);
+
+    const postData = new FormData();
+    for (key in s3Data.fields) {
+        postData.append(key, s3Data.fields[key]);
+    }
+    postData.append('file', file);
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 204) {
+                if (document.getElementById('gallery')) {
+                    const containerEl = document.getElementById('gallery');
+                    const existingElCount = document.querySelectorAll(".photo-container").length;
+                    const imgTag = `<a href="${url}" class="${collection}-gallery">
+                                        <img class="img-thumbnail gallery-item" src="${url}" alt="photo">
+                                    </a>`;
+                    const newEl = Object.assign(document.createElement('div'), {
+                        className: 'photo-container col-sm-4 col-md-6 col-lg-4',
+                        innerHTML: `${imgTag}
+                                    <a class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>`
+                    });
+                    // newEl.dataset.src = url;
+                    containerEl.appendChild(newEl);
+                    fileListUpdate();
+                    if (lightbox) {
+                        lightbox.reload();
+                    }
+                }
+            }
+            else {
+                alertToast("Could not upload file.");
+            }
+        }
+    };
+    xhr.send(postData);
+}
 /**
 * Uploads a file element by sending at through an PATCH ajax call to a python route
 * @param {obj} file - file object.
 */
-const uploadFile = (file) => {
-    const url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId : urlForFiles + "?collection=" + collection;
-    const formData = new FormData();
+// const uploadFile = (file) => {
+// const url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId : urlForFiles + "?collection=" + collection;
+// const formData = new FormData();
 
-    formData.append('files', file);
+// formData.append('files', file);
 
-    return ajax_call(url, 'PATCH', formData, (data, stat) => {
-        if (stat === 201) {
-            if (document.getElementById('gallery')) {
-                const containerEl = document.getElementById('gallery');
-                const existingElCount = document.querySelectorAll(".photo-container").length;
-                const initialSlug = document.getElementById('initial_slug');
-                let galleryClass;
-                let imgTag;
-                if (initialSlug) {
-                    galleryClass = initialSlug.value + "-gallery";
-                }
-                if (galleryClass) {
-                    imgTag = `<a href="/uploads/${data.newName}" class="${galleryClass}">
-                                    <img class="img-thumbnail gallery-item" src="/uploads/${data.newName}" alt="${data.newName}">
-                                </a>`;
-                } else {
-                    imgTag = `<img class="img-thumbnail" src="/uploads/${data.newName}" alt="${data.newName}">`;
-                }
-                const newEl = Object.assign(document.createElement('div'), {
-                    className: 'photo-container col-sm-4 col-md-6 col-lg-4',
-                    innerHTML: `${imgTag}
-                                <a class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
-                                    <i class="bi bi-trash-fill"></i>
-                                </a>`
-                });
-                newEl.dataset.src = data.newName;
-                containerEl.appendChild(newEl);
-                fileListUpdate();
-            }
-            alertToast(data.message);
-            return true;
-        } else {
-            alertToast(data.message);
-            return false
-        }
-    });
-}
+// return ajax_call(url, 'PATCH', formData, (data, stat) => {
+//     if (stat === 201) {
+//         if (document.getElementById('gallery')) {
+//             const containerEl = document.getElementById('gallery');
+//             const existingElCount = document.querySelectorAll(".photo-container").length;
+//             const initialSlug = document.getElementById('initial_slug');
+//             let galleryClass;
+//             let imgTag;
+//             if (initialSlug) {
+//                 galleryClass = initialSlug.value + "-gallery";
+//             }
+//             if (galleryClass) {
+//                 imgTag = `<a href="/uploads/${data.newName}" class="${galleryClass}">
+//                                 <img class="img-thumbnail gallery-item" src="/uploads/${data.newName}" alt="${data.newName}">
+//                             </a>`;
+//             } else {
+//                 imgTag = `<img class="img-thumbnail" src="/uploads/${data.newName}" alt="${data.newName}">`;
+//             }
+//             const newEl = Object.assign(document.createElement('div'), {
+//                 className: 'photo-container col-sm-4 col-md-6 col-lg-4',
+//                 innerHTML: `${imgTag}
+//                             <a class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
+//                                 <i class="bi bi-trash-fill"></i>
+//                             </a>`
+//             });
+//             newEl.dataset.src = data.newName;
+//             containerEl.appendChild(newEl);
+//             fileListUpdate();
+//         }
+//         alertToast(data.message);
+//         return true;
+//     } else {
+//         alertToast(data.message);
+//         return false
+//     }
+// });
+// }
 
 /** 
 * Generates an array out of dom photos src of a particular class

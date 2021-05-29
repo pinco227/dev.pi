@@ -9,6 +9,8 @@ from flask_pymongo import PyMongo
 from forms import *
 from functools import wraps
 from html5lib_truncation import truncate_html
+import boto3
+import json
 import pydf
 import pymongo
 import random
@@ -359,6 +361,33 @@ def admin():
     unapproved_testimonials = mongo.db.testimonials.count_documents({
                                                                     'approved': False})
     return render_template('admin/dashboard.html', blogs=blogs, projects=projects, skills=skills, education=education, experience=experience, testimonials=testimonials, unapproved_testimonials=unapproved_testimonials)
+
+
+@app.route('/admin/sign_s3')
+@login_required()
+def sign_s3():
+    S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
+
+    file_name = request.args.get('file_name')
+    file_type = request.args.get('file_type')
+
+    s3 = boto3.client('s3')
+
+    presigned_post = s3.generate_presigned_post(
+        Bucket=S3_BUCKET,
+        Key=file_name,
+        Fields={"acl": "public-read", "Content-Type": file_type},
+        Conditions=[
+            {"acl": "public-read"},
+            {"Content-Type": file_type}
+        ],
+        ExpiresIn=3600
+    )
+
+    return json.dumps({
+        'data': presigned_post,
+        'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
+    })
 
 
 @app.route('/admin/files', methods=['PATCH', 'DELETE'])

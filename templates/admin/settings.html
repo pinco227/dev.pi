@@ -96,6 +96,7 @@
                         </div>
                         <div class="mb-3">
                             <input type="hidden" id="url-for-files" value="{{ url_for('files')}}">
+                            <input type="hidden" id="url-for-signs3" value="{{ url_for('sign_s3')}}">
                             <input type="hidden" id="collection" value="settings">
                             <input type="hidden" id="doc-id" value="{{ settings._id }}">
                             <label for="drop-area" class="form-label">New Photo</label>
@@ -113,10 +114,10 @@
     </section>
 {% endblock content %}
 {% block scripts %}
-    <script src="{{ url_for('static', filename='js/photos.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <!-- CREDIT: https://github.com/biati-digital/glightbox -->
-    <script type="text/javascript">
+    <script>
         const lightbox = GLightbox({ 'selector': '.settings-gallery' });
     </script>
+    <script src="{{ url_for('static', filename='js/photos.js') }}"></script>
 {% endblock scripts %}
