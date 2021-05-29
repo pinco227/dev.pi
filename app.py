@@ -381,6 +381,23 @@ def add_photo():
         return make_response(jsonify({'message': 'Photo was successfully added to database'}), 200)
 
 
+@app.route('/admin/delete_photo', methods=["DELETE"])
+@login_required()
+def delete_photo():
+    collection = request.args.get('coll')
+    photo = request.args.get('photo')
+
+    try:
+        mongo.db[collection].update(
+            {},
+            {'$pull': {'photos': photo}}
+        )
+    except:
+        return make_response(jsonify({'message': 'Error updating database'}), 500)
+    else:
+        return make_response(jsonify({'message': 'Photo was successfully removed from database'}), 200)
+
+
 @app.route('/admin/sign_s3')
 @login_required()
 def sign_s3():

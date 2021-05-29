@@ -1,30 +1,3 @@
-/**
-* API GET function. Gets the data from the url and sends it as a parameter to the callback function.
-* @param {string} url - Api url to be called
-* @param {function} callback - Callback function
-*/
-// const ajax_call = async (url, method, body, callback) => {
-//     await fetch(url, {
-//         method: method,
-//         credentials: "include",
-//         body: body
-//     }).then((response) => {
-//         if (response.status < 200 && response.status > 299) {
-//             console.log(`Looks like there was a problem. Status code: ${response.status}`);
-//             callback("", response.statusText);
-//         }
-//         else {
-//             response.json().then((data) => {
-//                 // console.log(data);
-//                 callback(data, response.status);
-//             });
-//         }
-//     }).catch((error) => {
-//         console.log("Fetch error: " + error);
-//         callback("", error);
-//     });
-// };
-
 // Declare used variables
 const formElement = document.getElementById('dropzoneForm');
 let formSubmitted = false;
@@ -102,17 +75,13 @@ const handleFiles = (files) => {
         // check if there is a current file
         if (document.querySelectorAll('.photo-container')[0]) {
             if (confirm('Are you sure?\r\n This will replace the current file!')) {
-                if (getSignedRequest(files[0])) {
-                    const el = document.querySelectorAll('.photo-container')[0];
-                    deleteFile(el);
-                }
+                const el = document.querySelectorAll('.photo-container')[0];
+                deleteFile(el);
             } else {
                 return;
             }
-        } else {
-            // uploadFile(files[0]);
-            getSignedRequest(files[0]);
         }
+        getSignedRequest(files[0]);
     }
 }
 
@@ -123,9 +92,12 @@ const deleteFile = (el) => {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
+                if (docId) {
+                    deleteFileFromDb(el.dataset.src);
+                }
                 el.remove();
                 fileListUpdate();
+                console.log(response);
                 alertToast("Image '" + fileName + "' was successfully deleted!");
             }
             else {
@@ -203,6 +175,18 @@ const uploadFile = (file, s3Data, url) => {
 const addFileToDb = (photo) => {
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", urlForAddPhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo);
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            const response = JSON.parse(xhr.responseText);
+            alertToast(response.message)
+        }
+    };
+    xhr.send();
+}
+
+const deleteFileFromDb = (photo) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("DELETE", urlForDeletePhoto + "?coll=" + collection + "&photo=" + photo);
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             const response = JSON.parse(xhr.responseText);
@@ -292,7 +276,6 @@ document.getElementById('gallery').addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-photo')) {
         e.preventDefault;
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
-            const fileName = e.target.parentElement.dataset.src.split('/').pop()
             deleteFile(e.target.parentElement);
         }
     }

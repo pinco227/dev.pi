@@ -50,7 +50,7 @@
                         <label for="current-photo">Current Photos:</label>
                         <div id="gallery" class="row">
                             {% for photo in post.photos %}
-                                <div class="photo-container col-sm-4 col-md-6 col-lg-4">
+                                <div class="photo-container col-sm-4 col-md-6 col-lg-4" data-src="{{ photo }}">
                                     <a href="{{ photo }}"
                                             class="blogs-gallery">
                                         <img class="img-thumbnail gallery-item"
