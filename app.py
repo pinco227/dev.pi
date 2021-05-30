@@ -13,9 +13,7 @@ import boto3
 import json
 import pydf
 import pymongo
-import random
 import re
-import requests
 import os
 import secure
 

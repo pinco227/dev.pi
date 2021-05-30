@@ -249,8 +249,8 @@
       Resolving deltas: 100% (156/156), done.
       ```
       > Click [Here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
-  7. Create a [MongoDB](https://www.mongodb.com/) account, project, cluster and database. Create collections (see db schema) and create an empty document into ***settings*** collection.
-  8. Create `env.py` file and include the following code (note that the values should be replaced with your own credentials)
+  8. Create a [MongoDB](https://www.mongodb.com/) account, project, cluster and database. Create collections (see db schema). Create an empty document into ***settings*** collection and retrieve its ```_id```.
+  9. Create `env.py` file and include the following code (note that the values should be replaced with your own credentials)
       ```python
       import os
 
@@ -267,23 +267,27 @@
       # Admin panel user and password
       os.environ.setdefault("ADMIN_USERNAME", "<username>")
       os.environ.setdefault("ADMIN_PASSWORD", "<password>")
-      # Gmail user and password. For othe mail server change mail_settings in app.py
-      os.environ.setdefault("EMAIL_USER", "<email>")
-      os.environ.setdefault("EMAIL_PASSWORD", "<email_password>")
+      # AWS Keys
+      os.environ.setdefault('AWS_ACCESS_KEY_ID', '<access_key>')
+      os.environ.setdefault('AWS_SECRET_ACCESS_KEY', '<secret_key>')
+      os.environ.setdefault('S3_BUCKET_NAME', '<bucket_name>')
+      # Email credentials. See mail_settings in app.py for more email settings
+      os.environ.setdefault("SENDGRID_API_KEY", "<api_key>")
+      os.environ.setdefault("MAIL_DEFAULT_SENDER", "<sender_email>")
       # Recaptcha keys. Go to https://www.google.com/recaptcha/admin/create and create a new site
       os.environ.setdefault("RC_SITE_KEY", "<recaptcha_site_key>")
       os.environ.setdefault("RC_SECRET_KEY", "<recaptcha_secret_key>")
       ```
       > Make sure you add this file to **.gitignore** file so it will not be published.
-  9. Install required `python` packages by running the following command into terminal:
+  10. Install required `python` packages by running the following command into terminal:
       ```bash
       pip3 install -r requirements.txt
       ```
-  10. Run app bu typing the following into terminal:
+  11. Run app by typing the following into terminal:
       ```bash
       python3 app.py
       ```
-  11. Browse app by accessing [0.0.0.0:5000](http://0.0.0.0:5000) into a browser.
+  12. Browse app by accessing [0.0.0.0:5000](http://0.0.0.0:5000) into a browser.
 - ### Heroku
   1. Make sure the `requirements.txt` and `Procfile` are created. If not, type the followings into terminal:
       ```bash
@@ -295,7 +299,7 @@
       ```
   2. Commit and push changes to forked repository.
   3. Create a [Heroku](https://heroku.com) account and click **New** on top right of the dashboard to **Create a new app**.
-  4. Within the newly created app go to **Settings** tab and press **Reveal Config Vars**. Here you can add the variables initially stored into local `env.py` file: IP, PORT, SECRET_KEY, MONGO_URI, MONGO_DBNAME, DB_SETTINGS_ID, ADMIN_USERNAME, ADMIN_PASSWORD, EMAIL_USER, EMAIL_PASSWORD, RC_SITE_KEY, RC_SECRET_KEY.
+  4. Within the newly created app go to **Settings** tab and press **Reveal Config Vars**. Here you can add the variables initially stored into local `env.py` file: IP, SECRET_KEY, MONGO_URI, MONGO_DBNAME, DB_SETTINGS_ID, ADMIN_USERNAME, ADMIN_PASSWORD, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME, SENDGRID_API_KEY, MAIL_DEFAULT_SENDER, RC_SITE_KEY, RC_SECRET_KEY.
   5. Go to **Deploy** tab and under the **Deployment method** click on the **Github** icon.
   6. Right under this section, type the `dev.pi` and search for the forked repository into your GitHub account. Select the right repository and click **Connect**.
   7. Under the **Automatic deploys** section, click **Enable Automatic Deploys**. The deployment will be now automatic with every github `push` command.
