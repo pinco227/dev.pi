@@ -320,6 +320,7 @@
   - [Gal Weizman's article](https://www.perimeterx.com/tech-blog/2019/beforeunload-and-unload-events/) about ```unload``` And ```beforeunload``` javascripts events for the ```sleep(delay)``` function which was used in admin panel when discarding a form that has uploaded images in order to get the files deleted before unload.
   - [GitHub Gist user: Mathew Byrne](https://gist.github.com/mathewbyrne) for the javascript ```slugify(text)``` function ([Gist](https://gist.github.com/mathewbyrne/1280286)) that was used in admin panel to generate slugs for blogs and projects.
   - [Bootsnipp user: devlopereswar](https://bootsnipp.com/devlopereswar) for the html responsive [email template snippet](https://bootsnipp.com/snippets/A2kpB).
+  - [Bram.us](https://www.bram.us/) for [this article](https://www.bram.us/2020/11/04/preventing-double-form-submissions/) on how to prevent double form submission.
 
 ## Aknowledgements
   - **My Mentor**: Nishant Kumar for continuous helpful feedback.
