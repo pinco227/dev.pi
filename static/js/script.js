@@ -63,3 +63,29 @@ toastList.forEach(toast => {
 document.querySelectorAll('.confirm').forEach(item => {
     item.addEventListener('click', confirmIt, false);
 });
+
+// Prevent Double Submits
+// CREDIT: https://www.bram.us/2020/11/04/preventing-double-form-submissions/
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', (e) => {
+        // Prevent if already submitting
+        if (form.classList.contains('is-submitting')) {
+            e.preventDefault();
+            console.log('huooo');
+        } else {
+            const overlay = Object.assign(document.createElement('div'), {
+                id: "spin-overlay-contain"
+            });
+            const spinnerEl = Object.assign(document.createElement('div'), {
+                id: "spinner",
+                className: 'spinner-border',
+                innerHTML: `<span class="visually-hidden">Loading...</span>`
+            });
+            form.appendChild(overlay);
+            form.appendChild(spinnerEl);
+        }
+
+        // Add class to hook our visual indicator on
+        form.classList.add('is-submitting');
+    });
+});
