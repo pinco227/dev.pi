@@ -7,6 +7,33 @@ const collection = document.getElementById('collection').value;
 const docId = document.getElementById('doc-id') ? document.getElementById('doc-id').value : 0;
 
 /** 
+* API GET function. Gets the data from the url and sends it as a parameter to the callback function.
+* @param {string} method - Request method
+* @param {string} url - Api url to be called
+* @param {function} cb - Callback function
+*/
+function apiRequest(method, url, cb, data = undefined) {
+    const xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                cb(JSON.parse(this.responseText), this.status);
+            } else {
+                cb({}, this.status);
+            }
+        }
+    };
+
+    xhr.onerror = function () {
+        cb({}, this.status);
+    };
+
+    xhr.open(method, url);
+    xhr.send(data);
+}
+
+/** 
 * Prevents default action for the event in which was called.
 * @param {obj} e - event object.
 */
@@ -93,24 +120,20 @@ const handleFiles = (files) => {
 */
 const deleteFile = (el) => {
     const fileName = el.dataset.src.split('/').pop();
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", urlForDeleteS3 + "?file_name=" + fileName);
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                if (docId) {
-                    deleteFileFromDb(el.dataset.src);
-                }
-                el.remove();
-                fileListUpdate();
-                alertToast("Image '" + fileName + "' was successfully deleted!");
+    const url = urlForDeleteS3 + "?file_name=" + fileName;
+    apiRequest("GET", url, (response, status) => {
+        if (status === 200) {
+            if (docId) {
+                deleteFileFromDb(el.dataset.src);
             }
-            else {
-                alertToast("Could not delete.");
-            }
+            el.remove();
+            fileListUpdate();
+            alertToast("Image '" + fileName + "' was successfully deleted!");
         }
-    };
-    xhr.send();
+        else {
+            alertToast("Could not delete.");
+        }
+    });
 }
 
 /** 
@@ -122,20 +145,15 @@ const getSignedRequest = (file) => {
     const date = new Date();
     const newFileName = collection + String(date.getDate()) + String(date.getMonth() + 1) + Math.floor(Math.random() * 999) + '.' + fileExt;
     const renamedFile = new File([file], newFileName, { type: file.type });
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", urlForSignS3 + "?file_name=" + renamedFile.name + "&file_type=" + renamedFile.type);
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                uploadFile(renamedFile, response.data, response.url);
-            }
-            else {
-                alertToast("Could not get signed URL.");
-            }
+    const url = urlForSignS3 + "?file_name=" + renamedFile.name + "&file_type=" + renamedFile.type;
+    apiRequest("GET", url, (response, status) => {
+        if (status === 200) {
+            uploadFile(renamedFile, response.data, response.url);
         }
-    };
-    xhr.send();
+        else {
+            alertToast("Could not get signed URL.");
+        }
+    });
 }
 
 /** 
@@ -148,46 +166,40 @@ const getSignedRequest = (file) => {
 * @return {ReturnValueDataTypeHere} Brief description of the returning value here.
 */
 const uploadFile = (file, s3Data, url) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", s3Data.url);
-
     const postData = new FormData();
     for (key in s3Data.fields) {
         postData.append(key, s3Data.fields[key]);
     }
     postData.append('file', file);
 
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200 || xhr.status === 204) {
-                if (docId) {
-                    addFileToDb(url);
-                }
-                if (document.getElementById('gallery')) {
-                    const containerEl = document.getElementById('gallery');
-                    const existingElCount = document.querySelectorAll(".photo-container").length;
-                    const imgTag = `<a href="${url}" class="${collection}-gallery">
+    apiRequest("POST", s3Data.url, (response, status) => {
+        if (status === 200 || status === 204) {
+            if (docId) {
+                addFileToDb(url);
+            }
+            if (document.getElementById('gallery')) {
+                const containerEl = document.getElementById('gallery');
+                const existingElCount = document.querySelectorAll(".photo-container").length;
+                const imgTag = `<a href="${url}" class="${collection}-gallery">
                                         <img class="img-thumbnail gallery-item" src="${url}" alt="photo">
                                     </a>`;
-                    const newEl = Object.assign(document.createElement('div'), {
-                        className: 'photo-container col-sm-4 col-md-6 col-lg-4',
-                        innerHTML: `${imgTag}
+                const newEl = Object.assign(document.createElement('div'), {
+                    className: 'photo-container col-sm-4 col-md-6 col-lg-4',
+                    innerHTML: `${imgTag}
                                     <a class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
                                         <i class="bi bi-trash-fill"></i>
                                     </a>`
-                    });
-                    newEl.dataset.src = url;
-                    containerEl.appendChild(newEl);
-                    alertToast("Image '" + file.name + "' was successfully uploaded!");
-                }
-                fileListUpdate();
+                });
+                newEl.dataset.src = url;
+                containerEl.appendChild(newEl);
+                alertToast("Image '" + file.name + "' was successfully uploaded!");
             }
-            else {
-                alertToast("Could not upload file.");
-            }
+            fileListUpdate();
         }
-    };
-    xhr.send(postData);
+        else {
+            alertToast("Could not upload file.");
+        }
+    }, postData);
 }
 
 /** 
@@ -195,15 +207,10 @@ const uploadFile = (file, s3Data, url) => {
 * @param {string} photo - Full url of the photo
 */
 const addFileToDb = (photo) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("PUT", urlForAddPhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo);
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            const response = JSON.parse(xhr.responseText);
-            alertToast(response.message)
-        }
-    };
-    xhr.send();
+    const url = urlForAddPhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo;
+    apiRequest("PUT", url, (response, status) => {
+        alertToast(response.message)
+    });
 }
 
 /**
@@ -211,15 +218,10 @@ const addFileToDb = (photo) => {
 * @param {string} photo - Full url of the photo
 */
 const deleteFileFromDb = (photo) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", urlForDeletePhoto + "?coll=" + collection + "&photo=" + photo);
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            const response = JSON.parse(xhr.responseText);
-            alertToast(response.message)
-        }
-    };
-    xhr.send();
+    const url = urlForDeletePhoto + "?coll=" + collection + "&photo=" + photo;
+    apiRequest("GET", url, (response, status) => {
+        alertToast(response.message)
+    });
 }
 
 /** 
