@@ -33,11 +33,10 @@
             {% include "inc/breadcrumbs.html" %}
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
                 {% for project in projects %}
-                    {% set photos = project.photos.split(',') %}
                     <div class="col">
                         <div class="card card-project h-100">
                             {% if project.photos|length %}
-                                <a href="{{ url_for('get_project', project=project.slug) }}"><img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" class="card-img-top" alt="{{ project.title }}"></a>
+                                <a href="{{ url_for('get_project', project=project.slug) }}"><img src="{{ project.photos[0] }}" class="card-img-top" alt="{{ project.title }}"></a>
                             {% endif %}
                             <div class="card-body">
                                 <h5 class="card-title"><a href="{{ url_for('get_project', project=project.slug) }}">{{ project.title }}</a></h5>

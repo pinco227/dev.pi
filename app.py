@@ -81,19 +81,6 @@ def context_processor():
     return dict(settings=settings, links=links)
 
 
-@app.errorhandler(413)
-def too_large(e):
-    """Error handler for error 413 TOO LARGE
-
-    Args:
-        e (obj): error obj
-
-    Returns:
-        obj: json response
-    """
-    return make_response(jsonify({'message': 'File is too large!'}), 413)
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     """Error handler for error 404 NOT FOUND
@@ -119,24 +106,6 @@ def sendfile():
         funct: returns file
     """
     return send_from_directory('static', 'browserconfig.xml')
-
-
-@app.route('/uploads/', defaults={'filename': False})
-@app.route('/uploads/<filename>')
-def uploads(filename):
-    """Route to access uploaded files and to have url_for uploads as flask variable
-
-    Args:
-        filename (string): requested file name
-
-    Returns:
-        function: returns requested file if exists or no-photo.jpg if it doesn't
-    """
-    if filename and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], filename)):
-        return send_from_directory(app.config['UPLOAD_PATH'],
-                                   filename)
-    else:
-        return send_from_directory('static/images', 'no-photo.jpg')
 
 
 @app.route('/cv')
@@ -344,26 +313,6 @@ def login_required(flash_message=False):
     return inner_function
 
 
-@app.route('/admin/')
-@app.route('/admin')
-@login_required()
-def admin():
-    """ADMIN Dashboard page route
-
-    Returns:
-        function: renders page from html jinja template
-    """
-    testimonials = mongo.db.testimonials.count_documents({})
-    blogs = mongo.db.blogs.count_documents({})
-    projects = mongo.db.projects.count_documents({})
-    skills = mongo.db.skills.count_documents({})
-    education = mongo.db.education.count_documents({})
-    experience = mongo.db.experience.count_documents({})
-    unapproved_testimonials = mongo.db.testimonials.count_documents({
-                                                                    'approved': False})
-    return render_template('admin/dashboard.html', blogs=blogs, projects=projects, skills=skills, education=education, experience=experience, testimonials=testimonials, unapproved_testimonials=unapproved_testimonials)
-
-
 @app.route('/admin/add_photo', methods=["PUT"])
 @login_required()
 def add_photo():
@@ -449,121 +398,24 @@ def delete_s3():
     return s3_delete_call(file_name)
 
 
-@app.route('/admin/files', methods=['PATCH', 'DELETE'])
+@app.route('/admin/')
+@app.route('/admin')
 @login_required()
-def files():
-    """Route for file manipulation (upload, delete) that works with API calls
+def admin():
+    """ADMIN Dashboard page route
 
     Returns:
-        obj: json response
+        function: renders page from html jinja template
     """
-    if 'collection' in request.args:
-        coll = request.args.get('collection')
-
-        # DELETE request
-        if request.method == 'DELETE':
-            # Check if document id was sent as argument
-            if 'docid' in request.args or coll == 'settings':
-                if coll == 'settings':
-                    doc_id = settings['_id']
-                    coll_dict = settings
-                else:
-                    doc_id = request.args.get('docid')
-                    coll_dict = mongo.db[coll].find_one(
-                        {'_id': ObjectId(doc_id)})
-                photos = list(filter(None, coll_dict['photos'].split(',')))
-
-                # Check if photo key (position starting with 0) was sent as argument and set to 0 if not
-                photo_key = request.args.get(
-                    'photokey') if 'photokey' in request.args else 0
-                photo = photos[int(photo_key)].strip()
-
-                # Remove file from the list
-                del photos[int(photo_key)]
-                new_db_photos = ','.join(photos)
-                updated_coll = {
-                    'photos': new_db_photos
-                }
-                # Update database with new files list
-                mongo.db[coll].update({'_id': ObjectId(doc_id)}, {
-                    '$set': updated_coll})
-
-                # Check if selected photo exists and delete from server
-                if photo and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], photo)):
-                    os.remove(os.path.join(app.config['UPLOAD_PATH'], photo))
-                    return make_response(jsonify({'message': f"File {photo} successfully deleted!"}), 200)
-                else:
-                    return make_response(jsonify({'message': 'Something went wrong!'}), 400)
-            else:
-                # Check if file src was sent as argument and delete file from server
-                if ('src' in request.args) and request.args.get('src') and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], request.args.get('src'))):
-                    os.remove(os.path.join(
-                        app.config['UPLOAD_PATH'], request.args.get('src')))
-                    return make_response(jsonify({'message': f"File {request.args.get('src')} successfully deleted!"}), 200)
-                else:
-                    return make_response(jsonify({'message': 'Something went wrong!'}), 400)
-        # PATCH request
-        elif request.method == 'PATCH':
-            uploaded_file = request.files['files']
-            response = {}
-            filename = ''
-            if uploaded_file.filename != '':
-                # Check if document id was sent as argument and set filename as truncated slug + random number
-                if 'docid' in request.args or coll == 'settings':
-                    if coll == 'settings':
-                        coll_dict = settings
-                        new_filename = 'settings' + \
-                            str(random.randint(1111, 9999))
-                    else:
-                        doc_id = request.args.get('docid')
-                        coll_dict = mongo.db[coll].find_one(
-                            {'_id': ObjectId(doc_id)})
-                        has_slug = mongo.db[coll].find(
-                            {'_id': ObjectId(doc_id),
-                             'slug': {'$exists': True}})
-                        if has_slug:
-                            new_filename = coll_dict['slug'][:25] + \
-                                str(random.randint(1111, 9999))
-                        else:
-                            new_filename = coll + date.today().strftime('%d%m') + \
-                                str(random.randint(1111, 9999))
-                # Set filename as default collection name + day + month + random number
-                else:
-                    coll_dict = False
-                    new_filename = coll + date.today().strftime('%d%m') + \
-                        str(random.randint(1111, 9999))
-                file_ext = os.path.splitext(uploaded_file.filename)[1]
-                # Check if file extension is allowed
-                if file_ext.lower() in app.config['UPLOAD_EXTENSIONS']:
-                    filename = new_filename + file_ext.lower()
-                    uploaded_file.save(os.path.join(
-                        app.config['UPLOAD_PATH'], filename))
-                    # Check if upload is made for existig db document and update it
-                    if coll_dict:
-                        photos = list(
-                            filter(None, coll_dict['photos'].split(',')))
-                        photos.append(filename)
-                        updated_coll = {
-                            'photos': ','.join(photos) if len(photos) > 1 else photos[0]
-                        }
-                        mongo.db[coll].update({'_id': ObjectId(coll_dict['_id'])}, {
-                            '$set': updated_coll})
-                    response = {
-                        'name': uploaded_file.filename,
-                        'newName': filename,
-                        'message': f"File {uploaded_file.filename} was successfully uploaded",
-                        'statusCode': 201
-                    }
-                else:
-                    response = {
-                        'name': uploaded_file.filename,
-                        'message': 'Unsupported Media Type!',
-                        'statusCode': 415
-                    }
-                return make_response(jsonify(response), response['statusCode'])
-            else:
-                return make_response(jsonify({'message': 'Invalid file!'}), 400)
-    return make_response(jsonify({'message': 'error'}), 400)
+    testimonials = mongo.db.testimonials.count_documents({})
+    blogs = mongo.db.blogs.count_documents({})
+    projects = mongo.db.projects.count_documents({})
+    skills = mongo.db.skills.count_documents({})
+    education = mongo.db.education.count_documents({})
+    experience = mongo.db.experience.count_documents({})
+    unapproved_testimonials = mongo.db.testimonials.count_documents({
+                                                                    'approved': False})
+    return render_template('admin/dashboard.html', blogs=blogs, projects=projects, skills=skills, education=education, experience=experience, testimonials=testimonials, unapproved_testimonials=unapproved_testimonials)
 
 
 @app.route('/admin/testimonials', methods=['GET', 'POST'])

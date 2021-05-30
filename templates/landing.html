@@ -8,9 +8,9 @@
         <div class="container-xl">
             <div class="row align-items-center justify-content-center g-5 py-5 hero">
                 <div class="col-8 col-sm-6 col-md-5 col-lg-4">
-                    <a href="{{ url_for('uploads', filename=settings.photos.replace(' ', '')) }}"
+                    <a href="{{ settings.photos[0] }}"
                             class="gallery">
-                        <img src="{{ url_for('uploads', filename=settings.photos.replace(' ', '')) }}"
+                        <img src="{{ settings.photos[0] }}"
                                 alt="{{ settings.name }} - {{ settings.title }}" class="hero-img d-block mx-lg-auto img-fluid gallery-item">
                     </a>
                 </div>

@@ -85,6 +85,12 @@ const handleFiles = (files) => {
     }
 }
 
+/** 
+* Sends request to AWS S3 server delete url to delete file from cloud
+* and calls function to delete file metadata from database deleteFileFromDb
+* and removes the image element from DOM
+* @param {obj} el - DOM el that contains file metadata and that has to be removed.
+*/
 const deleteFile = (el) => {
     const fileName = el.dataset.src.split('/').pop();
     const xhr = new XMLHttpRequest();
@@ -107,6 +113,10 @@ const deleteFile = (el) => {
     xhr.send();
 }
 
+/** 
+* Sends request to python route to get signed request that is then passed through upladFile function
+* @param {obj} file - file to be uploaded
+*/
 const getSignedRequest = (file) => {
     const fileExt = file.name.split('.').pop();
     const date = new Date();
@@ -128,6 +138,15 @@ const getSignedRequest = (file) => {
     xhr.send();
 }
 
+/** 
+* Send request to AWS S3 server to upload file
+* Calls function to add file to database addFileToDb(url)
+* Adds new image element to DOM
+* @param {obj} file - File to be uploaded
+* @param {array} s3Data - Data from signed request
+* @param {string} url - File url from signed request
+* @return {ReturnValueDataTypeHere} Brief description of the returning value here.
+*/
 const uploadFile = (file, s3Data, url) => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", s3Data.url);
@@ -171,6 +190,10 @@ const uploadFile = (file, s3Data, url) => {
     xhr.send(postData);
 }
 
+/** 
+* Sends request to python route to add file to db into specified collection and document
+* @param {string} photo - Full url of the photo
+*/
 const addFileToDb = (photo) => {
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", urlForAddPhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo);
@@ -183,6 +206,10 @@ const addFileToDb = (photo) => {
     xhr.send();
 }
 
+/**
+* Sends request to python route to delete file from database
+* @param {string} photo - Full url of the photo
+*/
 const deleteFileFromDb = (photo) => {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", urlForDeletePhoto + "?coll=" + collection + "&photo=" + photo);
@@ -194,53 +221,6 @@ const deleteFileFromDb = (photo) => {
     };
     xhr.send();
 }
-/**
-* Uploads a file element by sending at through an PATCH ajax call to a python route
-* @param {obj} file - file object.
-*/
-// const uploadFile = (file) => {
-// const url = docId ? urlForFiles + "?collection=" + collection + "&docid=" + docId : urlForFiles + "?collection=" + collection;
-// const formData = new FormData();
-
-// formData.append('files', file);
-
-// return ajax_call(url, 'PATCH', formData, (data, stat) => {
-//     if (stat === 201) {
-//         if (document.getElementById('gallery')) {
-//             const containerEl = document.getElementById('gallery');
-//             const existingElCount = document.querySelectorAll(".photo-container").length;
-//             const initialSlug = document.getElementById('initial_slug');
-//             let galleryClass;
-//             let imgTag;
-//             if (initialSlug) {
-//                 galleryClass = initialSlug.value + "-gallery";
-//             }
-//             if (galleryClass) {
-//                 imgTag = `<a href="/uploads/${data.newName}" class="${galleryClass}">
-//                                 <img class="img-thumbnail gallery-item" src="/uploads/${data.newName}" alt="${data.newName}">
-//                             </a>`;
-//             } else {
-//                 imgTag = `<img class="img-thumbnail" src="/uploads/${data.newName}" alt="${data.newName}">`;
-//             }
-//             const newEl = Object.assign(document.createElement('div'), {
-//                 className: 'photo-container col-sm-4 col-md-6 col-lg-4',
-//                 innerHTML: `${imgTag}
-//                             <a class="delete-photo btn btn-danger" data-photo-key="${existingElCount}">
-//                                 <i class="bi bi-trash-fill"></i>
-//                             </a>`
-//             });
-//             newEl.dataset.src = data.newName;
-//             containerEl.appendChild(newEl);
-//             fileListUpdate();
-//         }
-//         alertToast(data.message);
-//         return true;
-//     } else {
-//         alertToast(data.message);
-//         return false
-//     }
-// });
-// }
 
 /** 
 * Generates an array out of dom photos src of a particular class

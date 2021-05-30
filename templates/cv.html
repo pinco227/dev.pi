@@ -96,7 +96,7 @@
         .profile {
             width: 200px;
             height:200px;
-            background: url('{{ root }}uploads/{{ settings.photos.replace(' ', '') }}');
+            background: url('{{ settings.photos[0] }}');
             background-size: cover;
             border-radius: 50%;
         }
@@ -176,9 +176,8 @@
             {% endif %}
             <p>{{ project.description }}</p>
             {% if project.photos|length %}
-                {% set photos = project.photos.split(',') %}
-                {% for photo in photos %}
-                    <img src="{{ root }}uploads/{{ photo.replace(' ', '') }}" alt="Photo {{ loop.index }}" class="gallery">
+                {% for photo in project.photos %}
+                    <img src="{{ photo }}" alt="Photo {{ loop.index }}" class="gallery">
                 {% endfor %}
             {% endif %}
         </div>

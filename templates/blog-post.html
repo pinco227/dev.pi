@@ -51,10 +51,9 @@
             <div class="row mb-4 g-0 blog-document">
                 <div class="col">
                     {% if post.photos|length %}
-                        {% set photos = post.photos.split(',') %}
                         <figure class="float-start col-sm-6 col-md-5">
-                            <a href="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" class="{{ post.slug }}-gallery">
-                                <img src="{{ url_for('uploads', filename=photos[0].replace(' ', '')) }}" alt="{{ post.title }}"
+                            <a href="{{ post.photos[0] }}" class="{{ post.slug }}-gallery">
+                                <img src="{{ post.photos[0] }}" alt="{{ post.title }}"
                                     class="post-photo gallery-item">
                             </a>
                         </figure>
