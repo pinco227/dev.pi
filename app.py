@@ -15,6 +15,7 @@ import pydf
 import pymongo
 import random
 import re
+import requests
 import os
 import secure
 
@@ -381,7 +382,7 @@ def add_photo():
         return make_response(jsonify({'message': 'Photo was successfully added to database'}), 200)
 
 
-@app.route('/admin/delete_photo', methods=["DELETE"])
+@app.route('/admin/delete_photo')
 @login_required()
 def delete_photo():
     collection = request.args.get('coll')
@@ -425,13 +426,8 @@ def sign_s3():
     })
 
 
-@app.route('/admin/delete_s3')
-@login_required()
-def delete_s3():
+def s3_delete_call(file_name):
     S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
-
-    file_name = request.args.get('file_name')
-    file_type = request.args.get('file_type')
 
     s3 = boto3.client('s3')
 
@@ -443,6 +439,14 @@ def delete_s3():
     return json.dumps({
         'data': response
     })
+
+
+@app.route('/admin/delete_s3')
+@login_required()
+def delete_s3():
+    file_name = request.args.get('file_name')
+
+    return s3_delete_call(file_name)
 
 
 @app.route('/admin/files', methods=['PATCH', 'DELETE'])
@@ -637,10 +641,11 @@ def add_blog():
     if request.method == 'POST':
         slug_exists = mongo.db.blogs.find_one({'slug': form.slug.data})
         if form.validate_on_submit() and not slug_exists:
+            photos = form.photo_list.data.split(',')
             blog = {
                 'title': form.title.data,
                 'slug': form.slug.data,
-                'photos': form.photo_list.data,
+                'photos': photos,
                 'body': form.body.data,
                 'added_on': date.today().strftime('%B %d, %Y')
             }
@@ -706,11 +711,14 @@ def delete_blog(id):
         function: redirects to blogs page
     """
     post = mongo.db.blogs.find_one({'_id': ObjectId(id)})
-
-    photos = list(filter(None, post['photos'].split(',')))
-    for photo in photos:
-        if photo and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], photo)):
-            os.remove(os.path.join(app.config['UPLOAD_PATH'], photo))
+    for photo in post['photos']:
+        file_name = photo.split('/').pop()
+        try:
+            s3_delete_call(file_name)
+        except:
+            flash(f"Photo {file_name} couldn't be deleted from server!")
+        else:
+            flash(f"Photo {file_name} was successfully deleted from server!")
 
     mongo.db.blogs.remove({'_id': ObjectId(id)})
     flash('Blog was successfully deleted', 'warning')
@@ -1053,6 +1061,7 @@ def add_project():
     if request.method == 'POST':
         slug_exists = mongo.db.projects.find_one({'slug': form.slug.data})
         if form.validate_on_submit() and not slug_exists:
+            photos = form.photo_list.data.split(',')
             project = {
                 'title': form.title.data,
                 'slug': form.slug.data,
@@ -1060,7 +1069,7 @@ def add_project():
                 'description': form.description.data,
                 'repo': form.repo.data,
                 'live_url': form.live_url.data,
-                'photos': form.photo_list.data
+                'photos': photos
             }
             mongo.db.projects.insert_one(project)
             flash(Markup(
@@ -1125,11 +1134,15 @@ def delete_project(id):
     Returns:
         function: redirect to projects page
     """
-    post = mongo.db.projects.find_one({'_id': ObjectId(id)})
-    photos = list(filter(None, post['photos'].split(',')))
-    for photo in photos:
-        if photo and os.path.exists(os.path.join(app.config['UPLOAD_PATH'], photo)):
-            os.remove(os.path.join(app.config['UPLOAD_PATH'], photo))
+    project = mongo.db.projects.find_one({'_id': ObjectId(id)})
+    for photo in project['photos']:
+        file_name = photo.split('/').pop()
+        try:
+            s3_delete_call(file_name)
+        except:
+            flash(f"Photo {file_name} couldn't be deleted from server!")
+        else:
+            flash(f"Photo {file_name} was successfully deleted from server!")
 
     mongo.db.projects.remove({'_id': ObjectId(id)})
     flash('Project was successfully deleted', 'warning')

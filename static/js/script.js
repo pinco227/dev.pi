@@ -4,18 +4,18 @@
 */
 const alertToast = message => {
     const newToastEl = Object.assign(document.createElement('div'), {
-        className: 'd-flex w-100 toast',
+        className: 'w-100 toast',
         role: 'alert',
         'aria-live': 'assertive',
         'aria-atomic': 'true',
-        innerHTML: `<span class="m-auto px-2">
+        innerHTML: `<div class="d-flex"><span class="m-auto px-2">
                                     <i class="bi bi-bell-fill"></i>
                                 </span>
                                 <div class="toast-body">
                                     <h4>${message}</h4>
                                 </div>
                                 <a href="" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"><i
-                                        class="bi bi-x-circle"></i></a>`
+                                        class="bi bi-x-circle"></i></a></div>`
     });
     toastContainer.insertBefore(newToastEl, toastContainer.firstChild);
     const newToast = new bootstrap.Toast(newToastEl, toastSettings);

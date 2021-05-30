@@ -8,8 +8,6 @@ tinymce.init({
     min_height: 300,
     max_height: 500,
     paste_as_text: true,
-    image_prepend_url: window.location.protocol + "//" + window.location.host + "/uploads",
-    document_base_url: window.location.protocol + "//" + window.location.host,
     relative_urls: false,
     content_css: '/static/css/style.css',
     content_style: 'body { background-color: #fffcf6; }',

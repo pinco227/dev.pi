@@ -97,7 +97,6 @@ const deleteFile = (el) => {
                 }
                 el.remove();
                 fileListUpdate();
-                console.log(response);
                 alertToast("Image '" + fileName + "' was successfully deleted!");
             }
             else {
@@ -186,7 +185,7 @@ const addFileToDb = (photo) => {
 
 const deleteFileFromDb = (photo) => {
     const xhr = new XMLHttpRequest();
-    xhr.open("DELETE", urlForDeletePhoto + "?coll=" + collection + "&photo=" + photo);
+    xhr.open("GET", urlForDeletePhoto + "?coll=" + collection + "&photo=" + photo);
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             const response = JSON.parse(xhr.responseText);
@@ -252,7 +251,7 @@ const getPhotoList = () => {
     if (document.querySelectorAll('.photo-container').length) {
         const photoList = [];
         document.querySelectorAll('.photo-container').forEach((el, i) => {
-            photoList.push({ title: 'Photo' + (i + 1), value: el.getElementsByTagName('img')[0].src.split('/').pop() });
+            photoList.push({ title: 'Photo' + (i + 1), value: el.getElementsByTagName('img')[0].src });
         });
         return photoList;
     } else {

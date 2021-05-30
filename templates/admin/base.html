@@ -144,8 +144,8 @@
             <!-- CONTENT -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!-- flash messages -->
-                <div class="toast-container position-absolute top-1 start-50 translate-middle-x p-3 w-75"
-                    style="z-index: 5">
+                <div class="toast-container position-fixed top-1 start-50 translate-middle-x p-3 w-75"
+                    style="z-index: 100">
                     {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
                             {% for category, message in messages %}
