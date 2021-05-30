@@ -206,6 +206,7 @@
   * [Coolors](https://coolors.co/) for palette image generation.
   * [dbdiagram.io](https://dbdiagram.io/) for database diagram creation.
 - Other
+  * [SendGrid](https://sendgrid.com/) for email API.
 
 ## Testing
   ### [Click Here for Full Testing Process](https://github.com/pinco227/dev.pi/blob/main/TEST.md)
@@ -214,6 +215,7 @@
     | Issue                                                                                              | Fixed              |
     | -------------------------------------------------------------------------------------------------- | ------------------ |
     | [Pylint(no-member) error](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues) | :heavy_check_mark: |
+    | [Image upload](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues)            | :heavy_check_mark: |
   - #### Tests
     | Test                               | Result             |
     | ---------------------------------- | ------------------ |
@@ -313,6 +315,7 @@
   - [Joseph Zimmerman](https://www.joezimjs.com/) for writing [How To Make A Drag-and-Drop File Uploader With Vanilla JavaScript](https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/) which was adapted and used in admin panel for photo uploads.
   - [Gal Weizman's article](https://www.perimeterx.com/tech-blog/2019/beforeunload-and-unload-events/) about ```unload``` And ```beforeunload``` javascripts events for the ```sleep(delay)``` function which was used in admin panel when discarding a form that has uploaded images in order to get the files deleted before unload.
   - [GitHub Gist user: Mathew Byrne](https://gist.github.com/mathewbyrne) for the javascript ```slugify(text)``` function ([Gist](https://gist.github.com/mathewbyrne/1280286)) that was used in admin panel to generate slugs for blogs and projects.
+  - [Bootsnipp user: devlopereswar](https://bootsnipp.com/devlopereswar) for the html responsive [email template snippet](https://bootsnipp.com/snippets/A2kpB).
 
 ## Aknowledgements
   - **My Mentor**: Nishant Kumar for continuous helpful feedback.

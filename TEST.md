@@ -19,6 +19,7 @@
         `pylint --generate-rcfile .pylintrc` and modifying this line `generated-members=FlaskForm.*,Form.*` and adding `"python.linting.pylintArgs": ["--generated-members"]` to `settings.json` file. [CREDIT to this article](https://yann-leguilly.gitlab.io/post/2019-11-11-no-member-vs-code/).
     
     > - Image upload issue: Heroku server doesn't allow for filesystem writes and even if it seems that uploads are working, it is only temporary.
+    > - :heavy_check_mark: **FIXED**: The whole internal upload proccess implementation was replaced with AWS S3 server upload and delete implementation and all photos urls were updated throughout the site to work with aws urls. Database functionality was also updated to add/delete and read photos to/from an array type document.
 - ### Issues found while testing:
     > - Issue found.
     > - :heavy_check_mark: **FIXED**: Issue fix.
