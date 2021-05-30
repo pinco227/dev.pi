@@ -31,21 +31,16 @@ app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['RECAPTCHA_PUBLIC_KEY'] = os.environ.get('RC_SITE_KEY')
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ.get('RC_SECRET_KEY')
-app.config['UPLOAD_PATH'] = 'uploads'
-app.config['UPLOAD_EXTENSIONS'] = ['.png', '.jpg', '.jpeg', '.gif']
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+
 mail_settings = {
-    'MAIL_SERVER': 'smtp.gmail.com',
-    'MAIL_PORT': 465,
-    'MAIL_USE_TLS': False,
-    'MAIL_USE_SSL': True,
-    'MAIL_USERNAME': os.environ.get('EMAIL_USER'),
-    'MAIL_PASSWORD': os.environ.get('EMAIL_PASSWORD')
+    'MAIL_SERVER': 'smtp.sendgrid.net',
+    'MAIL_PORT': 587,
+    'MAIL_USE_TLS': True,
+    'MAIL_USERNAME': 'apikey',
+    'MAIL_PASSWORD': os.environ.get('SENDGRID_API_KEY'),
+    'MAIL_DEFAULT_SENDER': os.environ.get('MAIL_DEFAULT_SENDER')
 }
 app.config.update(mail_settings)
-
-if not os.path.exists(app.config['UPLOAD_PATH']):
-    os.makedirs(app.config['UPLOAD_PATH'])
 
 # Initializations / Global vars
 Breadcrumbs(app=app)
@@ -271,12 +266,20 @@ def contact():
     if request.method == 'POST':
         if form.validate_on_submit():
             msg = Message(subject='[Dev.PI] ' + form.subject.data,
-                          sender=app.config.get('MAIL_USERNAME'),
-                          recipients=[app.config.get('MAIL_USERNAME')],
-                          body=form.name.data + '(' + form.email.data + '): ' + form.message.data)
-            mail.send(msg)
-            flash(
-                'Thank you for your message! I will get back to you shortly.', 'success')
+                          recipients=[app.config.get('MAIL_DEFAULT_SENDER')],
+                          reply_to=form.email.data)
+            msg.body = (form.name.data +
+                        '(' + form.email.data + '): ' + form.message.data)
+            msg.html = (render_template(
+                'mail.html', subject=form.subject.data, name=form.name.data, message=form.message.data))
+            try:
+                mail.send(msg)
+            except:
+                flash(
+                    'Error sending email!', 'danger')
+            else:
+                flash(
+                    'Thank you for your message! I will get back to you shortly.', 'success')
             return redirect(url_for('contact'))
         else:
             for fieldName, errorMessages in form.errors.items():
