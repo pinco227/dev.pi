@@ -743,8 +743,9 @@ def add_education():
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.order.data = str(
-        mongo.db.education.find_one(sort=[('order', pymongo.DESCENDING)])['order'] + 1)
+    if mongo.db.education.find_one(sort=[('order', pymongo.DESCENDING)]):
+        form.order.data = str(
+            mongo.db.education.find_one(sort=[('order', pymongo.DESCENDING)])['order'] + 1)
     form.submit.label.text = 'Add'
 
     return render_template('admin/add_education.html', form=form)
@@ -855,8 +856,9 @@ def add_experience():
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.order.data = str(
-        mongo.db.experience.find_one(sort=[('order', pymongo.DESCENDING)])['order'] + 1)
+    if mongo.db.experience.find_one(sort=[('order', pymongo.DESCENDING)]):
+        form.order.data = str(
+            mongo.db.experience.find_one(sort=[('order', pymongo.DESCENDING)])['order'] + 1)
     form.submit.label.text = 'Add'
 
     return render_template('admin/add_experience.html', form=form)
