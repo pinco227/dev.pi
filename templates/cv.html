@@ -38,6 +38,9 @@
             width: 50%;
             padding: 1rem;
         }
+        .w-100 {
+            width: 100%;
+        }
         table {
             margin-top: 0;
         }
@@ -96,7 +99,9 @@
         .profile {
             width: 200px;
             height:200px;
-            background: url('{{ settings.photos[0] }}');
+            {% if settings.photos|length %}
+                background: url('{{ settings.photos[0] }}');
+            {% endif %}
             background-size: cover;
             border-radius: 50%;
         }
@@ -108,14 +113,18 @@
 </head>
 
 <body>
-    <table>
+    <table class="w-100">
         <tr>
-            <td class="w-50 text-right">
-                <div class="profile-container">
-                    <div class="profile"></div>
-                </div>
-            </td>
-            <td class="w-50 text-left">
+            {% if settings.photos|length %}
+                <td class="w-50 text-right">
+                    <div class="profile-container">
+                        <div class="profile"></div>
+                    </div>
+                </td>
+                <td class="w-50 text-left">
+            {% else %}
+                <td class="text-center">
+            {% endif %}
                 <h1>{{ settings.name }}</h1>
                 <h2>{{ settings.title }}</h2>
                 <h3 class="fw-normal no-margin">{{ settings.address }}</h3>

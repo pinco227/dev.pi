@@ -119,6 +119,9 @@ def context_processor():
         dict: settings and links db collections
     """
 
+    global settings
+    settings = mongo.db.settings.find_one({'_id': "1"})
+
     links = list(mongo.db.links.find())
     return dict(settings=settings, links=links)
 
@@ -351,9 +354,14 @@ def add_photo():
     document_id = request.args.get('docid')
     photo = request.args.get('photo')
 
+    if collection == "settings":
+        id = "1"
+    else:
+        id = ObjectId(document_id)
+
     try:
         mongo.db[collection].update(
-            {'_id': ObjectId(document_id)},
+            {'_id': id},
             {'$push': {'photos': photo}}
         )
     except:
@@ -1086,13 +1094,13 @@ def add_link():
 def get_settings():
     """ADMIN Settins page route"""
 
-    global settings
     form = SettingsForm()
 
     if request.method == 'POST':
         if form.validate_on_submit():
             updated = {
                 'name': form.name.data,
+                'title': form.title.data,
                 'bio': form.bio.data,
                 'cover': form.cover.data,
                 'status': form.status.data,
@@ -1104,7 +1112,7 @@ def get_settings():
                 'meta_desc': form.meta_desc.data,
                 'meta_keys': form.meta_keys.data
             }
-            mongo.db.settings.update({'_id': ObjectId(settings['_id'])}, {
+            mongo.db.settings.update({'_id': "1"}, {
                 '$set': updated})
             flash('Settings were successfully updated!', 'success')
 
@@ -1115,12 +1123,9 @@ def get_settings():
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.bio.data = settings['bio']
-    form.cover.data = settings['cover']
-    form.meta_desc.data = settings['meta_desc']
-    # Update global settings variable
-    settings = mongo.db.settings.find_one(
-        {'_id': ObjectId(os.environ.get('DB_SETTINGS_ID'))})
+    form.bio.data = settings['bio'] if settings['bio'] else ""
+    form.cover.data = settings['cover'] if settings['cover'] else ""
+    form.meta_desc.data = settings['meta_desc'] if settings['meta_desc'] else ""
 
     return render_template('admin/settings.html', form=form)
 

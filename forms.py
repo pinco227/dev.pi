@@ -162,6 +162,8 @@ class SettingsForm(FlaskForm):
     """Settings Update Form"""
     name = StringField('Dev Name', validators=[
         DataRequired(message="Please fill in the Developer's name!")])
+    title = StringField('Title/Position', validators=[
+        DataRequired(message="Please fill in the Developer's title!")])
     bio = TextAreaField('Short Bio')
     cover = TextAreaField('Long Bio')
     status = StringField('Status', validators=[

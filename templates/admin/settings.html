@@ -26,6 +26,10 @@
                                 {{ form.name.label }}
                             </div>
                             <div class="form-floating mb-3">
+                                {{ form.title(class="form-control", value="%s" | format(settings.title)) }}
+                                {{ form.title.label }}
+                            </div>
+                            <div class="form-floating mb-3">
                                 {{ form.bio(class="form-control") }}
                                 {{ form.bio.label }}
                             </div>
