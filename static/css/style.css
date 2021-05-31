@@ -86,6 +86,11 @@ section:last-of-type {
     z-index: 9998;
 }
 
+.modal-body {
+    padding: 2rem;
+    text-indent: 1.5rem;
+}
+
 /*------------------------------------------ TYPOGRAPHY */
 
 h1, h2, h3, h4, h5 {
