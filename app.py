@@ -231,7 +231,10 @@ def view_project_dlc(*args, **kwargs):
     slug = request.view_args['project']
     project = mongo.db.projects.find_one({'slug': slug})
 
-    return [{'text': project['title']}]
+    if project and project['title']:
+        return [{'text': project['title']}]
+    else:
+        return [{'text': 'Not found'}]
 
 
 @app.route('/portfolio/<project>')
@@ -269,7 +272,10 @@ def view_blog_dlc(*args, **kwargs):
     slug = request.view_args['post']
     post = mongo.db.blogs.find_one({'slug': slug})
 
-    return [{'text': post['title']}]
+    if post and post['title']:
+        return [{'text': post['title']}]
+    else:
+        return [{'text': 'Not found'}]
 
 
 @app.route('/blog/<post>')
@@ -562,7 +568,10 @@ def edit_blog(id):
     """ADMIN Edit Blog page route"""
 
     form = EditBlogForm()
-    post = mongo.db.blogs.find_one({'_id': ObjectId(id)})
+    if ObjectId.is_valid(id):
+        post = mongo.db.blogs.find_one({'_id': ObjectId(id)})
+    else:
+        post = None
 
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -584,7 +593,7 @@ def edit_blog(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.body.data = post['body']
+    form.body.data = post['body'] if post else ""
 
     return render_template('admin/edit_blog.html', post=post, form=form)
 
@@ -747,7 +756,10 @@ def edit_education(id):
     """ADMIN Edit Education page route"""
 
     form = EducationForm()
-    school = mongo.db.education.find_one({'_id': ObjectId(id)})
+    if ObjectId.is_valid(id):
+        school = mongo.db.education.find_one({'_id': ObjectId(id)})
+    else:
+        school = None
 
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -771,7 +783,7 @@ def edit_education(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.description.data = school['description']
+    form.description.data = school['description'] if school else ""
     form.submit.label.text = 'Edit'
 
     return render_template('admin/edit_education.html', school=school, form=form)
@@ -856,7 +868,10 @@ def edit_experience(id):
     """ADMIN Edit Experience page route"""
 
     form = ExperienceForm()
-    job = mongo.db.experience.find_one({'_id': ObjectId(id)})
+    if ObjectId.is_valid(id):
+        job = mongo.db.experience.find_one({'_id': ObjectId(id)})
+    else:
+        job = None
 
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -879,7 +894,7 @@ def edit_experience(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.description.data = job['description']
+    form.description.data = job['description'] if job else ""
     form.submit.label.text = 'Edit'
 
     return render_template('admin/edit_experience.html', job=job, form=form)
@@ -947,7 +962,10 @@ def edit_project(id):
     """ADMIN Edit Project page route"""
 
     form = EditProjectForm()
-    project = mongo.db.projects.find_one({'_id': ObjectId(id)})
+    if ObjectId.is_valid(id):
+        project = mongo.db.projects.find_one({'_id': ObjectId(id)})
+    else:
+        project = None
 
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -971,7 +989,7 @@ def edit_project(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.description.data = project['description']
+    form.description.data = project['description'] if project else ""
 
     return render_template('admin/edit_project.html', project=project, form=form)
 

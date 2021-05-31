@@ -10,60 +10,66 @@
                     class="section-image">
             </div>
         </div>
-        <div class="card">
-            <form action="{{ url_for('get_testimonials') }}" method="POST">
-                {{ form.csrf_token }}
-                <div class="card-header text-center">
-                    {{ form.submit(class="btn btn-lg btn-accent") }}
-                </div>
-                <div class="card-header">
-                    Unapproved
-                </div>
-                <ul class="list-group list-group-flush">
-                    {% for post in unapproved %}
-                        <li class="list-group-item d-flex flex-column flex-sm-row">
-                            <div class="w-100">
-                                "{{ post.text }}" <br>
-                                <small class="text-muted">by <strong>{{ post.author }}</strong> ({{ post.role }})</small>
-                            </div>
-                            <div class="controls d-flex align-items-baseline justify-content-end">
-                                <div class="form-check form-switch me-3">
-                                    <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]"
-                                        name="approved[{{ post._id }}]">
-                                    <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
+        {% if unapproved|length or approved|length %}
+            <div class="card">
+                <form action="{{ url_for('get_testimonials') }}" method="POST">
+                    {{ form.csrf_token }}
+                    <div class="card-header text-center">
+                        {{ form.submit(class="btn btn-lg btn-accent") }}
+                    </div>
+                    <div class="card-header">
+                        Unapproved
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for post in unapproved %}
+                            <li class="list-group-item d-flex flex-column flex-sm-row">
+                                <div class="w-100">
+                                    "{{ post.text }}" <br>
+                                    <small class="text-muted">by <strong>{{ post.author }}</strong> ({{ post.role }})</small>
                                 </div>
-                                <a href="{{ url_for('delete_testimonial', id=post._id) }}"
-                                    class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <div class="card-header">
-                    Approved
-                </div>
-                <ul class="list-group list-group-flush">
-                    {% for post in approved %}
-                        <li class="list-group-item d-flex flex-column flex-sm-row">
-                            <div class="w-100">
-                                "{{ post.text }}" <br>
-                                <small class="text-muted">by <strong>{{ post.author }}</strong> ({{ post.role }})</small>
-                            </div>
-                            <div class="controls d-flex align-items-baseline justify-content-end">
-                                <div class="form-check form-switch me-3">
-                                    <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]"
-                                        name="approved[{{ post._id }}]" checked>
-                                    <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
+                                <div class="controls d-flex align-items-baseline justify-content-end">
+                                    <div class="form-check form-switch me-3">
+                                        <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]"
+                                            name="approved[{{ post._id }}]">
+                                        <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
+                                    </div>
+                                    <a href="{{ url_for('delete_testimonial', id=post._id) }}"
+                                        class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
                                 </div>
-                                <a href="{{ url_for('delete_testimonial', id=post._id) }}"
-                                    class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <div class="card-footer text-center">
-                    {{ form.submit(class="btn btn-lg btn-accent") }}
-                </div>
-            </form>
-        </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="card-header">
+                        Approved
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for post in approved %}
+                            <li class="list-group-item d-flex flex-column flex-sm-row">
+                                <div class="w-100">
+                                    "{{ post.text }}" <br>
+                                    <small class="text-muted">by <strong>{{ post.author }}</strong> ({{ post.role }})</small>
+                                </div>
+                                <div class="controls d-flex align-items-baseline justify-content-end">
+                                    <div class="form-check form-switch me-3">
+                                        <input class="form-check-input" type="checkbox" id="approved[{{ post._id }}]"
+                                            name="approved[{{ post._id }}]" checked>
+                                        <label class="form-check-label" for="approved[{{ post._id }}]">Approved</label>
+                                    </div>
+                                    <a href="{{ url_for('delete_testimonial', id=post._id) }}"
+                                        class="btn btn-sm btn-danger confirm"><i class="bi bi-trash"></i></a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="card-footer text-center">
+                        {{ form.submit(class="btn btn-lg btn-accent") }}
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="col">
+                {% include "inc/no-results.html" %}
+            </div>
+        {% endif %}
     </section>
 {% endblock content %}

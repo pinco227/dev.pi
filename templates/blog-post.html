@@ -35,34 +35,40 @@
                         back</a>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <h3 class="post-title">{{ post.title }}
-                    {% if session['user'] %}
-                        <a href="{{ url_for('delete_blog', id=post._id) }}" class="btn btn-danger confirm  mx-2 float-end"><i
-                                    class="bi bi-trash"></i></a>
-                        <a href="{{ url_for('edit_blog', id=post._id) }}" class="btn btn-accent-light float-end"><i
-                                    class="bi bi-pencil"></i></a>
-                    {% endif %}
-                    </h3>
-                    <p><small class="text-muted">{{ post.added_on }}</small></p>
+            {% if post %}
+                <div class="row">
+                    <div class="col">
+                        <h3 class="post-title">{{ post.title }}
+                        {% if session['user'] %}
+                            <a href="{{ url_for('delete_blog', id=post._id) }}" class="btn btn-danger confirm  mx-2 float-end"><i
+                                        class="bi bi-trash"></i></a>
+                            <a href="{{ url_for('edit_blog', id=post._id) }}" class="btn btn-accent-light float-end"><i
+                                        class="bi bi-pencil"></i></a>
+                        {% endif %}
+                        </h3>
+                        <p><small class="text-muted">{{ post.added_on }}</small></p>
+                    </div>
                 </div>
-            </div>
-            <div class="row mb-4 g-0 blog-document">
-                <div class="col">
-                    {% if post.photos|length %}
-                        <figure class="float-start col-sm-6 col-md-5">
-                            <a href="{{ post.photos[0] }}" class="{{ post.slug }}-gallery">
-                                <img src="{{ post.photos[0] }}" alt="{{ post.title }}"
-                                    class="post-photo gallery-item">
-                            </a>
-                        </figure>
-                    {% else %}
-                        <i class="bi bi-blockquote-left fs-1 float-start mx-4"></i>
-                    {% endif %}
-                    <div class="blog-document-body">{{ post.body|safe }}</div>
+                <div class="row mb-4 g-0 blog-document">
+                    <div class="col">
+                        {% if post.photos|length %}
+                            <figure class="float-start col-sm-6 col-md-5">
+                                <a href="{{ post.photos[0] }}" class="blog-gallery">
+                                    <img src="{{ post.photos[0] }}" alt="{{ post.title }}"
+                                        class="post-photo gallery-item">
+                                </a>
+                            </figure>
+                        {% else %}
+                            <i class="bi bi-blockquote-left fs-1 float-start mx-4"></i>
+                        {% endif %}
+                        <div class="blog-document-body">{{ post.body|safe }}</div>
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="col">
+                    {% include "inc/no-results.html" %}
+                </div>
+            {% endif %}
             <div class="row">
                 <div class="col">
                     <a href="{{ url_for('blog') }}" class="btn btn-accent-light"><i class="bi bi-arrow-left-circle"></i> Go
@@ -77,6 +83,6 @@
     <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <!-- CREDIT: https://github.com/biati-digital/glightbox -->
     <script type="text/javascript">
-        const lightbox = GLightbox({ 'selector': '.{{ post.slug }}-gallery' });
+        const lightbox = GLightbox({ 'selector': '.blog-gallery' });
     </script>
 {% endblock scripts %}
