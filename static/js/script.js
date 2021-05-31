@@ -2,7 +2,7 @@
 * Creates a new toast element and displays it
 * @param {string} message - message to be displayed.
 */
-const alertToast = message => {
+const alertToast = (message) => {
     const newToastEl = Object.assign(document.createElement('div'), {
         className: 'w-100 toast',
         role: 'alert',
@@ -23,13 +23,21 @@ const alertToast = message => {
 };
 
 /** 
+* Prevents default action for the event in which was called.
+* @param {obj} e - event object.
+*/
+const preventDefaults = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+/** 
 * Prevents event's default action if is not confirmed by user.
 * @param {obj} e - Event
 */
-const confirmIt = e => {
+const confirmIt = (e) => {
     if (!confirm('Are you sure?')) {
-        e.preventDefault();
-        e.stopPropagation();
+        preventDefaults(e);
     }
 };
 
@@ -70,8 +78,7 @@ document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', (e) => {
         // Prevent if already submitting
         if (form.classList.contains('is-submitting')) {
-            e.preventDefault();
-            console.log('huooo');
+            preventDefaults(e);
         } else {
             const overlay = Object.assign(document.createElement('div'), {
                 id: "spin-overlay-contain"

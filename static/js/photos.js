@@ -33,15 +33,6 @@ function apiRequest(method, url, cb, data = undefined) {
     xhr.send(data);
 }
 
-/** 
-* Prevents default action for the event in which was called.
-* @param {obj} e - event object.
-*/
-const preventDefaults = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-}
-
 /**
 * Adds .highlight class to the drop area element.
 */
@@ -121,6 +112,7 @@ const handleFiles = (files) => {
 const deleteFile = (el) => {
     const fileName = el.dataset.src.split('/').pop();
     const url = urlForDeleteS3 + "?file_name=" + fileName;
+
     apiRequest("GET", url, (response, status) => {
         if (status === 200) {
             if (docId) {
@@ -146,6 +138,7 @@ const getSignedRequest = (file) => {
     const newFileName = collection + String(date.getDate()) + String(date.getMonth() + 1) + Math.floor(Math.random() * 999) + '.' + fileExt;
     const renamedFile = new File([file], newFileName, { type: file.type });
     const url = urlForSignS3 + "?file_name=" + renamedFile.name + "&file_type=" + renamedFile.type;
+
     apiRequest("GET", url, (response, status) => {
         if (status === 200) {
             uploadFile(renamedFile, response.data, response.url);
@@ -208,6 +201,7 @@ const uploadFile = (file, s3Data, url) => {
 */
 const addFileToDb = (photo) => {
     const url = urlForAddPhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo;
+
     apiRequest("PUT", url, (response, status) => {
         alertToast(response.message)
     });
@@ -219,6 +213,7 @@ const addFileToDb = (photo) => {
 */
 const deleteFileFromDb = (photo) => {
     const url = urlForDeletePhoto + "?coll=" + collection + "&photo=" + photo;
+
     apiRequest("GET", url, (response, status) => {
         alertToast(response.message)
     });
@@ -235,6 +230,7 @@ const getPhotoList = () => {
         document.querySelectorAll('.photo-container').forEach((el, i) => {
             photoList.push({ title: 'Photo' + (i + 1), value: el.getElementsByTagName('img')[0].src });
         });
+
         return photoList;
     } else {
         return [];
@@ -255,7 +251,7 @@ const sleep = (delay) => {
 // Click event listener for file delete button
 document.getElementById('gallery').addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-photo')) {
-        e.preventDefault;
+        preventDefaults(e);
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
             deleteFile(e.target.parentElement);
         }
@@ -266,7 +262,6 @@ document.getElementById('gallery').addEventListener('click', (e) => {
 if (formElement) {
     formElement.addEventListener('submit', () => {
         formSubmitted = true;
-        console.log("submitted");
     });
 }
 
