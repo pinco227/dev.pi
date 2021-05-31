@@ -8,11 +8,16 @@
         <div class="container-xl">
             <div class="row align-items-center justify-content-center g-5 py-5 hero">
                 <div class="col-8 col-sm-6 col-md-5 col-lg-4">
-                    <a href="{{ settings.photos[0] }}"
-                            class="gallery">
-                        <img src="{{ settings.photos[0] }}"
-                                alt="{{ settings.name }} - {{ settings.title }}" class="hero-img d-block mx-lg-auto img-fluid gallery-item">
-                    </a>
+                    {% if settings.photos|length %}
+                        <a href="{{ settings.photos[0] }}"
+                                class="gallery">
+                            <img src="{{ settings.photos[0] }}"
+                                    alt="{{ settings.name }} - {{ settings.title }}" class="hero-img d-block mx-lg-auto img-fluid gallery-item">
+                        </a>
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/no-photo.jpg') }}"
+                                    alt="{{ settings.name }} - {{ settings.title }}" class="hero-img d-block mx-lg-auto img-fluid gallery-item">
+                    {% endif %}
                 </div>
                 <div class="col-12 col-md-7 col-lg-8">
                     <h1 class="hero-title display-5 fw-bold lh-1 mb-3 text-shadow">{{ settings.name }}

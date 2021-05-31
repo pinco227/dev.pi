@@ -29,6 +29,8 @@ app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['RECAPTCHA_PUBLIC_KEY'] = os.environ.get('RC_SITE_KEY')
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ.get('RC_SECRET_KEY')
+app.config['DB_COLLECTIONS'] = ["blogs", "testimonials", "links",
+                                "settings", "experience", "education", "projects", "skills"]
 
 mail_settings = {
     'MAIL_SERVER': 'smtp.sendgrid.net',
@@ -46,7 +48,52 @@ mongo = PyMongo(app)
 mail = Mail(app)
 secure_headers = secure.Secure()
 settings = mongo.db.settings.find_one(
-    {'_id': ObjectId(os.environ.get('DB_SETTINGS_ID'))})
+    {'_id': "1"})
+
+
+@app.before_request
+def check_installed():
+    created = mongo.db.list_collection_names()
+    if set(created) != set(app.config.get('DB_COLLECTIONS')) or not mongo.db.settings.find_one({'_id': "1"}):
+        install_app()
+        return redirect(url_for('get_settings'))
+
+
+def install_app():
+    # List of existing collections
+    created = mongo.db.list_collection_names()
+
+    if set(created) != set(app.config.get('DB_COLLECTIONS')):
+        # Iterate through required collections that are not created
+        expr = (coll for coll in app.config.get(
+            'DB_COLLECTIONS') if coll not in created)
+        for coll in expr:
+            # Create collection
+            try:
+                mongo.db.create_collection(name=coll)
+            except Exception as e:
+                flash(f"{coll} creation error: {e}", "danger")
+            else:
+                flash(f"{coll} successfully created!", "success")
+
+    # Create empty settings document with id 1
+    if not mongo.db.settings.find_one({'_id': "1"}):
+        mongo.db.settings.insert_one(
+            {'_id': "1",
+             'name': "",
+             'title': "",
+             'bio': "",
+             'cover': "",
+             'status': "",
+             'availability': "",
+             'email': "",
+             'phone': "",
+             'address': "",
+             'photos': [],
+             'meta_title': "",
+             'meta_desc': "",
+             'meta_keys': ""})
+        flash("Settings document created!")
 
 
 @app.after_request
@@ -286,7 +333,7 @@ def login_required(flash_message=False):
         def decorated_function(*args, **kwargs):
             if not session.get('user'):
                 flash(flash_message, 'danger') if flash_message else None
-                return redirect(url_for('login'))
+                return redirect(url_for('login', path=request.path))
             else:
                 return f(*args, **kwargs)
 
@@ -1078,8 +1125,9 @@ def get_settings():
     return render_template('admin/settings.html', form=form)
 
 
-@ app.route('/admin/login', methods=['GET', 'POST'])
-def login():
+@ app.route('/admin/login', defaults={'path': None}, methods=['GET', 'POST'])
+@ app.route('/<path:path>/login', methods=['GET', 'POST'])
+def login(path):
     """ADMIN Login page route"""
 
     form = LoginForm()
@@ -1089,7 +1137,11 @@ def login():
             if form.username.data.lower() == os.environ.get('ADMIN_USERNAME').lower() and form.password.data == os.environ.get('ADMIN_PASSWORD'):
                 session['user'] = form.username.data.lower()
                 flash(f"Welcome, {form.username.data}")
-                return redirect(url_for('admin'))
+
+                if path:
+                    return redirect("/"+path)
+                else:
+                    return redirect(url_for('admin'))
             else:
                 # username doesn't exist
                 flash('Incorrect Username or Password!', 'danger')
