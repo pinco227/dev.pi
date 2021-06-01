@@ -100,8 +100,8 @@
             </div>
         </div>
     </section>
-    <!-- EDUCATION SECTION -->
-    <section id="education">
+    <!-- EXPERIENCE SECTION -->
+    <section id="experience">
         <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
         <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
             preserveAspectRatio="none">
@@ -113,36 +113,36 @@
             </g>
         </svg>
         <div class="container-xl">
-            <h2 class="section-title">Education
-            {% if session['user'] %}
+            <h2 class="section-title">Experience
+                {% if session['user'] %}
                 <div class="float-end mt-2 mx-2">
-                    <a href="{{ url_for('add_education') }}" class="btn btn-success rounded-circle"><i class="bi bi-plus"></i></a>
-                    <a href="{{ url_for('get_education') }}" class="btn btn-accent-light"><i class="bi bi-pencil"></i></a>
+                    <a href="{{ url_for('add_experience') }}" class="btn btn-success rounded-circle"><i
+                            class="bi bi-plus"></i></a>
+                    <a href="{{ url_for('get_experience') }}" class="btn btn-accent-light"><i class="bi bi-pencil"></i></a>
                 </div>
-            {% endif %}
+                {% endif %}
             </h2>
-            {% for school in education %}
-                <div class="card card-education mb-3 w-100">
-                    <div class="row g-0">
-                        <div class="col-md-4 bg-accent card-left">
-                            <i class="bi bi-book-half"></i>
-                            <h4>{{ school.school }}</h4>
-                            <span class="period">{{ school.period }}</span>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h4 class="card-title">{{ school.title }}</h4>
-                                <h5 class="card-subtitle">{{ school.department }}</h5>
-                                <p class="card-text">{{ school.description }}</p>
-                            </div>
+            {% for job in experience %}
+            <div class="card card-experience bg-accent mb-3 w-100">
+                <div class="row g-0">
+                    <div class="col-md-4 card-left">
+                        <i class="bi bi-code-square"></i>
+                        <span class="period">{{ job.period }}</span>
+                        <h4>{{ job.company }}</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ job.role }}</h4>
+                            <p class="card-text">{{ job.description }}</p>
                         </div>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
     </section>
-    <!-- EXPERIENCE SECTION -->
-    <section id="experience">
+    <!-- EDUCATION SECTION -->
+    <section id="education">
         <!-- CREDIT: https://codepen.io/xyzzyestudioweb/pen/JgdKOR -->
         <svg class="separator" xmlns="http://www.w3.org/2000/svg" width="100%" height="100" viewBox="0.4 0.2 200 44"
             preserveAspectRatio="none">
@@ -154,30 +154,32 @@
             </g>
         </svg>
         <div class="container-xl">
-            <h2 class="section-title">Experience
-            {% if session['user'] %}
+            <h2 class="section-title">Education
+                {% if session['user'] %}
                 <div class="float-end mt-2 mx-2">
-                    <a href="{{ url_for('add_experience') }}" class="btn btn-success rounded-circle"><i class="bi bi-plus"></i></a>
-                    <a href="{{ url_for('get_experience') }}" class="btn btn-accent-light"><i class="bi bi-pencil"></i></a>
+                    <a href="{{ url_for('add_education') }}" class="btn btn-success rounded-circle"><i
+                            class="bi bi-plus"></i></a>
+                    <a href="{{ url_for('get_education') }}" class="btn btn-accent-light"><i class="bi bi-pencil"></i></a>
                 </div>
-            {% endif %}
+                {% endif %}
             </h2>
-            {% for job in experience %}
-                <div class="card card-experience bg-accent mb-3 w-100">
-                    <div class="row g-0">
-                        <div class="col-md-4 card-left">
-                            <i class="bi bi-code-square"></i>
-                            <span class="period">{{ job.period }}</span>
-                            <h4>{{ job.company }}</h4>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h4 class="card-title">{{ job.role }}</h4>
-                                <p class="card-text">{{ job.description }}</p>
-                            </div>
+            {% for school in education %}
+            <div class="card card-education mb-3 w-100">
+                <div class="row g-0">
+                    <div class="col-md-4 bg-accent card-left">
+                        <i class="bi bi-book-half"></i>
+                        <h4>{{ school.school }}</h4>
+                        <span class="period">{{ school.period }}</span>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ school.title }}</h4>
+                            <h5 class="card-subtitle">{{ school.department }}</h5>
+                            <p class="card-text">{{ school.description }}</p>
                         </div>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
     </section>

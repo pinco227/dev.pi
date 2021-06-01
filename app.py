@@ -182,7 +182,8 @@ def get_cv():
 def home():
     """Landing page route"""
 
-    skills = list(mongo.db.skills.find())
+    skills = list(mongo.db.skills.find().sort(
+        [('percentage', pymongo.DESCENDING), ('name', pymongo.ASCENDING)]))
     education = list(mongo.db.education.find().sort('order', 1))
     experience = list(mongo.db.experience.find().sort('order', 1))
     testimonials = list(mongo.db.testimonials.find({'approved': True}))

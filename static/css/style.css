@@ -486,10 +486,6 @@ nav[aria-label="breadcrumb"] {
 
 /*------------------------------------------ EDUCATION */
 
-#education {
-    background-color: var(--accent-light);
-}
-
 #education .section-title {
     margin-top: -1rem;
 }
@@ -530,6 +526,10 @@ nav[aria-label="breadcrumb"] {
 }
 
 /*------------------------------------------ EXPERIENCE */
+
+#experience {
+    background-color: var(--accent-light);
+}
 
 #experience .section-title {
     margin-top: -1rem;
