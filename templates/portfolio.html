@@ -36,12 +36,14 @@
                     {% for project in projects %}
                         <div class="col">
                         {% if project.featured %}
-                            <div class="card card-project featured h-100">
+                            <div class="card card-project featured h-100 text-center">
                         {% else %}
-                            <div class="card card-project h-100">
+                            <div class="card card-project h-100 text-center">
                         {% endif %}
-                                {% if project.photos|length %}
+                                {% if project.photos|length and project.photos[0]|length %}
                                     <a href="{{ url_for('get_project', project=project.slug) }}"><img src="{{ project.photos[0] }}" class="card-img-top" alt="{{ project.title }}" loading="lazy"></a>
+                                {% else %}
+                                        <i class="bi bi-display fs-1 m-4"></i>
                                 {% endif %}
                                 <div class="card-body">
                                     <h5 class="card-title"><a href="{{ url_for('get_project', project=project.slug) }}">{{ project.title }}</a></h5>

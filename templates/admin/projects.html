@@ -27,7 +27,7 @@
                         <li class="list-group-item d-flex justify-content-between">
                             <div class="row w-100 align-items-center">
                                 <div class="col-6 offset-3 col-sm-2 offset-sm-0 text-center">
-                                    {% if project.photos|length %}
+                                    {% if project.photos|length and project.photos[0]|length %}
                                         <img src="{{ project.photos[0] }}"
                                             alt="{{ project.title }}" class="img-fluid mb-1" loading="lazy">
                                         {% for photo in project.photos %}

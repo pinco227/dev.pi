@@ -541,7 +541,8 @@ def add_blog():
     if request.method == 'POST':
         slug_exists = mongo.db.blogs.find_one({'slug': form.slug.data})
         if form.validate_on_submit() and not slug_exists:
-            photos = form.photo_list.data.split(',')
+            photos = form.photo_list.data.split(
+                ',') if form.photo_list.data else []
             blog = {
                 'title': form.title.data,
                 'slug': form.slug.data,
@@ -937,7 +938,8 @@ def add_project():
     if request.method == 'POST':
         slug_exists = mongo.db.projects.find_one({'slug': form.slug.data})
         if form.validate_on_submit() and not slug_exists:
-            photos = form.photo_list.data.split(',')
+            photos = form.photo_list.data.split(
+                ',') if form.photo_list.data else []
             project = {
                 'title': form.title.data,
                 'slug': form.slug.data,
