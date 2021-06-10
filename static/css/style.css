@@ -136,6 +136,19 @@ textarea.form-control {
     min-height: 100px;
 }
 
+.form-switch {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    padding: 0;
+}
+
+.form-switch .form-check-input {
+    width: 4rem;
+    height: 2rem;
+    margin: 0 .5rem 0 0;
+}
+
 /*------------------------------------------ UTILS */
 
 .bg-accent {
@@ -630,6 +643,14 @@ nav[aria-label="breadcrumb"] {
     border: 0;
     box-shadow: inset 1px 0px 3px rgba(0, 0, 0, .3);
     border-radius: 1rem;
+}
+
+.card-project .card-body {
+    padding-bottom: 0;
+}
+
+.card-project.featured {
+    box-shadow: inset 1px 0px 5px var(--accent-dark);
 }
 
 .card-project img {

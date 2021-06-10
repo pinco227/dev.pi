@@ -221,7 +221,8 @@ def add_testimonial():
 def portfolio():
     """Portfolio page route"""
 
-    projects = list(mongo.db.projects.find())
+    projects = list(mongo.db.projects.find().sort(
+        [('featured', -1), ('year', -1)]))
 
     return render_template('portfolio.html', projects=projects)
 
@@ -919,7 +920,8 @@ def delete_experience(id):
 def get_projects():
     """ADMIN Projects page route"""
 
-    projects = list(mongo.db.projects.find())
+    projects = list(mongo.db.projects.find().sort(
+        [('featured', -1), ('year', -1)]))
 
     return render_template('admin/projects.html', projects=projects)
 
@@ -943,7 +945,8 @@ def add_project():
                 'description': form.description.data,
                 'repo': form.repo.data,
                 'live_url': form.live_url.data,
-                'photos': photos
+                'photos': photos,
+                'featured': form.featured.data
             }
             mongo.db.projects.insert_one(project)
             flash(Markup(
@@ -980,7 +983,8 @@ def edit_project(id):
                 'tech': form.tech.data,
                 'description': form.description.data,
                 'repo': form.repo.data,
-                'live_url': form.live_url.data
+                'live_url': form.live_url.data,
+                'featured': form.featured.data
             }
             mongo.db.projects.update({'_id': ObjectId(id)}, {
                 '$set': updated})
@@ -995,6 +999,8 @@ def edit_project(id):
                     flash(err, 'danger')
 
     form.description.data = project['description'] if project else ""
+    if project and 'featured' in project:
+        form.featured.data = project['featured']
 
     return render_template('admin/edit_project.html', project=project, form=form)
 

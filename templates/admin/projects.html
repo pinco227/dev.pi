@@ -41,7 +41,11 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-12 col-sm-10">
-                                    <h3 class="text-start">{{ project.title }}</h3>
+                                    <h3 class="text-start">{{ project.title }}
+                                    {% if project.featured %}
+                                        <small><span class="badge rounded-pill bg-warning text-dark">Featured</span></small>
+                                    {% endif %}
+                                    </h3>
                                     <span class="fst-italic">Slug: {{ project.slug }}</span><br>
                                     <span class="fst-italic">Year: {{ project.year }}</span><br>
                                     {% if project.repo %}

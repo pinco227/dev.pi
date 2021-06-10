@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.recaptcha.validators import Recaptcha
-from wtforms import StringField, TextAreaField, SubmitField, HiddenField, IntegerField, SelectField, PasswordField
+from wtforms import StringField, TextAreaField, SubmitField, HiddenField, IntegerField, SelectField, PasswordField, BooleanField
 from wtforms.fields.html5 import EmailField, IntegerRangeField, IntegerField, TelField
 from wtforms.validators import DataRequired, Email, NumberRange, Regexp, URL, Optional, InputRequired, AnyOf, Length
 
@@ -87,6 +87,7 @@ class AddProjectForm(FlaskForm):
     live_url = StringField('Live URL', validators=[Optional(),
                            URL(message='Invalid URL for Live Project!')])
     description = TextAreaField('Description')
+    featured = BooleanField('Featured')
     url_for_sign_s3 = HiddenField(id='url-for-signs3')
     url_for_delete_s3 = HiddenField(id='url-for-deletes3')
     collection = HiddenField()
@@ -109,6 +110,7 @@ class EditProjectForm(FlaskForm):
     live_url = StringField('Live URL', validators=[Optional(),
                            URL(message='Invalid URL for Live Project!')])
     description = TextAreaField('Description')
+    featured = BooleanField('Featured')
     submit = SubmitField('Update')
 
 

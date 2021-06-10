@@ -35,16 +35,29 @@
                 {% if projects|length %}
                     {% for project in projects %}
                         <div class="col">
+                        {% if project.featured %}
+                            <div class="card card-project featured h-100">
+                        {% else %}
                             <div class="card card-project h-100">
+                        {% endif %}
                                 {% if project.photos|length %}
                                     <a href="{{ url_for('get_project', project=project.slug) }}"><img src="{{ project.photos[0] }}" class="card-img-top" alt="{{ project.title }}"></a>
                                 {% endif %}
                                 <div class="card-body">
                                     <h5 class="card-title"><a href="{{ url_for('get_project', project=project.slug) }}">{{ project.title }}</a></h5>
+                                    <span class="badge bg-dark">{{ project.year }}</span>
+                                    {% if project.featured %}
+                                        <span class="badge bg-warning text-dark">Featured</span>
+                                    {% endif %}
                                     <p class="card-text">{{ project.description|truncate(80, True, ' ...') }}</p>
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">{{ project.tech }}</li>
+                                    {% set technologies = project.tech.split(',') %}
+                                    <li class="list-group-item">
+                                        {% for tech in technologies %}
+                                            <span class="badge bg-secondary">{{ tech }}</span>
+                                        {% endfor %}
+                                    </li>
                                     {% if project.repo %}
                                         <li class="list-group-item d-grid"><a href="{{ project.repo }}" target="_blank"
                                             class="btn btn-sm btn-dark"> <i class="bi bi-github"></i> Source</a></li>

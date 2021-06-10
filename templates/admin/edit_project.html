@@ -51,6 +51,10 @@
                                     {{ form.description(class="form-control") }}
                                     {{ form.description.label }}
                                 </div>
+                                <div class="form-check form-switch mb-3">
+                                    {{ form.featured(class="form-check-input", placeholder="Featured") }}
+                                    {{ form.featured.label(class="form-check-label") }}
+                                </div>
                             </div>
                             <div class="card-footer text-center d-flex justify-content-between">
                                 <a href="{{ url_for('get_projects') }}" class="btn btn-lg btn-danger">Cancel</a>
