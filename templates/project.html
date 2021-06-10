@@ -67,6 +67,9 @@
                                 <a href="{{ project.live_url }}" target="_blank" class="btn btn-accent-light w-100"><i
                                     class="bi bi-display"></i> Demo</a>
                             {% endif %}
+                            {% if project.photos|length > 1 %}
+                                <a href="#project-gallery" class="btn btn-light w-100"><i class="bi bi-images"></i> Gallery</a>
+                            {% endif %}
                         </div>
                         <div class="project-tech">
                             <h4>Technologies</h4>

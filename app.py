@@ -176,8 +176,8 @@ def get_cv():
     return response
 
 
-@app.route('/home')
 @app.route('/')
+@app.route('/home')
 @register_breadcrumb(app, '.', 'Home')
 def home():
     """Landing page route"""
