@@ -31,6 +31,10 @@
                                     {{ form.slug.label }}
                                 </div>
                                 <div class="form-floating mb-3">
+                                    {{ form.year(class="form-control", value="%s" | format(project.year)) }}
+                                    {{ form.year.label }}
+                                </div>
+                                <div class="form-floating mb-3">
                                     {{ form.tech(class="form-control", placeholder="Technologies Used", value="%s" | format(project.tech)) }}
                                     {{ form.tech.label }}
                                     <small class="text-muted">Separated by comma.</small>

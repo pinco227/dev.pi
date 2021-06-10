@@ -938,6 +938,7 @@ def add_project():
             project = {
                 'title': form.title.data,
                 'slug': form.slug.data,
+                'year': form.year.data,
                 'tech': form.tech.data,
                 'description': form.description.data,
                 'repo': form.repo.data,
@@ -975,6 +976,7 @@ def edit_project(id):
             updated = {
                 'title': form.title.data,
                 'slug': form.slug.data,
+                'year': form.year.data,
                 'tech': form.tech.data,
                 'description': form.description.data,
                 'repo': form.repo.data,

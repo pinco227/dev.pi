@@ -78,6 +78,9 @@ class AddProjectForm(FlaskForm):
         DataRequired(message='Please fill in Title field!')])
     slug = StringField('Slug', validators=[
                        DataRequired(message='Slug is required!')])
+    year = IntegerField('Year', validators=[
+        NumberRange(message='Year should be a number!'),
+        InputRequired(message='Please enter Year!')])
     tech = StringField('Technologies Used')
     repo = StringField('Source Code (repository URL)', validators=[Optional(),
                        URL(message='Invalid URL for Source Code!')])
@@ -97,6 +100,9 @@ class EditProjectForm(FlaskForm):
         DataRequired(message='Please fill in Title field!')])
     slug = StringField('Slug', validators=[
                        DataRequired(message='Slug is required!')])
+    year = IntegerField('Year', validators=[
+        NumberRange(message='Year should be a number!'),
+        InputRequired(message='Please enter Year!')])
     tech = StringField('Technologies Used')
     repo = StringField('Source Code (repository URL)', validators=[Optional(),
                        URL(message='Invalid URL for Source Code!')])

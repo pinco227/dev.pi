@@ -43,8 +43,14 @@
                                 <div class="col-12 col-sm-10">
                                     <h3 class="text-start">{{ project.title }}</h3>
                                     <span class="fst-italic">Slug: {{ project.slug }}</span><br>
-                                    <small class="text-muted">Repo: {{ project.repo }}</small><br>
-                                    <small class="text-muted">URL: {{ project.live_url }}</small>
+                                    <span class="fst-italic">Year: {{ project.year }}</span><br>
+                                    {% if project.repo %}
+                                        <small class="text-muted">Repo: {{ project.repo }}</small><br>
+                                    {% endif %}
+                                    {% if project.live_url %}
+                                        <small class="text-muted">URL: {{ project.live_url }}</small><br>
+                                    {% endif %}
+                                    <small class="text-muted">Tech: {{ project.tech }}</small>
                                     <p class="pt-2 fw-light">{{ project.description|truncate(250) }}</p>
                                 </div>
                             </div>
