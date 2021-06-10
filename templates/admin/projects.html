@@ -29,11 +29,11 @@
                                 <div class="col-6 offset-3 col-sm-2 offset-sm-0 text-center">
                                     {% if project.photos|length %}
                                         <img src="{{ project.photos[0] }}"
-                                            alt="{{ project.title }}" class="img-fluid mb-1">
+                                            alt="{{ project.title }}" class="img-fluid mb-1" loading="lazy">
                                         {% for photo in project.photos %}
                                             {% if loop.index0 != 0 %}
                                                 <img src="{{ photo }}"
-                                                    alt="Photo {{ loop.index }}" class="w-25">
+                                                    alt="Photo {{ loop.index }}" class="w-25" loading="lazy">
                                             {% endif %}
                                         {% endfor %}
                                     {% else %}

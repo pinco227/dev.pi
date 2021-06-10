@@ -41,7 +41,7 @@
                             <div class="card card-project h-100">
                         {% endif %}
                                 {% if project.photos|length %}
-                                    <a href="{{ url_for('get_project', project=project.slug) }}"><img src="{{ project.photos[0] }}" class="card-img-top" alt="{{ project.title }}"></a>
+                                    <a href="{{ url_for('get_project', project=project.slug) }}"><img src="{{ project.photos[0] }}" class="card-img-top" alt="{{ project.title }}" loading="lazy"></a>
                                 {% endif %}
                                 <div class="card-body">
                                     <h5 class="card-title"><a href="{{ url_for('get_project', project=project.slug) }}">{{ project.title }}</a></h5>

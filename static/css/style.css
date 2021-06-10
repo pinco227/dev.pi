@@ -715,6 +715,7 @@ nav[aria-label="breadcrumb"] {
     border: 0;
     border-radius: .5rem;
     max-width: 100%;
+    max-height: 250px;
     height: auto;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, .3);
     transition: transform .3s ease-in-out, box-shadow .3s ease-in-out;

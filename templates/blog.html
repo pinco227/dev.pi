@@ -40,7 +40,7 @@
                                     {% if blog.photos|length %}
                                         <div class="col-12 col-md-4 text-center">
                                             <img src="{{ blog.photos[0] }}"
-                                                alt="{{ blog.title }}" class="img-fluid">
+                                                alt="{{ blog.title }}" class="img-fluid" loading="lazy">
                                         </div>
                                         <div class="card-blogs-body col-12 col-md-8">
                                     {% else %}

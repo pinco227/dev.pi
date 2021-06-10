@@ -48,11 +48,11 @@
                                 <a href="{{ project.photos[0] }}"
                                     class="project-gallery">
                                     <img src="{{ project.photos[0] }}"
-                                        alt="{{ project.title }}" class="project-main-photo gallery-item">
+                                        alt="{{ project.title }}" class="project-main-photo gallery-item" loading="lazy">
                                 </a>
                             {% else %}
                                 <img src="{{ url_for('static', filename='images/no-photo.jpg') }}"
-                                        alt="{{ project.title }}" class="project-main-photo gallery-item">
+                                        alt="{{ project.title }}" class="project-main-photo gallery-item" loading="lazy">
                             {% endif %}
                         </figure>
                     </div>
@@ -129,9 +129,7 @@
                             <div class="col">
                                 <figure>
                                     <a href="{{ photo }}"
-                                        class="project-gallery"><img
-                                            src="{{ photo }}"
-                                            alt="Photo {{ loop.index }}" class="gallery-item"></a>
+                                        class="project-gallery"><img src="{{ photo }}" alt="Photo {{ loop.index }}" class="gallery-item"></a>
                                 </figure>
                             </div>
                         {% endif %}
