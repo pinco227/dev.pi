@@ -5,6 +5,26 @@ const dropArea = document.getElementById('drop-area');
 const fileElem = document.getElementById('drop-file-elem');
 const collection = document.getElementById('collection').value;
 const docId = document.getElementById('doc-id') ? document.getElementById('doc-id').value : 0;
+const maxfilesize = 1024 * 1024;
+
+/** 
+* Converts bytes to readable format.
+* @credit https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
+* @param {number} bytes - Number of bytes.
+* @param {int} decimals - Number of decimals.
+* @return {string} Formated size.
+*/
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
 /** 
 * API GET function. Gets the data from the url and sends it as a parameter to the callback function.
@@ -88,18 +108,28 @@ const handleDrop = (e) => {
 */
 const handleFiles = (files) => {
     if (dropArea.dataset.multiple == "true") {
-        ([...files]).forEach(getSignedRequest);
-    } else {
-        // check if there is a current file
-        if (document.querySelectorAll('.photo-container')[0]) {
-            if (confirm('Are you sure?\r\n This will replace the current file!')) {
-                const el = document.querySelectorAll('.photo-container')[0];
-                deleteFile(el);
+        ([...files]).forEach((file) => {
+            if (file.size < maxfilesize) {
+                getSignedRequest(file);
             } else {
-                return;
+                alertToast("File <strong>" + file.name + "</strong> is too large. Maximum allowed is <strong> " + formatBytes(maxfilesize) + " </strong>");
             }
+        });
+    } else {
+        if (files[0].size < maxfilesize) {
+            // check if there is a current file
+            if (document.querySelectorAll('.photo-container')[0]) {
+                if (confirm('Are you sure?\r\n This will replace the current file!')) {
+                    const el = document.querySelectorAll('.photo-container')[0];
+                    deleteFile(el);
+                } else {
+                    return;
+                }
+            }
+            getSignedRequest(files[0]);
+        } else {
+            alertToast("File <strong>" + files[0].name + "</strong> is too large. Maximum allowed is <strong> " + formatBytes(maxfilesize) + " </strong>");
         }
-        getSignedRequest(files[0]);
     }
 }
 
