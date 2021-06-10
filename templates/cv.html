@@ -213,7 +213,7 @@
             {% if project.repo %}
                 <h4 class="fw-normal no-margin"><strong>Source:</strong> <span class="text-light">{{ project.repo }}</span></h4>
             {% endif %}
-            <p>{{ project.description }}</p>
+            <p>{{ project.brief }}</p>
             {% if project.photos|length %}
                 {% for photo in project.photos[:5] %}
                     <img src="{{ photo }}" alt="Photo {{ loop.index }}" class="gallery">
