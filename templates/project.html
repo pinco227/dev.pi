@@ -72,6 +72,12 @@
                             {% endif %}
                         </div>
                         <div class="project-tech">
+                            <span class="badge rounded-pill bg-dark">{{ project.year }}</span>
+                            {% if project.featured %}
+                                <span class="badge rounded-pill bg-warning text-dark">Featured</span>
+                            {% endif %}
+                        </div>
+                        <div class="project-tech">
                             <h4>Technologies</h4>
                             <p>
                                 {% set technologies = project.tech.split(',') %}

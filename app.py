@@ -159,7 +159,8 @@ def get_cv():
     jobs = list(mongo.db.experience.find().sort('order', 1))
     schools = list(mongo.db.education.find().sort('order', 1))
     skills = list(mongo.db.skills.find().sort('percentage', -1))
-    projects = list(mongo.db.projects.find())
+    projects = list(mongo.db.projects.find().sort(
+        [('featured', -1), ('year', -1)]).limit(5))
     testimonials = list(mongo.db.testimonials.find(
         {'approved': True}).limit(5))
     html = render_template('cv.html', jobs=jobs,
