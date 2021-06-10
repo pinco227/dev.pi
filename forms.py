@@ -86,7 +86,9 @@ class AddProjectForm(FlaskForm):
                        URL(message='Invalid URL for Source Code!')])
     live_url = StringField('Live URL', validators=[Optional(),
                            URL(message='Invalid URL for Live Project!')])
-    description = TextAreaField('Description')
+    brief = TextAreaField('Brief', validators=[Length(
+        max=100, message='Brief is %(max)d characters max!')])
+    description = TextAreaField('Description', id='body')
     featured = BooleanField('Featured')
     url_for_sign_s3 = HiddenField(id='url-for-signs3')
     url_for_delete_s3 = HiddenField(id='url-for-deletes3')
@@ -109,7 +111,9 @@ class EditProjectForm(FlaskForm):
                        URL(message='Invalid URL for Source Code!')])
     live_url = StringField('Live URL', validators=[Optional(),
                            URL(message='Invalid URL for Live Project!')])
-    description = TextAreaField('Description')
+    brief = TextAreaField('Brief', validators=[Length(
+        max=100, message='Brief is %(max)d characters max!')])
+    description = TextAreaField('Description', id='body')
     featured = BooleanField('Featured')
     submit = SubmitField('Update')
 

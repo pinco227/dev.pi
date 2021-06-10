@@ -51,7 +51,7 @@
                                     {% if project.featured %}
                                         <span class="badge bg-warning text-dark">Featured</span>
                                     {% endif %}
-                                    <p class="card-text">{{ project.description|truncate(80, True, ' ...') }}</p>
+                                    <p class="card-text">{{ project.brief }}</p>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     {% set technologies = project.tech.split(',') %}

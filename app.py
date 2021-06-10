@@ -225,6 +225,11 @@ def portfolio():
     projects = list(mongo.db.projects.find().sort(
         [('featured', -1), ('year', -1)]))
 
+    for i, project in enumerate(projects):
+        project['description'] = truncate_html(
+            project['description'], 80, end=' ... ', break_words=False)
+        projects[i] = project
+
     return render_template('portfolio.html', projects=projects)
 
 
@@ -597,7 +602,7 @@ def edit_blog(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.body.data = post['body'] if post else ""
+    form.body.data = post.get('body') if post else ""
 
     return render_template('admin/edit_blog.html', post=post, form=form)
 
@@ -788,7 +793,7 @@ def edit_education(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.description.data = school['description'] if school else ""
+    form.description.data = school.get('description') if school else ""
     form.submit.label.text = 'Edit'
 
     return render_template('admin/edit_education.html', school=school, form=form)
@@ -900,7 +905,7 @@ def edit_experience(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.description.data = job['description'] if job else ""
+    form.description.data = job.get('description') if job else ""
     form.submit.label.text = 'Edit'
 
     return render_template('admin/edit_experience.html', job=job, form=form)
@@ -945,6 +950,7 @@ def add_project():
                 'slug': form.slug.data,
                 'year': form.year.data,
                 'tech': form.tech.data,
+                'brief': form.brief.data,
                 'description': form.description.data,
                 'repo': form.repo.data,
                 'live_url': form.live_url.data,
@@ -984,6 +990,7 @@ def edit_project(id):
                 'slug': form.slug.data,
                 'year': form.year.data,
                 'tech': form.tech.data,
+                'brief': form.brief.data,
                 'description': form.description.data,
                 'repo': form.repo.data,
                 'live_url': form.live_url.data,
@@ -1001,7 +1008,8 @@ def edit_project(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.description.data = project['description'] if project else ""
+    form.description.data = project.get('description') if project else ""
+    form.brief.data = project.get('brief') if project else ""
     if project and 'featured' in project:
         form.featured.data = project['featured']
 
@@ -1155,9 +1163,10 @@ def get_settings():
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.bio.data = settings['bio'] if settings['bio'] else ""
-    form.cover.data = settings['cover'] if settings['cover'] else ""
-    form.meta_desc.data = settings['meta_desc'] if settings['meta_desc'] else ""
+    form.bio.data = settings.get('bio') if settings['bio'] else ""
+    form.cover.data = settings.get('cover') if settings['cover'] else ""
+    form.meta_desc.data = settings.get(
+        'meta_desc') if settings['meta_desc'] else ""
 
     return render_template('admin/settings.html', form=form)
 

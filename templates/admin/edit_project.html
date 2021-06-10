@@ -48,6 +48,10 @@
                                     {{ form.live_url.label }}
                                 </div>
                                 <div class="form-floating mb-3">
+                                    {{ form.brief(class="form-control", maxlength="100") }}
+                                    {{ form.brief.label }}
+                                </div>
+                                <div class="form-floating mb-3">
                                     {{ form.description(class="form-control") }}
                                     {{ form.description.label }}
                                 </div>
@@ -114,4 +118,7 @@
     </script>
     <script src="{{ url_for('static', filename='js/slugify.js') }}"></script>
     <script src="{{ url_for('static', filename='js/photos.js') }}"></script>
+    <script src="https://cdn.tiny.cloud/1/emgmzxkejmtysjj6vbbmqrkk2zkr2qoo44j51u7oam308dtn/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script src="{{ url_for('static', filename='js/tiny.js') }}"></script>
 {% endblock scripts %}
