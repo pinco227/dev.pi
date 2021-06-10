@@ -2,6 +2,22 @@
 {% block title %}
     - Contact
 {% endblock title %}
+{% block styles %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <style>
+        .hero-img {
+            {% if settings.photos|length %}
+                background: url('{{ settings.photos[0] }}');
+            {% else %}
+                background: url('{{ url_for('static', filename='images/no-photo.jpg') }}');
+            {% endif %}
+            background-size: cover;
+            background-position: center;
+            width: 50%;
+            padding-top: 50%;
+        }
+    </style>
+{% endblock styles %}
 {% block content %}
     <!-- Contact SECTION -->
     <section id="contact">
@@ -28,12 +44,12 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="card bg-accent card-contact-details">
-                        <div class="card-body position-relative">
+                        <div class="card-body position-relative d-flex flex-column align-items-center">
                             {% if session['user'] %}
                                 <a href="{{ url_for('get_settings') }}" class="btn btn-light position-absolute top-0 end-0 mt-2 mx-2"><i class="bi bi-pencil"></i></a>
                             {% endif %}
-                            <img src="{{ settings.photos[0] }}"
-                                class="mb-3 w-50" alt="{{ settings.name }}">
+                            <div class="hero-img mb-3">
+                            </div>
                             <h4 class="card-title">Contact Info</h4>
                             <p class="card-text">
                             <dl class="row">
