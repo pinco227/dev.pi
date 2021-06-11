@@ -206,7 +206,8 @@
   * [Coolors](https://coolors.co/) for palette image generation.
   * [dbdiagram.io](https://dbdiagram.io/) for database diagram creation.
 - Other
-  * [SendGrid](https://sendgrid.com/) for email API.
+  * [SendGrid](https://sendgrid.com/) API for email sending.
+  * [AWS S3](https://aws.amazon.com/s3/) API for file upload and storage.
 
 ## Testing
   ### [Click Here for Full Testing Process](https://github.com/pinco227/dev.pi/blob/main/TEST.md)
@@ -323,6 +324,7 @@
   - [GitHub Gist user: Mathew Byrne](https://gist.github.com/mathewbyrne) for the javascript ```slugify(text)``` function ([Gist](https://gist.github.com/mathewbyrne/1280286)) that was used in admin panel to generate slugs for blogs and projects.
   - [Bootsnipp user: devlopereswar](https://bootsnipp.com/devlopereswar) for the html responsive [email template snippet](https://bootsnipp.com/snippets/A2kpB).
   - [Bram.us](https://www.bram.us/) for [this article](https://www.bram.us/2020/11/04/preventing-double-form-submissions/) on how to prevent double form submission.
+  - [This StackOverflow thread](https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript) for ```formatBytes``` javascript function that takes a number of bytes and returns a readable size format (e.g.: **1Mb**).
 
 ## Acknowledgements
   - **My Mentor**: Nishant Kumar for continuous helpful feedback.
