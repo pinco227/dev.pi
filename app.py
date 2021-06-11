@@ -159,8 +159,28 @@ def get_cv():
     jobs = list(mongo.db.experience.find().sort('order', 1))
     schools = list(mongo.db.education.find().sort('order', 1))
     skills = list(mongo.db.skills.find().sort('percentage', -1))
-    projects = list(mongo.db.projects.find().sort(
-        [('featured', -1), ('year', -1)]).limit(5))
+    projects = list(mongo.db.projects.aggregate(
+        [
+            {"$project": {
+                "title": 1,
+                "year": 1,
+                "tech": 1,
+                "brief": 1,
+                "repo": 1,
+                "live_url": 1,
+                "photos": 1,
+                "featured": 1,
+                "tech_length": {"$strLenCP": "$tech"}
+            }},
+            {"$sort": {
+                "featured": -1,
+                "year": -1,
+                "tech_length": -1
+            }},
+            {'$limit': 5},
+            {"$project": {"tech_length": 0}}
+        ]
+    ))
     testimonials = list(mongo.db.testimonials.find(
         {'approved': True}).limit(5))
     html = render_template('cv.html', jobs=jobs,
@@ -222,13 +242,28 @@ def add_testimonial():
 def portfolio():
     """Portfolio page route"""
 
-    projects = list(mongo.db.projects.find().sort(
-        [('featured', -1), ('year', -1)]))
-
-    for i, project in enumerate(projects):
-        project['description'] = truncate_html(
-            project['description'], 80, end=' ... ', break_words=False)
-        projects[i] = project
+    projects = list(mongo.db.projects.aggregate(
+        [
+            {"$project": {
+                "title": 1,
+                "slug": 1,
+                "year": 1,
+                "tech": 1,
+                "brief": 1,
+                "repo": 1,
+                "live_url": 1,
+                "photos": 1,
+                "featured": 1,
+                "tech_length": {"$strLenCP": "$tech"}
+            }},
+            {"$sort": {
+                "featured": -1,
+                "year": -1,
+                "tech_length": -1
+            }},
+            {"$project": {"tech_length": 0}}
+        ]
+    ))
 
     return render_template('portfolio.html', projects=projects)
 
@@ -483,7 +518,7 @@ def admin():
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
 @login_required("You don't have the user privileges to access this section.")
 def get_testimonials():
-    """ADMIN Testionials page route"""
+    """ADMIN Testimonials page route"""
 
     form = UpdateForm()
     if request.method == 'POST':
@@ -927,8 +962,28 @@ def delete_experience(id):
 def get_projects():
     """ADMIN Projects page route"""
 
-    projects = list(mongo.db.projects.find().sort(
-        [('featured', -1), ('year', -1)]))
+    projects = list(mongo.db.projects.aggregate(
+        [
+            {"$project": {
+                "title": 1,
+                "slug": 1,
+                "year": 1,
+                "tech": 1,
+                "brief": 1,
+                "repo": 1,
+                "live_url": 1,
+                "photos": 1,
+                "featured": 1,
+                "tech_length": {"$strLenCP": "$tech"}
+            }},
+            {"$sort": {
+                "featured": -1,
+                "year": -1,
+                "tech_length": -1
+            }},
+            {"$project": {"tech_length": 0}}
+        ]
+    ))
 
     return render_template('admin/projects.html', projects=projects)
 
