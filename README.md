@@ -19,13 +19,13 @@
   - [Testing](#testing)
   - [Deployment](#deployment)
   - [Credits](#credits)
-  - [Aknowledgements](#aknowledgements)
+  - [Acknowledgements](#acknowledgements)
 
 ## Demo
 
 ### [Live website](https://dev-pi.herokuapp.com/)
 
-(( Website screenshots here ))
+[![Screenshot](https://github.com/pinco227/dev.pi/blob/main/docs/screenshot.jpg)](https://dev-pi.herokuapp.com/)
 
 ## UX
 
@@ -70,7 +70,7 @@
 - ### Structure
     The website is designed to be consistent, intuitive and learnable.
   - Interaction design
-    - For predictability, the interface interacts with user actions as the user expetcs. The scroll/swipe actions respond with the normal behaviour and buttons acts instantly on press.
+    - For predictability, the interface interacts with user actions as the user expects. The scroll/swipe actions respond with the normal behaviour and buttons acts instantly on press.
     - For consistency, the interface offers a subtle visual feedback to the user (on hover, focus and press of buttons and fields) which is similar throughout the application and helps the user to quickly learn the functionality.
   - Information architecture
     - The content is organised and prioritised by importance from top to bottom and left to right.
@@ -100,7 +100,7 @@
       - #### All pages:
         - The layout is completely separate and different from the client side, different navbar which only includes **App** and **Logout** buttons and the menu panel is now a full height sidebar, no footer.
         - On mobile, menu is expandable from the navbar and it covers the whole page.
-        - A svg image on top right of every page (centered on mobile), representing the page's subject.
+        - A svg image on top right of every page (centred on mobile), representing the page's subject.
       - #### Dashboard:
         - Notifications panel is displayed in yellow and only if there are notifications.
         - Extra panel with quick links.
@@ -134,7 +134,7 @@
     - ***Skillset*** section where dev's skills will be presented as progress bars.
     - ***Education*** section.
     - ***Work Experience*** section.
-    - ***Tetimonials***.
+    - ***Testimonials***.
   - #### **Projects Page**
     - Projects will be listed on a different page, as a detailed gallery, with quick access links and link to an individual project page for each.
   - #### **Blog**
@@ -146,11 +146,11 @@
   - #### **Admin panel**
     - Hidden dashboard and buttons, only accessible when logged as admin.
 - ### Extra Features
-  - **Navigation** is hidden offcanvas on small screens and is opening full screen.
+  - **Navigation** is hidden off-canvas on small screens and is opening full screen.
   - **Footer** is displayed on every page of the main app and it features a &copy; copyright message, a list of social links and two columns of app links, including the **Download CV** CTA and the **Write Testimonial** link.
   - #### **Landing Page**
     - **Hero** section extra features: Profile Picture, title (profession), social links and the CTA buttons act as follows:
-      - ***Learn More*** opens a modal dialog containing a long bio.
+      - ***Learn More*** opens a modal dialogue containing a long bio.
       - ***Download CV*** opens an auto-generated PDF attachment containing all the relevant information extracted from the database.
     - **Project** individual page features a photo gallery.
   - #### **Admin panel**
@@ -161,7 +161,7 @@
     - **Blogs** and **Projects** shows a list of items and allows admin to access they're individual edit page, to delete any item on the list or to preview them on the main app. Also gives access to **[+ Add new]** item page and preview the list page on the app. **Add New** and **Edit existing** pages features a drag&drop multiple photo upload section. The first uploaded photo will be displayed as the main photo of the item. For ***Projects***, the rest of photos will be displayed as a gallery on they're individual page. For ***Blogs***, the rest of the photos can be used while writing/editing the post as inserted objects from the rich text editor field.
     - **Education** and **Experience** shows a list of items and allows admin to update they're order, access they're individual edit page and delete any of them from the database. Also gives access to **[+ Add new]** item page.
     - **Skills** and **Links** shows a list of items and allows admin to update they're data directly to the list, multiple items at once. It also allows admin to delete any of the items from database and gives access to **[+ Add new]** item page.
-    - **Setings** page features a form and a drag&drop single photo upload section where admin can update any information about the showcased developer or dynamic site data as META information.
+    - The **Settings** page features a form and a drag&drop single photo upload section where admin can update any information about the showcased developer or dynamic site data as META information.
     - **Log out** button which logs the admin out and deletes the session item.
 
 ## Database
@@ -179,10 +179,10 @@
   * [JS](https://en.wikipedia.org/wiki/JavaScript)
   * [Python](https://www.python.org/)
 - Frameworks & Libraries
-  * [Bootstrap5](https://getbootstrap.com/) is used for its great responsivness, styling classes, icons and its javascript functionality.
+  * [Bootstrap5](https://getbootstrap.com/) is used for its great responsiveness, styling classes, icons and its javascript functionality.
   * [Font Awesome](https://fontawesome.com/) icons were used for writing the auto-generated CV.
   * [Google Fonts](https://fonts.google.com/) is used as the main font resource.
-  * [GLightBox](https://biati-digital.github.io/glightbox/) is used for the lightbox phot gallery.
+  * [GLightBox](https://biati-digital.github.io/glightbox/) is used for the lightbox photo gallery.
   * [TinyMCE](https://www.tiny.cloud/) is used for blog rich text editor.
   * [Flask](https://flask.palletsprojects.com/en/2.0.x/) is used as back-end framework.
   * Python modules:
@@ -324,7 +324,7 @@
   - [Bootsnipp user: devlopereswar](https://bootsnipp.com/devlopereswar) for the html responsive [email template snippet](https://bootsnipp.com/snippets/A2kpB).
   - [Bram.us](https://www.bram.us/) for [this article](https://www.bram.us/2020/11/04/preventing-double-form-submissions/) on how to prevent double form submission.
 
-## Aknowledgements
+## Acknowledgements
   - **My Mentor**: Nishant Kumar for continuous helpful feedback.
   - **Tutor** support at Code Institute for their support.
   - **Slack** Code Institute community for feedback.
