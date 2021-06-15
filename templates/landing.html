@@ -91,7 +91,7 @@
                         <div class="skill-container">
                             <span class="skill-label">{{ skill.name }}</span>
                             <div class="progress">
-                                <div class="progress-bar bg-accent" role="progressbar" style="width: {{ skill.percentage }}%"
+                                <div class="progress-bar bg-accent" role="progressbar" aria-progressbar-name="{{ skill.name }}" style="width: {{ skill.percentage }}%"
                                     aria-valuenow="{{ skill.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>

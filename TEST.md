@@ -170,16 +170,19 @@
         > The website was tested on Google Chrome, Firefox, Safari, Edge, Samsung Internet, Opera, Vivaldi and Yandex. This website is NOT designed to be compatible with IE. Browsers versions were all up to date. Results were consistent. Conclusion: the website is **browser-cross compatible** :heavy_check_mark:.
 ## Testing Performance
 > Performance has been tested using Chrome's **Lighthouse** tool for both desktop and mobile. Mobile tests were made using **remote device** connection and an actual mobile phone. Results are as follows:
-> - Landing Page:
+> - :heavy_check_mark: Landing Page:
 >
 >   ![LightHouse Performance Result for Landing page](https://github.com/pinco227/dev.pi/blob/main/docs/landing-perf.png)  
-> - Portfolio page (with over 30 photos displayed):
+> - :heavy_check_mark: Portfolio page (with over 30 photos displayed):
 >
 >   ![LightHouse Performance Result for Portfolio page](https://github.com/pinco227/dev.pi/blob/main/docs/portfolio-perf.png)  
-> - Admin panel -> Projects page:
+> - :heavy_check_mark: Admin panel -> Projects page:
 > 
 >   ![LightHouse Performance Result for Admin panel - Projects page](https://github.com/pinco227/dev.pi/blob/main/docs/admin-projects-perf.png)  
 ## Testing Accessibility
+> The accessibility was tested using [a11y Color Contrast Accessibility Validator](https://color.a11y.com/Contrast/). Results are as follows:
+>   - :heavy_check_mark: Landing Page: There were 6 problems detected on the landing page, 4 of these problems are due to te fact that the validator doesn't see the actual background colour of the work experience cards and education cards, these being gradient backgrounds, while the other 2 problems are design choices, so they are accepted. 
+>   - :heavy_check_mark: Any other page of the main app: The only problems found are the cards/badges with gradient background, where the validator cannot read the actual value, the design choices (testimonials and project gallery section titles, and breadcrumbs which are not supposed to stand out) and the buttons with ```btn-accent``` class, where the problem is solved by having a dark shadow around the text, but it is not read by the validator.
 ## Code Validation
   - ### HTML
   - ### CSS
