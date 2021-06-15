@@ -299,8 +299,8 @@ a[data-bs-dismiss="toast"] {
 
 /*------------------------------------------ HEADER */
 
-.navbar {
-    height: 56px;
+.navbar-app {
+    min-height: 56px;
 }
 
 /* HOVER.CSS Grow */

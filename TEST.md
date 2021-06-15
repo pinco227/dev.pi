@@ -75,7 +75,6 @@
         > :heavy_check_mark: Website's metadata, as **Title**, **Description** and **Keywords** can be edited in the **Settings** Page of the admin panel. The access password for admin panel can only be changed by the developer, server-side, by changing the values of the environmental variables.
 ## Testing Code
 > :heavy_check_mark: Every javascript method was tested for the expected outcome by using the app, in console by using `console.log()` or by manually calling the function.
-
 > :heavy_check_mark: Every python function and route was tested for the expected outcome by using the app, by accessing the route, in python console, while debug mode was set to on, by using `print()` and by watching for the correct response. 
 ## Testing Functionality
    - ### Testing links and buttons
@@ -159,9 +158,16 @@
 
 ## Testing Compatibility
    - ### Responsiveness
+        > Using DevTools and different device sizes such as mobile and tablet, the website was tested for any posible screen size combination and orientation. No issues found. **Site is size compatible** :heavy_check_mark:.
    - ### OS test
+        > #### Desktop
+        > The website was tested on Ubuntu 20.04, Windows 7 and Windows 10 systems. Further tests were made using [LambdaTest](https://www.lambdatest.com/), for MacOS Mojave. Result as expected, **desktop system-cross compatible** :heavy_check_mark:.
+        > #### Mobile
+        > The website was tested on Android 6, Android 9, Android 10 and iOS 14 systems. Further tests were made using [LambdaTest](https://www.lambdatest.com/), for iOS on iPad Pro. Result as expected. **mobile system-cross compatible** :heavy_check_mark:.
    - ### Devices test
+        > The website was tested on ASUS 17" notebook, ACER 17" notebook, Huawei P30 PRO, Huawei P20 PRO, Huawei P10, iPhone 11, Samsung Galaxy Note10, Samsung Galaxy A7, Samsung Galaxy TabS6, Lenovo Yoga Tab. Further device tests were made using [LambdaTest](https://www.lambdatest.com/), for iPad Pro (11 inch) and MacOS. The result is consistent, website is **platform-cross compatible** :heavy_check_mark:.
    - ### Browser test
+        > The website was tested on Google Chrome, Firefox, Safari, Edge, Samsung Internet, Opera, Vivaldi and Yandex. This website is NOT designed to be compatible with IE. Browsers versions were all up to date. Results were consistent. Conclusion: the website is **browser-cross compatible** :heavy_check_mark:.
 ## Testing Performance
 ## Testing Accessibility
 ## Code Validation

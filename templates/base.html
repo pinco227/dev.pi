@@ -33,7 +33,7 @@
 </head>
 
 <body class="d-flex flex-column h-100">
-    <nav class="navbar bg-accent-transparent navbar-expand-md sticky-top">
+    <nav class="navbar navbar-app bg-accent-transparent navbar-expand-md sticky-top">
         <div class="container-xxl">
             <a class="navbar-brand" href="{{ url_for('home') }}">{&pi;}Dev.PI</a>
             <button class="navbar-toggler text-shadow" id="navbar-toggler" type="button" aria-label="Toggle navigation"
@@ -73,12 +73,12 @@
                         <a class="nav-link" href="{{ url_for('contact') }}" data-toggle="offcavas">Contact</a>
                     </li>
                     {% if session['user'] %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin') }}" data-toggle="offcavas">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}" data-toggle="offcavas">Log out</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin') }}" data-toggle="offcavas">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}" data-toggle="offcavas">Log out</a>
+                    </li>
                     {% endif %}
                 </ul>
             </div>
@@ -87,24 +87,24 @@
     <main class="flex-shrink-0">
         <!-- flash messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="toast-container position-fixed top-1 start-50 translate-middle-x p-3 w-75" style="z-index: 5">
-                    {% for category, message in messages %}
-                        <div class="w-100 toast bg-{{ category }}" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="d-flex">
-                                <span class="m-auto px-2">
-                                    <i class="bi bi-bell-fill"></i>
-                                </span>
-                                <div class="toast-body">
-                                    <h4>{{ message }}</h4>
-                                </div>
-                                <a href="" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"><i
-                                        class="bi bi-x-circle"></i></a>
-                            </div>
-                        </div>
-                    {% endfor %}
+        {% if messages %}
+        <div class="toast-container position-fixed top-1 start-50 translate-middle-x p-3 w-75" style="z-index: 5">
+            {% for category, message in messages %}
+            <div class="w-100 toast bg-{{ category }}" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <span class="m-auto px-2">
+                        <i class="bi bi-bell-fill"></i>
+                    </span>
+                    <div class="toast-body">
+                        <h4>{{ message }}</h4>
+                    </div>
+                    <a href="" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"><i
+                            class="bi bi-x-circle"></i></a>
                 </div>
-            {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         {% endwith %}
         {% block content %}
         {% endblock content %}
