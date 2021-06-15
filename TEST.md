@@ -74,9 +74,76 @@
     - To be able to update website's metadata and admin password.
         > :heavy_check_mark: Website's metadata, as **Title**, **Description** and **Keywords** can be edited in the **Settings** Page of the admin panel. The access password for admin panel can only be changed by the developer, server-side, by changing the values of the environmental variables.
 ## Testing Code
-> :heavy_check_mark: Every javascript method was tested for the expected outcome by using the app, in console by using `console.log()` or by manually calling the function. 
+> :heavy_check_mark: Every javascript method was tested for the expected outcome by using the app, in console by using `console.log()` or by manually calling the function.
+
 > :heavy_check_mark: Every python function and route was tested for the expected outcome by using the app, by accessing the route, in python console, while debug mode was set to on, by using `print()` and by watching for the correct response. 
 ## Testing Functionality
+   - ### Testing links and buttons
+        > #### Header (every page except dashboard) :heavy_check_mark:
+        > - top navigation fully functional including the brand title.
+        > - mobile navigation toggle "burger" working as expecting, opening the off-canvas navigation.
+
+        > #### Landing Page :heavy_check_mark:
+        > - clicking on profile picture triggers the lightroom and displays it full screen.
+        > - CTA buttons are fully functional and they run as expected. **Learn More** button opens the modal and **Download CV** calls the pdf route that gives user the file as attachment, not as page.
+        > - Social links are functioning properly, opening the link in a new tab/window.
+        > - When logged as admin, **Dashboard** and **Log out** buttons on the navigation, works as expected. Every "plus" and "pen" button for add and edit, works as expected, sending user to relevant section of the dashboard.
+
+        > #### Portfolio :heavy_check_mark:
+        > - Clicking on any project photo, title or **Details** button opens the project page, as expected.
+        > - Clicking on dynamically generated **Source** and **Demo** (where applicable) buttons, opens the given link in a new tab/window, as expected.
+        > - When logged as admin, "plus" and "pen" buttons on top, for add and edit, works as expected, sending user to **Add new project**, respectively **Projects list** in admin panel. Every "pen" and "trash" button for every project, works as expected, sending user to **Edit project** section, respectively asks user for delete confirmation, and deletes the selected project.
+
+        > #### Project page :heavy_check_mark:
+        > - Clicking on main photo triggers the lightbox and opens the image full screen.
+        > - Clicking on dynamically generated **Source** and **Demo** (where applicable) buttons, opens the given link in a new tab/window, as expected.
+        > - Clicking on dynamically generated **Gallery** (where applicable, more than 1 photo) button, scrolls the page down to **Gallery** section, as expected.
+        > - **Gallery**: clicking on any photo triggers the lightbox and opens the clicked image in fullscreen, without leaving website and allowing user to navigate through rest of the photos, by clicking right and left arrows. "**X**" button closes the lightbox.
+        > - **Go back** buttons, both on top and bottom, sends user back to **Portfolio** page, as expected.
+        > - When logged as admin, "pen" and "trash" buttons on top, for edit and delete opened project, works as expected, sending user to **Edit project** section of admin panel, respectively **Projects list** in admin panel. Every "pen" and "trash" button for every project, works as expected, sending user to **Edit project** section, respectively asks user for delete confirmation, and deletes the opened project.
+
+        > #### Blogs :heavy_check_mark:
+        > - Clicking on "**Read More ...**" button of every blog post, opens the blog post page, as expected.
+        > - When logged as admin, "plus" and "pen" buttons on top, for add and edit, works as expected, sending user to **Add new blog**, respectively **Blogs list** in admin panel. Every "pen" and "trash" button for every post, works as expected, sending user to **Edit Blog Post** section, respectively asks user for delete confirmation, and deletes the selected post.
+
+        > #### Blog post page :heavy_check_mark:
+        > - Clicking on main photo triggers the lightbox and opens the image full screen.
+        > - **Go back** buttons, both on top and bottom, sends user back to **Blogs** page, as expected.
+        > - When logged as admin, "pen" and "trash" buttons on top, for edit and delete opened post, works as expected, sending user to **Edit blog post** section of admin panel, respectively asks user for delete confirmation, and deletes the selected post.
+
+        > #### Contact page :heavy_check_mark:
+        > - **Send** button submits the form.
+        > - When logged as admin, "pen" button on **Contact Info** section, works as expected, sending user to **Settings** section of admin panel.
+
+        > #### Write testimonial page :heavy_check_mark:
+        > - **Submit** button submits the form.
+
+        > #### Breadcrumbs :heavy_check_mark:
+        > - On every page, except the landing page, breadcrumbs are displayed on top. Clicking of every item of the breadcrumb, works as expected, directing user to the page described by the link.
+
+        > #### Footer (every page except dashboard) :heavy_check_mark:
+        > - Social links are functioning properly, opening the link in a new tab/window.
+        > - navigation links are fully functional, each acting as expecting.
+        > - When logged as admin, **Dashboard** and **Log out** links are displayed and works as expected. "Pen" and "plus" buttons for edit and add social links, works as expected, sending user to relevant section of the dashboard.
+
+        > #### Admin panel :heavy_check_mark:
+        > - Every link on the top nav and side nav, works as expected, sending user to relevant section.
+        > - Quick links on dashboard are functioning as expected, sending user each to it's described destination.
+        > - **View** button of the notification panel (when there are unapproved testimonials), works as expected, sending user to **Testimonials** page.
+        > - On every section (except **Dashboard**, **Testimonials** and **Settings**) of the admin panel, "plus" button work as expected, sending user to **Add new item** of that section.
+        > - On **Blogs** and **Projects** sections, the "eye" buttons, the top one and for each item, works as expected, sending user to relevant view page of the main app.
+        > - On **Testimonials**, **Skills**, **Education**, **Experience** and **Links** sections, the **Update** button, on both top and bottom, acts as expected, updating the list after modifications have been made.
+        > - On every section (except **Dashboard** and **Settings**), the "trash" button for every item, works as expected, asking user for confirmation and finally deleting selected item.
+        > On **Blogs**, **Education**, **Experience** and **Projects** sections, the "pen" button for every item, works as expected, sending user to edit page of the selected item.
+        > On **Settings** page, the **Update** button on the bottom of the form, works as expected, updating the settings with the values on the form.
+        > On **Photo**/**Photos** sections of **Settings**, **Add new project**, **Add new blog**, **Edit project** and **Edit blog** pages, clicking on, or dropping files into ***Drag&Drop area***, acts as expected, openning device's file selection tool, respectively uploads dropped files. Clicking on "trash" button of the uploaded images, acts as expected, asking user to confirm and finally removing selected picture. Clicking on the picture itself, triggers the lightbox and opens the image fullscreen.
+        > - On every **Add new item** and **Edit item** pages, the blue button on the bottom submits the form, while the red button cancels the operation, sending user back to list of items page, as expected.
+
+   - ### Testing form validation
+        > - :heavy_check_mark: **Contact** form: the form was tested for validation by trying to submit first with no data and then by filling the fields one by one. Result as expected, all fields asked for input. The email field asks for email format with `@`. Recaptcha works as expected and server returns error message if Recaptcha is not checked. Using the Chrome's DevTools, I have removed the ```required``` from every field and resubmitted the form, the server-side validation works, returning error messages for every required field. Also server-side validation checks email field agains a regex string.
+        > - :heavy_check_mark: **Write testimonial** form: was tested following the same procedure as the contact form. Results are as expected.
+        > - :heavy_check_mark: **Admin panel**: The admin panel functionality is mostly built on add and edit forms. Every form was tested against client-side and server-side validation, and results are satisfying.
+
 ## Testing Compatibility
    - ### Responsiveness
    - ### OS test
