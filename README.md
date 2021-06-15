@@ -219,10 +219,16 @@
     | [Image upload](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues)               | :heavy_check_mark: |
     | [Remove photo from database](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues) | :heavy_check_mark: |
   - #### Tests
-    | Test                                                                                              | Result             |
-    | ------------------------------------------------------------------------------------------------- | ------------------ |
-    | ***[User scenarios](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-user-stories)*** | :heavy_check_mark: |
-    | ***[Code](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-code)***                   | :heavy_check_mark: |
+    | Test                                                                                                                 | Result             |
+    | -------------------------------------------------------------------------------------------------------------------- | ------------------ |
+    | ***[User scenarios](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-user-stories)***                    | :heavy_check_mark: |
+    | ***[Code](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-code)***                                      | :heavy_check_mark: |
+    | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** links and buttons | :heavy_check_mark: |
+    | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** form validation   | :heavy_check_mark: |
+    | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** upload validation | :heavy_check_mark: |
+    | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** CRUD              | :heavy_check_mark: |
+    | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** contact           | :heavy_check_mark: |
+    | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** errors            | :heavy_check_mark: |
 
 ## Deployment
 - ### Forking the GitHub Repository

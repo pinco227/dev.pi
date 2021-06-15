@@ -143,6 +143,19 @@
         > - :heavy_check_mark: **Contact** form: the form was tested for validation by trying to submit first with no data and then by filling the fields one by one. Result as expected, all fields asked for input. The email field asks for email format with `@`. Recaptcha works as expected and server returns error message if Recaptcha is not checked. Using the Chrome's DevTools, I have removed the ```required``` from every field and resubmitted the form, the server-side validation works, returning error messages for every required field. Also server-side validation checks email field agains a regex string.
         > - :heavy_check_mark: **Write testimonial** form: was tested following the same procedure as the contact form. Results are as expected.
         > - :heavy_check_mark: **Admin panel**: The admin panel functionality is mostly built on add and edit forms. Every form was tested against client-side and server-side validation, and results are satisfying.
+   - ### Testing image upload validation
+        > - :heavy_check_mark: **File size**: image upload was tested against file size by trying to upload a bigger than 1Mb file. Website returns a toast message saying that file is too big.
+        > - :heavy_check_mark: **File type**: image upload was tested against file type by trying to upload a non-image file. Website returns a toast message saying that file type is not allowed.
+   - ### Testing CRUD functionality
+        > - :heavy_check_mark: **Create**: Create functionality was tested with real data for real world application, by adding items in admin panel and inserting testimonials from the designated page. Results are satisfying. Image upload during creation process, works as expected. Rich text editors, in projects and blogs creation state, are fully functional, including inserting uploaded images. No issues found.
+        > - :heavy_check_mark: **Read**: Read functionality was tested with real data for real world application, by verifying that created data is displayed correctly and in the correct section. No issues found.
+        > - :heavy_check_mark: **Update**: Update functionality was tested with real data for real world application, by updating items in admin panel. Results are satisfying. Images can be updated by adding more images using provided section, and any uploaded new images can be used to be inserted in the rich text editors (where applicable). No issues found.
+        > - :heavy_check_mark: **Delete**: Delete functionality was tested by deleting items, both from admin panel lists and from quick links in the main app. Images can be deleted and removed from database using the provided section, by clicking the "trash" button attached to every image. Errors were reported and fixed. No issues found.
+   - ### Testing contact functionality
+        > - :heavy_check_mark: Contact functionality was tested by sending sample emails using the provided form. Email was sent to the email address provided in the settings section. Email was received successfully.
+   - ### Testing for errors
+        > - :heavy_check_mark: Full app browsing and functionality was tested with browser's console open. Console is clear of errors.
+        > - :heavy_check_mark: Python console with debug mode on is clear of errors.
 
 ## Testing Compatibility
    - ### Responsiveness
