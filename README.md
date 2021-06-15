@@ -229,6 +229,11 @@
     | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** CRUD              | :heavy_check_mark: |
     | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** contact           | :heavy_check_mark: |
     | ***[Functionality](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-functionality):*** errors            | :heavy_check_mark: |
+    | ***[Compatibility](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-compatibility):*** Responsiveness    | :heavy_check_mark: |
+    | ***[Compatibility](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-compatibility):*** System-cross      | :heavy_check_mark: |
+    | ***[Compatibility](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-compatibility):*** Platform-cross    | :heavy_check_mark: |
+    | ***[Compatibility](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-compatibility):*** Browser-cross     | :heavy_check_mark: |
+    | ***[Performance](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-performance)***                        | :heavy_check_mark: |
 
 ## Deployment
 - ### Forking the GitHub Repository

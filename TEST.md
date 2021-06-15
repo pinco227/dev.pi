@@ -169,6 +169,16 @@
    - ### Browser test
         > The website was tested on Google Chrome, Firefox, Safari, Edge, Samsung Internet, Opera, Vivaldi and Yandex. This website is NOT designed to be compatible with IE. Browsers versions were all up to date. Results were consistent. Conclusion: the website is **browser-cross compatible** :heavy_check_mark:.
 ## Testing Performance
+> Performance has been tested using Chrome's **Lighthouse** tool for both desktop and mobile. Mobile tests were made using **remote device** connection and an actual mobile phone. Results are as follows:
+> - Landing Page:
+>
+>   ![LightHouse Performance Result for Landing page](https://github.com/pinco227/dev.pi/blob/main/docs/landing-perf.png)  
+> - Portfolio page (with over 30 photos displayed):
+>
+>   ![LightHouse Performance Result for Portfolio page](https://github.com/pinco227/dev.pi/blob/main/docs/portfolio-perf.png)  
+> - Admin panel -> Projects page:
+> 
+>   ![LightHouse Performance Result for Admin panel - Projects page](https://github.com/pinco227/dev.pi/blob/main/docs/admin-projects-perf.png)  
 ## Testing Accessibility
 ## Code Validation
   - ### HTML
