@@ -74,6 +74,8 @@
     - To be able to update website's metadata and admin password.
         > :heavy_check_mark: Website's metadata, as **Title**, **Description** and **Keywords** can be edited in the **Settings** Page of the admin panel. The access password for admin panel can only be changed by the developer, server-side, by changing the values of the environmental variables.
 ## Testing Code
+> :heavy_check_mark: Every javascript method was tested for the expected outcome by using the app, in console by using `console.log()` or by manually calling the function. 
+> :heavy_check_mark: Every python function and route was tested for the expected outcome by using the app, by accessing the route, in python console, while debug mode was set to on, by using `print()` and by watching for the correct response. 
 ## Testing Functionality
 ## Testing Compatibility
    - ### Responsiveness

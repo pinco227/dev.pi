@@ -222,6 +222,7 @@
     | Test                                                                                              | Result             |
     | ------------------------------------------------------------------------------------------------- | ------------------ |
     | ***[User scenarios](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-user-stories)*** | :heavy_check_mark: |
+    | ***[Code](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-code)***                   | :heavy_check_mark: |
 
 ## Deployment
 - ### Forking the GitHub Repository
