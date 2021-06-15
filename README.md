@@ -7,7 +7,7 @@
   - [UX](#ux)
     - [Goals](#goals)
     - [User Needs](#users-needs)
-    - [User Stories](#user-stories)
+    - [User Scenarios](#user-scenarios)
     - [Structure](#structure)
     - [Skeleton](#skeleton)
       - [Wireframes](#initial-wireframes)
@@ -213,14 +213,15 @@
   ### [Click Here for Full Testing Process](https://github.com/pinco227/dev.pi/blob/main/TEST.md)
   ### Overview
   - #### Issues
-    | Issue                                                                                              | Fixed              |
-    | -------------------------------------------------------------------------------------------------- | ------------------ |
-    | [Pylint(no-member) error](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues) | :heavy_check_mark: |
-    | [Image upload](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues)            | :heavy_check_mark: |
+    | Issue                                                                                                 | Fixed              |
+    | ----------------------------------------------------------------------------------------------------- | ------------------ |
+    | [Pylint(no-member) error](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues)    | :heavy_check_mark: |
+    | [Image upload](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues)               | :heavy_check_mark: |
+    | [Remove photo from database](https://github.com/pinco227/dev.pi/blob/main/TEST.md#encountered-issues) | :heavy_check_mark: |
   - #### Tests
-    | Test                               | Result             |
-    | ---------------------------------- | ------------------ |
-    | ***[Link to test on TEST.md](#)*** | :heavy_check_mark: |
+    | Test                                                                                              | Result             |
+    | ------------------------------------------------------------------------------------------------- | ------------------ |
+    | ***[User scenarios](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-user-stories)*** | :heavy_check_mark: |
 
 ## Deployment
 - ### Forking the GitHub Repository
