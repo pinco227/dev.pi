@@ -242,10 +242,14 @@ const addFileToDb = (photo) => {
 * @param {string} photo - Full url of the photo
 */
 const deleteFileFromDb = (photo) => {
-    const url = urlForDeletePhoto + "?coll=" + collection + "&photo=" + photo;
+    const url = urlForDeletePhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo;
 
     apiRequest("GET", url, (response, status) => {
-        alertToast(response.message)
+        if (status === 500) {
+            alertToast("Error updating database");
+        } else {
+            alertToast(response.message)
+        }
     });
 }
 

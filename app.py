@@ -423,12 +423,19 @@ def add_photo():
 @login_required()
 def delete_photo():
     """Route to be called (API call) for removing photo from database"""
+
     collection = request.args.get('coll')
+    document_id = request.args.get('docid')
     photo = request.args.get('photo')
+
+    if collection == "settings":
+        id = "1"
+    else:
+        id = ObjectId(document_id)
 
     try:
         mongo.db[collection].update(
-            {},
+            {'_id': id},
             {'$pull': {'photos': photo}}
         )
     except:
