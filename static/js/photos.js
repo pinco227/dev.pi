@@ -5,7 +5,8 @@ const dropArea = document.getElementById('drop-area');
 const fileElem = document.getElementById('drop-file-elem');
 const collection = document.getElementById('collection').value;
 const docId = document.getElementById('doc-id') ? document.getElementById('doc-id').value : 0;
-const maxfilesize = 1024 * 1024;
+const maxFileSize = 1024 * 1024;
+const allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif'];
 
 /** 
 * Converts bytes to readable format.
@@ -109,14 +110,22 @@ const handleDrop = (e) => {
 const handleFiles = (files) => {
     if (dropArea.dataset.multiple == "true") {
         ([...files]).forEach((file) => {
-            if (file.size < maxfilesize) {
-                getSignedRequest(file);
+            const fileExtension = file.name.split(".").pop().toLowerCase();
+            if (file.size > maxFileSize) {
+                alertToast("File <strong>" + file.name + "</strong> is too large. Maximum allowed is <strong> " + formatBytes(maxFileSize) + " </strong>");
+            } else if ((!allowedFileExtensions.includes(fileExtension)) || (file.type.split("/")[0] != "image")) {
+                alertToast("File <strong>" + file.name + "</strong> type (" + fileExtension + ") is not allowed!");
             } else {
-                alertToast("File <strong>" + file.name + "</strong> is too large. Maximum allowed is <strong> " + formatBytes(maxfilesize) + " </strong>");
+                getSignedRequest(file);
             }
         });
     } else {
-        if (files[0].size < maxfilesize) {
+        const fileExtension = files[0].name.split(".").pop().toLowerCase();
+        if (files[0].size > maxFileSize) {
+            alertToast("File <strong>" + files[0].name + "</strong> is too large. Maximum allowed is <strong> " + formatBytes(maxFileSize) + " </strong>");
+        } else if ((!allowedFileExtensions.includes(fileExtension)) || (file.type.split("/")[0] != "image")) {
+            alertToast("File <strong>" + files[0].name + "</strong> type (" + fileExtension + ") is not allowed!");
+        } else {
             // check if there is a current file
             if (document.querySelectorAll('.photo-container')[0]) {
                 if (confirm('Are you sure?\r\n This will replace the current file!')) {
@@ -127,8 +136,6 @@ const handleFiles = (files) => {
                 }
             }
             getSignedRequest(files[0]);
-        } else {
-            alertToast("File <strong>" + files[0].name + "</strong> is too large. Maximum allowed is <strong> " + formatBytes(maxfilesize) + " </strong>");
         }
     }
 }
@@ -163,7 +170,7 @@ const deleteFile = (el) => {
 * @param {obj} file - file to be uploaded
 */
 const getSignedRequest = (file) => {
-    const fileExt = file.name.split('.').pop();
+    const fileExt = file.name.split('.').pop().toLowerCase();
     const date = new Date();
     const newFileName = collection + String(date.getDate()) + String(date.getMonth() + 1) + Math.floor(Math.random() * 999) + '.' + fileExt;
     const renamedFile = new File([file], newFileName, { type: file.type });
