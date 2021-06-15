@@ -56,7 +56,7 @@
                             {{ form.description.label }}
                         </div>
                         <div class="form-check form-switch mb-3">
-                            {{ form.featured(class="form-check-input", placeholder="Featured") }}
+                            {{ form.featured(class="form-check-input") }}
                             {{ form.featured.label(class="form-check-label") }}
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                     <h4 class="text-center">Photos</h4>
                 </div>
                 <div class="card-body row justify-content-center g-2">
-                    <label for="current-photo">Current Photos:</label>
+                    <div class="mb-2">Current Photos</div>
                     <div id="gallery" class="row">
                         {% for photo in project.photos %}
                         <div class="photo-container col-sm-4 col-md-6 col-lg-4" data-src="{{ photo }}">
@@ -89,7 +89,7 @@
                     <div class="mb-3">
                         <input type="hidden" id="collection" value="projects">
                         <input type="hidden" id="doc-id" value="{{ project._id }}">
-                        <label for="drop-area" class="form-label">Add Photos</label>
+                        <div class="mb-2">Add Photos</div>
                         <input type="file" name="files" id="drop-file-elem" accept="image/*" multiple>
                         <div id="drop-area" data-multiple="true">
                             <i class="bi bi-upload"></i>

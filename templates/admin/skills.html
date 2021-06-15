@@ -19,7 +19,7 @@
                 <form action="{{ url_for('get_skills') }}" method="POST">
                     {{ form.csrf_token }}
                     <div class="card-header text-center">
-                        {{ form.submit(class="btn btn-lg btn-accent") }}
+                        {{ form.submit(class="btn btn-lg btn-accent", id="submit-top") }}
                     </div>
                     <ul class="list-group list-group-flush">
                         {% for skill in skills %}

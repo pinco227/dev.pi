@@ -92,7 +92,7 @@
         <div class="row">
             <div class="col-12 project-description">
                 <h4>Description</h4>
-                <p>{{ project.description|safe }}</p>
+                <div>{{ project.description|safe }}</div>
             </div>
         </div>
         {% if project.photos|length <= 1 %}

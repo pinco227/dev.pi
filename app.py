@@ -1218,6 +1218,9 @@ def get_settings():
                 '$set': updated})
             flash('Settings were successfully updated!', 'success')
 
+            global settings
+            settings = mongo.db.settings.find_one({'_id': "1"})
+
             # Redirect to avoid re-submission
             return redirect(url_for('get_settings'))
         else:
@@ -1225,10 +1228,10 @@ def get_settings():
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.bio.data = settings.get('bio') if settings['bio'] else ""
-    form.cover.data = settings.get('cover') if settings['cover'] else ""
-    form.meta_desc.data = settings.get(
-        'meta_desc') if settings['meta_desc'] else ""
+    form.bio.data = settings.get('bio')
+    form.cover.data = settings.get('cover')
+    form.availability.data = settings.get('availability')
+    form.meta_desc.data = settings.get('meta_desc')
 
     return render_template('admin/settings.html', form=form)
 
