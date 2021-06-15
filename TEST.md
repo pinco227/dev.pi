@@ -196,3 +196,13 @@
   - ### Python :heavy_check_mark:
     > Python has been validated during building proccess by **VSCODE** integrated extension **[Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance)**. **No errors or issues**.
 ## Further Testing
+  - ### Overflow :heavy_check_mark:
+    > Every page was tested for overflow by using the [Unicorn Revealer](https://chrome.google.com/webstore/detail/unicorn-revealer/lmlkphhdlngaicolpmaakfmhplagoaln?hl=en-GB) chrome extension to highlight the elements margins. **No issues found**.
+
+  - ### Spelling :heavy_check_mark:
+    > English grammar & spelling throughout the website was checked using [LanguageTool](https://languagetool.org/#plugins) chrome extension. The results are satisfying.
+
+  - ### Mobile Friendly :heavy_check_mark:
+    > According to [Google Mobile-Friendly Test](https://search.google.com/test/mobile-friendly?id=blMQX7ozm7UxRGhyXEvhVA), page is mobile friendly.
+    >
+    > ![Mobile-Friendly](https://github.com/pinco227/dev.pi/blob/main/docs/mobile-friendly.png)  
