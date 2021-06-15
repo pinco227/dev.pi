@@ -89,6 +89,7 @@ section:last-of-type {
 .modal-body {
     padding: 2rem;
     text-indent: 1.5rem;
+    text-align: justify;
 }
 
 /*------------------------------------------ TYPOGRAPHY */
@@ -297,6 +298,10 @@ a[data-bs-dismiss="toast"] {
 }
 
 /*------------------------------------------ HEADER */
+
+.navbar {
+    height: 56px;
+}
 
 /* HOVER.CSS Grow */
 
