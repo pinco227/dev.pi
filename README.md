@@ -234,6 +234,7 @@
     | ***[Compatibility](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-compatibility):*** Platform-cross    | :heavy_check_mark: |
     | ***[Compatibility](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-compatibility):*** Browser-cross     | :heavy_check_mark: |
     | ***[Performance](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-performance)***                        | :heavy_check_mark: |
+    | ***[Accessibility](https://github.com/pinco227/dev.pi/blob/main/TEST.md#testing-accessibility)***                    | :heavy_check_mark: |
 
 ## Deployment
 - ### Forking the GitHub Repository

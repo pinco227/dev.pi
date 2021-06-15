@@ -185,6 +185,7 @@
 >   - :heavy_check_mark: Any other page of the main app: The only problems found are the cards/badges with gradient background, where the validator cannot read the actual value, the design choices (testimonials and project gallery section titles, and breadcrumbs which are not supposed to stand out) and the buttons with ```btn-accent``` class, where the problem is solved by having a dark shadow around the text, but it is not read by the validator.
 ## Code Validation
   - ### HTML
+    > Html was tested and validated with [W3C Validator](https://validator.w3.org/). Code has been adjusted. Final results are as follows:
   - ### CSS
   - ### JavaScript
   - ### Python
