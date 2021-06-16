@@ -93,6 +93,7 @@
   - ### Improvements
     - #### **Client Side**:
       - **All pages**: Breadcrumbs between header and content
+        ![Breadcrumbs](https://github.com/pinco227/dev.pi/blob/main/docs/breadcrumbs.png) 
       - **Landing page**: Icons for education and experience items, but no icon for testimonials.
       - **Blog Post page**: The post cover photo is displayed on the left.
       - **Contact page**: Profile Picture is displayed instead of person icon and is not hidden on mobile.
@@ -102,12 +103,19 @@
         - On mobile, the menu is expandable from the navbar, and it covers the whole page.
         - A svg image on the top right of every page (centred on mobile), representing the page's subject.
       - #### Dashboard:
+        - Login page.
+          
+          ![Login](https://github.com/pinco227/dev.pi/blob/main/docs/login.png) 
         - Notifications panel is displayed in yellow and only if there are notifications.
         - Extra panel with quick links.
+
+          ![Dashboard](https://github.com/pinco227/dev.pi/blob/main/docs/dashboard.png) 
       - #### Get Items (list) page
         - Preview button for blogs and projects and no edit button for testimonials, skills and links.
       - #### Update (item) page and Settings page
-        - There is a new panel for the drag&drop photo upload on blog and project and edit page and on settings page, displayed beside the initial form.
+        - There is a new panel for the drag&drop photo upload on blog and project edit page and on settings page, displayed beside the initial form.
+
+          ![Dashboard](https://github.com/pinco227/dev.pi/blob/main/docs/photos-upload.png) 
 - ### Design Choices 
   - #### Colours
     - The colour palette consists of different shades of blue inspired by the "Colours of Santorini".  
@@ -145,6 +153,8 @@
     - Individual page with a simple form to write testimonials, accessible to all users.
   - #### **Admin panel**
     - Hidden dashboard and buttons, only accessible when logged as admin.
+
+      ![Dashboard](https://github.com/pinco227/dev.pi/blob/main/docs/admin-buttons.png) 
 - ### Extra Features
   - **Navigation** is hidden off-canvas on small screens and is opening full screen.
   - **Footer** is displayed on every page of the main app, and it features a &copy; copyright message, a list of social links and two columns of app links, including the **Download CV** CTA and the **Write Testimonial** link.
@@ -240,6 +250,8 @@
     | ***[JS Validation](https://github.com/pinco227/dev.pi/blob/main/TEST.md#code-validation)***                          | :heavy_check_mark: |
     | ***[Python Validation](https://github.com/pinco227/dev.pi/blob/main/TEST.md#code-validation)***                      | :heavy_check_mark: |
     | ***[Overflow](https://github.com/pinco227/dev.pi/blob/main/TEST.md#further-testing)***                               | :heavy_check_mark: |
+    | ***[Spelling](https://github.com/pinco227/dev.pi/blob/main/TEST.md#further-testing)***                               | :heavy_check_mark: |
+    | ***[Mobile-Friendly](https://github.com/pinco227/dev.pi/blob/main/TEST.md#further-testing)***                        | :heavy_check_mark: |
 
 ## Deployment
 - ### Forking the GitHub Repository

@@ -75,6 +75,7 @@
         > :heavy_check_mark: Website's metadata, as **Title**, **Description** and **Keywords** can be edited in the **Settings** Page of the admin panel. The access password for admin panel can only be changed by the developer, server-side, by changing the values of the environmental variables.
 ## Testing Code
 > :heavy_check_mark: Every javascript method was tested for the expected outcome by using the app, in console by using `console.log()` or by manually calling the function.
+
 > :heavy_check_mark: Every python function and route was tested for the expected outcome by using the app, by accessing the route, in python console, while debug mode was set to on, by using `print()` and by watching for the correct response. 
 ## Testing Functionality
    - ### Testing links and buttons
@@ -139,22 +140,29 @@
         > - On every **Add new item** and **Edit item** pages, the blue button on the bottom submits the form, while the red button cancels the operation, sending the user back to the list of items page, as expected.
 
    - ### Testing form validation
-        > - :heavy_check_mark: **Contact** form: the form was tested for validation by trying to submit first with no data and then by filling the fields one by one. Result as expected, all fields asked for input. The email field asks for email format with `@`. Recaptcha works as expected and server returns an error message if Recaptcha is not checked. Using the Chrome's DevTools, I have removed the ```required``` from every field and resubmitted the form, the server-side validation works, returning error messages for every required field. Also, server-side validation checks email field against a regex string.
-        > - :heavy_check_mark: **Write testimonial** form: was tested following the same procedure as the contact form. Results are as expected.
-        > - :heavy_check_mark: **Admin panel**: The admin panel functionality is mostly built on add and edit forms. Every form was tested against client-side and server-side validation, and results are satisfying.
+        > :heavy_check_mark: **Contact** form: the form was tested for validation by trying to submit first with no data and then by filling the fields one by one. Result as expected, all fields asked for input. The email field asks for email format with `@`. Recaptcha works as expected and server returns an error message if Recaptcha is not checked. Using the Chrome's DevTools, I have removed the ```required``` from every field and resubmitted the form, the server-side validation works, returning error messages for every required field. Also, server-side validation checks email field against a regex string.
+
+        > :heavy_check_mark: **Write testimonial** form: was tested following the same procedure as the contact form. Results are as expected.
+
+        > :heavy_check_mark: **Admin panel**: The admin panel functionality is mostly built on add and edit forms. Every form was tested against client-side and server-side validation, and results are satisfying.
    - ### Testing image upload validation
-        > - :heavy_check_mark: **File size**: image upload was tested against file size by trying to upload a bigger than 1Mb file. The website returns a toast message saying that file is too big.
-        > - :heavy_check_mark: **File type**: image upload was tested against file type by trying to upload a non-image file. The website returns a toast message saying that file type is not allowed.
+        > :heavy_check_mark: **File size**: image upload was tested against file size by trying to upload a bigger than 1Mb file. The website returns a toast message saying that file is too big.
+
+        > :heavy_check_mark: **File type**: image upload was tested against file type by trying to upload a non-image file. The website returns a toast message saying that file type is not allowed.
    - ### Testing CRUD functionality
-        > - :heavy_check_mark: **Create**: Create functionality was tested with real data for real world application, by adding items in admin panel and inserting testimonials from the designated page. Results are satisfying. Image upload during creation process, works as expected. Rich text editors, in projects and blogs creation state, are fully functional, including inserting uploaded images. No issues found.
-        > - :heavy_check_mark: **Read**: Read functionality was tested with real data for real world application, by verifying that created data is displayed correctly and in the correct section. No issues found.
-        > - :heavy_check_mark: **Update**: Update functionality was tested with real data for real world application, by updating items in admin panel. Results are satisfying. Images can be updated by adding more images using the provided section, and any uploaded new images can be used to be inserted in the rich text editors (where applicable). No issues found.
-        > - :heavy_check_mark: **Delete**: Delete functionality was tested by deleting items, both from admin panel lists and from quick links in the main app. Images can be deleted and removed from database using the provided section, by clicking the "trash" button attached to every image. Errors were reported and fixed. No issues found.
+        > :heavy_check_mark: **Create**: Create functionality was tested with real data for real world application, by adding items in admin panel and inserting testimonials from the designated page. Results are satisfying. Image upload during creation process, works as expected. Rich text editors, in projects and blogs creation state, are fully functional, including inserting uploaded images. No issues found.
+
+        > :heavy_check_mark: **Read**: Read functionality was tested with real data for real world application, by verifying that created data is displayed correctly and in the correct section. No issues found.
+
+        > :heavy_check_mark: **Update**: Update functionality was tested with real data for real world application, by updating items in admin panel. Results are satisfying. Images can be updated by adding more images using the provided section, and any uploaded new images can be used to be inserted in the rich text editors (where applicable). No issues found.
+
+        > :heavy_check_mark: **Delete**: Delete functionality was tested by deleting items, both from admin panel lists and from quick links in the main app. Images can be deleted and removed from database using the provided section, by clicking the "trash" button attached to every image. Errors were reported and fixed. No issues found.
    - ### Testing contact functionality
-        > - :heavy_check_mark: Contact functionality was tested by sending sample emails using the provided form. Email was sent to the email address provided in the settings section. Email was received successfully.
+        > :heavy_check_mark: Contact functionality was tested by sending sample emails using the provided form. Email was sent to the email address provided in the settings section. Email was received successfully.
    - ### Testing for errors
-        > - :heavy_check_mark: Full app browsing and functionality was tested with browser's console open. Console is clear of errors.
-        > - :heavy_check_mark: Python console with debug mode on is clear of errors.
+        > :heavy_check_mark: Full app browsing and functionality was tested with browser's console open. Console is clear of errors.
+
+        > :heavy_check_mark: Python console with debug mode on is clear of errors.
 
 ## Testing Compatibility
    - ### Responsiveness
@@ -162,6 +170,7 @@
    - ### OS test
         > #### Desktop
         > The website was tested on Ubuntu 20.04, Windows 7 and Windows 10 systems. Further tests were made using [LambdaTest](https://www.lambdatest.com/), for MacOS Mojave. Result as expected, **desktop system-cross compatible** :heavy_check_mark:.
+
         > #### Mobile
         > The website was tested on Android 6, Android 9, Android 10 and iOS 14 systems. Further tests were made using [LambdaTest](https://www.lambdatest.com/), for iOS on iPad Pro. Result as expected, **mobile system-cross compatible** :heavy_check_mark:.
    - ### Devices test
@@ -169,20 +178,25 @@
    - ### Browser test
         > The website was tested on Google Chrome, Firefox, Safari, Edge, Samsung Internet, Opera, Vivaldi and Yandex. This website is NOT designed to be compatible with IE. Browsers versions were all up to date. Results were consistent. Conclusion: the website is **browser-cross compatible** :heavy_check_mark:.
 ## Testing Performance
-> Performance has been tested using Chrome's **Lighthouse** tool for both desktop and mobile. Mobile tests were made using **remote device** connection and an actual mobile phone. Results are as follows:
-> - :heavy_check_mark: Landing Page:
+Performance has been tested using Chrome's **Lighthouse** tool for both desktop and mobile. Mobile tests were made using **remote device** connection and an actual mobile phone. Results are as follows:
+
+> :heavy_check_mark: Landing Page:
 >
 >   ![LightHouse Performance Result for Landing page](https://github.com/pinco227/dev.pi/blob/main/docs/landing-perf.png)  
-> - :heavy_check_mark: Portfolio page (with over 30 photos displayed):
+
+> :heavy_check_mark: Portfolio page (with over 30 photos displayed):
 >
->   ![LightHouse Performance Result for Portfolio page](https://github.com/pinco227/dev.pi/blob/main/docs/portfolio-perf.png)  
-> - :heavy_check_mark: Admin panel -> Projects page:
+>   ![LightHouse Performance Result for Portfolio page](https://github.com/pinco227/dev.pi/blob/main/docs/portfolio-perf.png)
+
+> :heavy_check_mark: Admin panel -> Projects page:
 > 
 >   ![LightHouse Performance Result for Admin panel - Projects page](https://github.com/pinco227/dev.pi/blob/main/docs/admin-projects-perf.png)  
+
 ## Testing Accessibility
-> The accessibility was tested using [a11y Color Contrast Accessibility Validator](https://color.a11y.com/Contrast/). Results are as follows:
->   - :heavy_check_mark: Landing Page: There were 6 problems detected on the landing page, 4 of these problems are due to the fact that the validator doesn't see the actual background colour of the work experience cards and education cards, these being gradient backgrounds, while the other 2 problems are design choices, so they are accepted. 
->   - :heavy_check_mark: Any other page of the main app: The only problems found are the cards/badges with gradient background, where the validator cannot read the actual value, the design choices (testimonials and project gallery section titles, and breadcrumbs which are not supposed to stand out) and the buttons with ```btn-accent``` class, where the problem is solved by having a dark shadow around the text, but it is not read by the validator.
+The accessibility was tested using [a11y Color Contrast Accessibility Validator](https://color.a11y.com/Contrast/). Results are as follows:
+> :heavy_check_mark: Landing Page: There were 6 problems detected on the landing page, 4 of these problems are due to the fact that the validator doesn't see the actual background colour of the work experience cards and education cards, these being gradient backgrounds, while the other 2 problems are design choices, so they are accepted. 
+
+> :heavy_check_mark: Any other page of the main app: The only problems found are the cards/badges with gradient background, where the validator cannot read the actual value, the design choices (testimonials and project gallery section titles, and breadcrumbs which are not supposed to stand out) and the buttons with ```btn-accent``` class, where the problem is solved by having a dark shadow around the text, but it is not read by the validator.
 ## Code Validation
   - ### HTML :heavy_check_mark:
     > Html was tested and validated with [W3C Validator](https://validator.w3.org/). Code has been adjusted. Final results are as follows:
