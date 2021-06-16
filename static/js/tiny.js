@@ -1,3 +1,4 @@
+// Initialize tiny rich text editor
 tinymce.init({
     selector: '#body',
     plugins: 'anchor autolink link image table spellchecker lists autoresize charmap code emoticons fullscreen help hr media paste preview print quickbars toc',
@@ -11,7 +12,7 @@ tinymce.init({
     relative_urls: false,
     content_css: '/static/css/style.css',
     content_style: 'body { background-color: #fffcf6; }',
-    image_list: function (success) {
+    image_list: (success) => {
         success(getPhotoList());
     }
 });

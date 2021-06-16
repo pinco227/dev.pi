@@ -15,7 +15,7 @@ const allowedFileExtensions = ['jpg', 'jpeg', 'png', 'gif'];
 * @param {int} decimals - Number of decimals.
 * @return {string} Formated size.
 */
-function formatBytes(bytes, decimals = 2) {
+const formatBytes = (bytes, decimals = 2) => {
     if (bytes === 0) return '0 Bytes';
 
     const k = 1024;
@@ -33,7 +33,7 @@ function formatBytes(bytes, decimals = 2) {
 * @param {string} url - Api url to be called
 * @param {function} cb - Callback function
 */
-function apiRequest(method, url, cb, data = undefined) {
+const apiRequest = (method, url, cb, data = undefined) => {
     const xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function () {

@@ -33,6 +33,7 @@
 </head>
 
 <body class="d-flex flex-column h-100">
+    <!-- NAVBAR -->
     <nav class="navbar navbar-app bg-accent-transparent navbar-expand-md sticky-top">
         <div class="container-xxl">
             <a class="navbar-brand" href="{{ url_for('home') }}">{&pi;}Dev.PI</a>
@@ -106,6 +107,7 @@
         </div>
         {% endif %}
         {% endwith %}
+        <!-- CONTENT -->
         {% block content %}
         {% endblock content %}
     </main>

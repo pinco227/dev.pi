@@ -24,13 +24,17 @@ if os.path.exists('env.py'):
 app = Flask(__name__)
 
 # Config app
-app.config['MONGO_DBNAME'] = os.environ.get('MONGO_DBNAME')
-app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-app.config['RECAPTCHA_PUBLIC_KEY'] = os.environ.get('RC_SITE_KEY')
-app.config['RECAPTCHA_PRIVATE_KEY'] = os.environ.get('RC_SECRET_KEY')
-app.config['DB_COLLECTIONS'] = ["blogs", "testimonials", "links",
-                                "settings", "experience", "education", "projects", "skills"]
+config = {
+    'MONGO_DBNAME': os.environ.get('MONGO_DBNAME'),
+    'MONGO_URI': os.environ.get('MONGO_URI'),
+    'SECRET_KEY': os.environ.get('SECRET_KEY'),
+    'RECAPTCHA_PUBLIC_KEY': os.environ.get('RC_SITE_KEY'),
+    'RECAPTCHA_PRIVATE_KEY': os.environ.get('RC_SECRET_KEY'),
+    'DB_COLLECTIONS': ["blogs", "testimonials", "links",
+                                "settings", "experience", "education", "projects", "skills"],
+
+}
+app.config.update(config)
 
 mail_settings = {
     'MAIL_SERVER': 'smtp.sendgrid.net',
@@ -53,6 +57,12 @@ settings = mongo.db.settings.find_one(
 
 @app.before_request
 def check_installed():
+    """Checks if collections are created and calls the install function if not
+
+    Returns:
+        function: redirects to settings page after installation
+    """
+
     created = mongo.db.list_collection_names()
     if set(created) != set(app.config.get('DB_COLLECTIONS')) or not mongo.db.settings.find_one({'_id': "1"}):
         install_app()
@@ -60,6 +70,8 @@ def check_installed():
 
 
 def install_app():
+    """Creates missing database collections and inserts the settings document with id 1"""
+
     # List of existing collections
     created = mongo.db.list_collection_names()
 
@@ -98,14 +110,7 @@ def install_app():
 
 @app.after_request
 def set_secure_headers(response):
-    """Set Secure HTTP Headers
-
-    Args:
-        response (obj): response object to modify
-
-    Returns:
-        obj: modified response
-    """
+    """Sets Secure HTTP Headers"""
 
     secure_headers.framework.flask(response)
     return response
@@ -188,7 +193,6 @@ def get_cv():
     filename = settings['name'].replace(' ', '-').lower()
     pdf = pydf.generate_pdf(html, page_size='A4', margin_bottom='0.75in',
                             margin_top='0.75in', margin_left='0.5in', margin_right='0.5in', image_dpi='300')
-    # pdf = pdfkit.from_string(html, False, options=options)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename=' + \
@@ -1070,10 +1074,10 @@ def edit_project(id):
                 for err in errorMessages:
                     flash(err, 'danger')
 
-    form.description.data = project.get('description') if project else ""
-    form.brief.data = project.get('brief') if project else ""
-    if project and 'featured' in project:
-        form.featured.data = project['featured']
+    if project:
+        form.description.data = project.get('description')
+        form.brief.data = project.get('brief')
+        form.featured.data = project.get('featured')
 
     return render_template('admin/edit_project.html', project=project, form=form)
 
@@ -1281,4 +1285,4 @@ def logout():
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=int(os.environ.get('PORT')),
-            debug=True)
+            debug=False)

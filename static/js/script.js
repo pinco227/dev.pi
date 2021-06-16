@@ -58,7 +58,7 @@ const toastSettings = {
 
 // Create Botstrap toasts from existing DOM elements
 const toastElList = [].slice.call(document.querySelectorAll('.toast'));
-const toastList = toastElList.map(function (toastEl) {
+const toastList = toastElList.map((toastEl) => {
     return new bootstrap.Toast(toastEl, toastSettings);
 });
 
