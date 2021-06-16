@@ -6,7 +6,7 @@
   - [Demo](#demo)
   - [UX](#ux)
     - [Goals](#goals)
-    - [User Needs](#users-needs)
+    - [User Needs](#user-needs)
     - [User Scenarios](#user-scenarios)
     - [Structure](#structure)
     - [Skeleton](#skeleton)
@@ -35,14 +35,14 @@
   - Present previous work (portfolio).
   - Present biography, skills, education, experience, links and CV.
   - Receive feedback/testimonials from clients/collaborators.
-- ### Users Needs
+- ### User Needs
   - Need to learn about the showcased developer.
-  - Need of an up to date portfolio with previews and source code (where applicable).
-  - Need of an up to date list of skills, education, experience.
+  - Need of an up-to-date portfolio with previews and source code (where applicable).
+  - Need of an up-to-date list of skills, education, experience.
   - Need to be able to download resume.
   - Need to be able to contact the developer if interested.
 - ### User Scenarios
-  - #### As a potential employer/recruiter I need:
+  - #### As a potential employer/recruiter, I need:
     - To learn about the candidate's professional profile without having to click too many times and look too deep.
     - To be able to download the candidate's CV for print/file purposes.
     - To learn about the developer's current status and availability.
@@ -51,16 +51,16 @@
     - To find candidate's other relevant social profiles, for a deeper insight (linkedin, github).
     - To find more about the person behind the title, to understand how he got into software development, how passionate and motivated he is.
     - To find what other people say about the developer (testimonials).
-  - #### As a potential collaborator I need:
-    - To be able to explore developer's work, written code and skillset to understand if he is fit to my project idea.
+  - #### As a potential collaborator, I need:
+    - To be able to explore developer's work, written code and skill set to understand if he is fit to my project idea.
     - To learn about the developer, personally, to see if he is compatible to work with.
     - To be able to contact the developer.
     - To connect with developer on other relevant social platforms.
-  - #### As a user (of any kind) I need:
+  - #### As a user (of any kind), I need:
     - To easily understand the purpose of the website.
     - To easily navigate throughout the website on any device/platform.
     - To be able to write a testimonial
-  - #### As the developer I need:
+  - #### As the developer, I need:
     - To be able to add, update and delete skills, education, work experience, portfolio projects and links.
     - To be able to update my current status, availability and contact information.
     - To be able to post, edit and delete personal blogs.
@@ -93,37 +93,37 @@
   - ### Improvements
     - #### **Client Side**:
       - **All pages**: Breadcrumbs between header and content
-      - **Landing page**: Icons for education and experience items but no icon for testimonials.
+      - **Landing page**: Icons for education and experience items, but no icon for testimonials.
       - **Blog Post page**: The post cover photo is displayed on the left.
       - **Contact page**: Profile Picture is displayed instead of person icon and is not hidden on mobile.
     - #### **Admin Panel**:
       - #### All pages:
         - The layout is completely separate and different from the client side, different navbar which only includes **App** and **Logout** buttons and the menu panel is now a full height sidebar, no footer.
-        - On mobile, menu is expandable from the navbar and it covers the whole page.
-        - A svg image on top right of every page (centred on mobile), representing the page's subject.
+        - On mobile, the menu is expandable from the navbar, and it covers the whole page.
+        - A svg image on the top right of every page (centred on mobile), representing the page's subject.
       - #### Dashboard:
         - Notifications panel is displayed in yellow and only if there are notifications.
         - Extra panel with quick links.
       - #### Get Items (list) page
         - Preview button for blogs and projects and no edit button for testimonials, skills and links.
       - #### Update (item) page and Settings page
-        - There is a new panel for drag&drop photo upload on blog and project and edit page and on settings page, displayed beside the initial form.
+        - There is a new panel for the drag&drop photo upload on blog and project and edit page and on settings page, displayed beside the initial form.
 - ### Design Choices 
   - #### Colours
     - The colour palette consists of different shades of blue inspired by the "Colours of Santorini".  
     ![Colour Palette](https://github.com/pinco227/dev.pi/blob/main/docs/palette.png)
     - According to [The Psychology of Color](https://www.toptal.com/designers/ux/color-in-ux), the chosen colours represent optimism, loyalty and reliability.
     ![Colour Psychology Wheel](https://github.com/pinco227/dev.pi/blob/main/docs/colour-wheel.jpg)  
-    - The 60-30-10 Rule was also taken into consideration when building the project. The light shades which are used mostly for background are considered neutral and makes up to 60% of the palette. The dark shades are complementary and makes up to 30% while the accent colours completes the remaining 10% of the design. The landing page is an exception from this rule as it is divided into multiple sections and uses all colours to create contrast between these.
+    - The 60-30-10 Rule was also taken into consideration when building the project. The light shades which are used mostly for background are considered neutral and makes up to 60% of the palette. The dark shades are complementary and makes up to 30%, while the accent colours completes the remaining 10% of the design. The landing page is an exception to this rule, as it is divided into multiple sections and uses all colours to create contrast between these.
   - #### Typography
-    There are three fonts used throughout the project. Two main fonts used for content and headings, both having a ```sans-serif``` typeface and fallback . These font-faces inspire a clean and modern aspect. The third font is a ```monospace``` typeface used for brand text (logo) only to make it look like a piece of code:
+    There are three fonts used throughout the project. Two main fonts used for content and headings, both having a ```sans-serif``` typeface and fallback. These font-faces inspire a clean and modern aspect. The third font is a ```monospace``` typeface used for brand text (logo) only to make it look like a piece of code:
     - [Lato](https://fonts.google.com/specimen/Lato?query=lato) is used as a general font.
     - [Alegreya Sans](https://fonts.google.com/specimen/Alegreya+Sans?query=Alegreya+Sans) is used for h1, h2 and h3 headings.
-    - [Source Code Pro](https://fonts.google.com/specimen/Source+Code+Pro?query=Source+Code+Pro) is used for brand text and it has a ```monospace``` fallback.
+    - [Source Code Pro](https://fonts.google.com/specimen/Source+Code+Pro?query=Source+Code+Pro) is used for brand text, and it has a ```monospace``` fallback.
   - #### Media
     The only media used on building this project are svg (inline html paths) section separators on the client side, svg minimalistic images on admin panel on top of every page and a ***"no-photo"*** image used as a fallback for any image issue. Any other media found on the app is added through the admin panel and is relevant to its container.
   - #### Iconography
-    Icons are used throughout the project to help user understand more efficiently the meaning of the content. They are a very good asset to improve UX.
+    Icons are used throughout the project to help the user understand more efficiently the meaning of the content. They are a very good asset to improve UX.
 
 ## Features
 - ### Planned features
@@ -131,14 +131,14 @@
     - Allows users to navigate through the website. The navigation will be fixed to top and visible all the time. Links will be collapsed on small screens.
   - #### **Landing Page**
     - ***Hero*** featuring a title (dev's name), a short bio, current status and availability and two *Call-to-Action* buttons: **Download CV** and **Learn more**.
-    - ***Skillset*** section where dev's skills will be presented as progress bars.
+    - ***Skill set*** section where dev's skills will be presented as progress bars.
     - ***Education*** section.
     - ***Work Experience*** section.
     - ***Testimonials***.
   - #### **Projects Page**
     - Projects will be listed on a different page, as a detailed gallery, with quick access links and link to an individual project page for each.
   - #### **Blog**
-    - Blogs will be presented on a different page, with further individual page for each post.
+    - Blogs will be presented on a different page, with a further individual page for each post.
   - #### **Contact Page**
     - Contact details, social links and a contact form.
   - #### **Write Testimonial**
@@ -147,25 +147,25 @@
     - Hidden dashboard and buttons, only accessible when logged as admin.
 - ### Extra Features
   - **Navigation** is hidden off-canvas on small screens and is opening full screen.
-  - **Footer** is displayed on every page of the main app and it features a &copy; copyright message, a list of social links and two columns of app links, including the **Download CV** CTA and the **Write Testimonial** link.
+  - **Footer** is displayed on every page of the main app, and it features a &copy; copyright message, a list of social links and two columns of app links, including the **Download CV** CTA and the **Write Testimonial** link.
   - #### **Landing Page**
     - **Hero** section extra features: Profile Picture, title (profession), social links and the CTA buttons act as follows:
       - ***Learn More*** opens a modal dialogue containing a long bio.
       - ***Download CV*** opens an auto-generated PDF attachment containing all the relevant information extracted from the database.
     - **Project** individual page features a photo gallery.
   - #### **Admin panel**
-    - **Login Page** asks for user and password when trying to access any ```/admin``` url. While admin is logged in and until is logged out, the main app features quick links for each item/section to **Add new**, **Edit** and **Delete**. It also display a **Dashboard** and **Log out** buttons in both navbar and footer for quick access.
-    - **Dashboard** page features a stand-out (yellow) **Notifications** panel for new (unapproved) testimonials, a **Quick Links** panel and a **Statistics** panel which shows count tiles for each item in database.
+    - **Login Page** asks for user and password when trying to access any ```/admin``` url. While admin is logged in and until is logged out, the main app features quick links for each item/section to **Add new**, **Edit** and **Delete**. It also displays a **Dashboard** and **Log out** buttons in both navbar and footer for quick access.
+    - **Dashboard** page features a stand-out (yellow) **Notifications** panel for new (unapproved) testimonials, a **Quick Links** panel and a **Statistics** panel which shows count tiles for each item in the database.
     - Full height collapsible (for small screen) **Sidebar Navigation**.
     - **Testimonials** page allows admin to approve/disapprove and delete testimonials.
-    - **Blogs** and **Projects** shows a list of items and allows admin to access they're individual edit page, to delete any item on the list or to preview them on the main app. Also gives access to **[+ Add new]** item page and preview the list page on the app. **Add New** and **Edit existing** pages features a drag&drop multiple photo upload section. The first uploaded photo will be displayed as the main photo of the item. For ***Projects***, the rest of photos will be displayed as a gallery on they're individual page. For ***Blogs***, the rest of the photos can be used while writing/editing the post as inserted objects from the rich text editor field.
+    - **Blogs** and **Projects** shows a list of items and allows admin to access they're individual edit page, to delete any item on the list or to preview them on the main app. Also gives access to **[+ Add new]** item page and preview the list page on the app. **Add New** and **Edit existing** pages features a drag&drop multiple photo upload section. The first uploaded photo will be displayed as the main photo of the item. For ***Projects***, the rest of the photos will be displayed as a gallery on they're individual page. For ***Blogs***, the rest of the photos can be used while writing/editing the post as inserted objects from the rich text editor field.
     - **Education** and **Experience** shows a list of items and allows admin to update they're order, access they're individual edit page and delete any of them from the database. Also gives access to **[+ Add new]** item page.
     - **Skills** and **Links** shows a list of items and allows admin to update they're data directly to the list, multiple items at once. It also allows admin to delete any of the items from database and gives access to **[+ Add new]** item page.
     - The **Settings** page features a form and a drag&drop single photo upload section where admin can update any information about the showcased developer or dynamic site data as META information.
-    - **Log out** button which logs the admin out and deletes the session item.
+    - **Log out** button, which logs the admin out and deletes the session item.
 
 ## Database
-  All the information in the database is only in relation with showcased developer. Therefore database used for this project is the document-based database **MongoDB** as a relational database is not needed.
+  All the information in the database is only in relation with showcased developer. Therefore, the database used for this project is the document-based database **MongoDB** as a relational database is not needed.
   - ### Schema
     ![DB Schema](https://github.com/pinco227/dev.pi/blob/main/docs/db_schema.png)
 
