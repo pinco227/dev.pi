@@ -174,6 +174,9 @@
     - **Skills** and **Links** shows a list of items and allows admin to update they're data directly to the list, multiple items at once. It also allows admin to delete any of the items from database and gives access to **[+ Add new]** item page.
     - The **Settings** page features a form and a drag&drop single photo upload section where admin can update any information about the showcased developer or dynamic site data as META information.
     - **Log out** button, which logs the admin out and deletes the session item.
+  - #### **Contact email** template: This is how the contact email appears on the recepient's inbox:
+
+    ![Contact email](https://github.com/pinco227/dev.pi/blob/main/docs/email-template.png)
 
 ## Database
   All the information in the database is only in relation with showcased developer. Therefore, the database used for this project is the document-based database **MongoDB** as a relational database is not needed.
