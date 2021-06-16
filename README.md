@@ -93,6 +93,7 @@
   - ### Improvements
     - #### **Client Side**:
       - **All pages**: Breadcrumbs between header and content
+  
         ![Breadcrumbs](https://github.com/pinco227/dev.pi/blob/main/docs/breadcrumbs.png) 
       - **Landing page**: Icons for education and experience items, but no icon for testimonials.
       - **Blog Post page**: The post cover photo is displayed on the left.
@@ -178,6 +179,13 @@
   All the information in the database is only in relation with showcased developer. Therefore, the database used for this project is the document-based database **MongoDB** as a relational database is not needed.
   - ### Schema
     ![DB Schema](https://github.com/pinco227/dev.pi/blob/main/docs/db_schema.png)
+
+    > This database schema is mostly self-explanatory. For a better understanding: 
+    > - **settings** document: ***cover*** field is for the long bio (or cover letter) text.
+    > - **blogs** document: ***slug*** field is an unique identifying string, generated from title, used for accessing the document from URL.
+    > - **education** and **experience** documents: ***order*** field is for sorting purposes when displaying records.
+    > - **projects** document: ***slug*** field is an unique identifying string, generated from title, used for accessing the document from URL. ***brief*** is the short descripton, displayed on project lists, while ***description*** is long rich-text description, containing html tags as well.
+    > - **links** document: ***icon*** field is for the bootstrap icon name extracted from the class, e.g.: ```github``` from ```<i class="bi bi-github"></i>```.
 
 ## Technologies used
 - Workspace
