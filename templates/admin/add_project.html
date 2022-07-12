@@ -56,8 +56,8 @@
                     {{ form.featured(class="form-check-input") }}
                     {{ form.featured.label(class="form-check-label") }}
                 </div>
-                {{ form.url_for_sign_s3(value="%s" | format(url_for('sign_s3'))) }}
-                {{ form.url_for_delete_s3(value="%s" | format(url_for('delete_s3'))) }}
+                <!-- {# form.url_for_sign_s3(value="%s" | format(url_for('sign_s3'))) #} -->
+                <!-- {# form.url_for_delete_s3(value="%s" | format(url_for('delete_s3'))) #} -->
                 {{ form.collection(value="projects") }}
                 {{ form.photo_list() }}
                 <input type="file" name="files" id="drop-file-elem" accept="image/*" multiple>

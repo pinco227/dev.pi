@@ -75,7 +75,7 @@ const fileListUpdate = () => {
     const fileListInput = document.getElementById('photo_list');
     const fileList = [];
     document.querySelectorAll('.photo-container').forEach(el => {
-        fileList.push(el.dataset.src);
+        fileList.push(el.dataset.cloudinary);
     });
     if (fileListInput) fileListInput.value = fileList.join(',');
     if (lightbox) {
@@ -235,6 +235,7 @@ const uploadFile = (file) => {
                 });
                 newEl.dataset.src = url;
                 newEl.dataset.fileid = fileid;
+                newEl.dataset.cloudinary = JSON.stringify(photo_data);
                 containerEl.appendChild(newEl);
                 alertToast("Image '" + file.name + "' was successfully uploaded!");
             }

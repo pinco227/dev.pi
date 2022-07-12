@@ -470,8 +470,7 @@ def save_photo():
             {'_id': id},
             {'$push': {'photos': photo}}
         )
-    except Exception as e:
-        print(e)
+    except Exception:
         return make_response(
             jsonify({'message': 'Error updating database'}), 500)
     else:
@@ -482,10 +481,11 @@ def save_photo():
 
 @app.route('/admin/delete_from_cloud')
 @login_required()
-def delete_from_cloud():
+def delete_from_cloud(file_id=None):
     """Route to be called (API call) for removing photo from database"""
 
-    file_id = request.args.get('file_id')
+    if not file_id:
+        file_id = request.args.get('file_id')
 
     if file_id:
         try:
@@ -654,7 +654,7 @@ def get_testimonials():
 def delete_testimonial(id):
     """ADMIN Delete testimonial page route"""
 
-    mongo.db.testimonials.remove({'_id': ObjectId(id)})
+    mongo.db.testimonials.delete_one({'_id': ObjectId(id)})
     flash('Testimonial was successfully deleted', 'warning')
 
     return redirect(url_for('get_testimonials'))
@@ -685,8 +685,7 @@ def add_blog():
     if request.method == 'POST':
         slug_exists = mongo.db.blogs.find_one({'slug': form.slug.data})
         if form.validate_on_submit() and not slug_exists:
-            photos = form.photo_list.data.split(
-                ',') if form.photo_list.data else []
+            photos = json.loads(f"[{form.photo_list.data}]")
             blog = {
                 'title': form.title.data,
                 'slug': form.slug.data,
@@ -756,16 +755,16 @@ def delete_blog(id):
     post = mongo.db.blogs.find_one({'_id': ObjectId(id)})
 
     for photo in post['photos']:
-        # file_name = photo.split('/').pop()
-        file_id = photo['public_id']
-        try:
-            delete_from_cloud(file_id)
-        except Exception:
-            flash(f"Photo {file_id} couldn't be deleted from server!")
-        else:
-            flash(f"Photo {file_id} was successfully deleted from server!")
+        if 'public_id' in photo:
+            file_id = photo['public_id']
+            try:
+                delete_from_cloud(file_id)
+            except Exception:
+                flash(f"Photo {file_id} couldn't be deleted from server!")
+            else:
+                flash(f"Photo {file_id} was successfully deleted from server!")
 
-    mongo.db.blogs.remove({'_id': ObjectId(id)})
+    mongo.db.blogs.delete_one({'_id': ObjectId(id)})
     flash('Blog was successfully deleted', 'warning')
 
     return redirect(url_for('get_blogs'))
@@ -805,7 +804,7 @@ def get_skills():
 def delete_skill(id):
     """ADMIN Delete Skill page route"""
 
-    mongo.db.skills.remove({'_id': ObjectId(id)})
+    mongo.db.skills.delete_one({'_id': ObjectId(id)})
     flash('Skill was successfully deleted', 'warning')
 
     return redirect(url_for('get_skills'))
@@ -954,7 +953,7 @@ def edit_education(id):
 def delete_education(id):
     """ADMIN Delete Education page route"""
 
-    mongo.db.education.remove({'_id': ObjectId(id)})
+    mongo.db.education.delete_one({'_id': ObjectId(id)})
     flash('School was successfully deleted')
 
     return redirect(url_for('get_education'))
@@ -1071,7 +1070,7 @@ def edit_experience(id):
 def delete_experience(id):
     """ADMIN Delete Experience page route"""
 
-    mongo.db.experience.remove({'_id': ObjectId(id)})
+    mongo.db.experience.delete_one({'_id': ObjectId(id)})
     flash('Job was successfully deleted')
 
     return redirect(url_for('get_experience'))
@@ -1118,8 +1117,7 @@ def add_project():
     if request.method == 'POST':
         slug_exists = mongo.db.projects.find_one({'slug': form.slug.data})
         if form.validate_on_submit() and not slug_exists:
-            photos = form.photo_list.data.split(
-                ',') if form.photo_list.data else []
+            photos = json.loads(f"[{form.photo_list.data}]")
             project = {
                 'title': form.title.data,
                 'slug': form.slug.data,
@@ -1172,7 +1170,7 @@ def edit_project(id):
                 'live_url': form.live_url.data,
                 'featured': form.featured.data
             }
-            mongo.db.projects.update({'_id': ObjectId(id)}, {
+            mongo.db.projects.update_one({'_id': ObjectId(id)}, {
                 '$set': updated})
             flash(Markup(
                 f"Project <strong>{updated['title']}</strong> was \
@@ -1202,16 +1200,16 @@ def delete_project(id):
     project = mongo.db.projects.find_one({'_id': ObjectId(id)})
 
     for photo in project['photos']:
-        # file_name = photo.split('/').pop()
-        file_id = photo['public_id']
-        try:
-            delete_from_cloud(file_id)
-        except Exception:
-            flash(f"Photo {file_id} couldn't be deleted from server!")
-        else:
-            flash(f"Photo {file_id} was successfully deleted from server!")
+        if 'public_id' in photo:
+            file_id = photo['public_id']
+            try:
+                delete_from_cloud(file_id)
+            except Exception:
+                flash(f"Photo {file_id} couldn't be deleted from server!")
+            else:
+                flash(f"Photo {file_id} was successfully deleted from server!")
 
-    mongo.db.projects.remove({'_id': ObjectId(id)})
+    mongo.db.projects.delete_one({'_id': ObjectId(id)})
     flash('Project was successfully deleted', 'warning')
 
     return redirect(url_for('get_projects'))
@@ -1279,7 +1277,7 @@ def get_links():
 def delete_link(id):
     """ADMIN Delete Link page route"""
 
-    mongo.db.links.remove({'_id': ObjectId(id)})
+    mongo.db.links.delete_one({'_id': ObjectId(id)})
     flash('Link was successfully deleted', 'warning')
 
     return redirect(url_for('get_links'))
