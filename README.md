@@ -228,7 +228,8 @@
   * [dbdiagram.io](https://dbdiagram.io/) for database diagram creation.
 - Other
   * [SendGrid](https://sendgrid.com/) API for email sending.
-  * [AWS S3](https://aws.amazon.com/s3/) API for file upload and storage.
+  * [Cloudinary](https://cloudinary.com/) API file upload and storage.
+  <!-- * [AWS S3](https://aws.amazon.com/s3/) API for file upload and storage. -->
 
 ## Testing
   ### [Click Here for Full Testing Process](https://github.com/pinco227/dev.pi/blob/main/TEST.md)
@@ -294,7 +295,8 @@
       > Click [Here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
   8. Create accounts:
       - [MongoDB](https://www.mongodb.com/) account, project, cluster and database.
-      - [AWS IAM](https://console.aws.amazon.com/iam/) User (retrieve access keys) and [AWS S3 bucket](https://s3.console.aws.amazon.com/s3).
+      - [Cloudinary](https://cloudinary.com/) User (retrieve access keys).
+      <!-- - [AWS IAM](https://console.aws.amazon.com/iam/) User (retrieve access keys) and [AWS S3 bucket](https://s3.console.aws.amazon.com/s3). -->
       - [SendGrid](https://sendgrid.com/) API key or edit ```mail_settings``` in ```app.py``` for use of other mail server/provider.
       - [ReCaptcha](https://www.google.com/recaptcha/admin/): create site and retrieve keys.
   9.  Create `env.py` file and include the following code (note that the values should be replaced with your own credentials)
@@ -312,10 +314,10 @@
       # Admin panel user and password
       os.environ.setdefault("ADMIN_USERNAME", "<username>")
       os.environ.setdefault("ADMIN_PASSWORD", "<password>")
-      # AWS Keys
-      os.environ.setdefault('AWS_ACCESS_KEY_ID', '<access_key>')
-      os.environ.setdefault('AWS_SECRET_ACCESS_KEY', '<secret_key>')
-      os.environ.setdefault('S3_BUCKET_NAME', '<bucket_name>')
+      # Cloudinary Keys
+      os.environ.setdefault('CLOUDINARY_NAME', '<account_name>')
+      os.environ.setdefault('CLOUDINARY_KEY', '<api_key>')
+      os.environ.setdefault('CLOUDINARY_SECRET', '<api_secret>')
       # Email credentials. See mail_settings in app.py for more email settings
       os.environ.setdefault("SENDGRID_API_KEY", "<api_key>")
       os.environ.setdefault("MAIL_DEFAULT_SENDER", "<sender_email>")
@@ -344,7 +346,7 @@
       ```
   2. Commit and push changes to forked repository.
   3. Create a [Heroku](https://heroku.com) account and click **New** on top right of the dashboard to **Create a new app**.
-  4. Within the newly created app go to **Settings** tab and press **Reveal Config Vars**. Here you can add the variables initially stored into local `env.py` file: IP, SECRET_KEY, MONGO_URI, MONGO_DBNAME, ADMIN_USERNAME, ADMIN_PASSWORD, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET_NAME, SENDGRID_API_KEY, MAIL_DEFAULT_SENDER, RC_SITE_KEY, RC_SECRET_KEY.
+  4. Within the newly created app go to **Settings** tab and press **Reveal Config Vars**. Here you can add the variables initially stored into local `env.py` file: IP, SECRET_KEY, MONGO_URI, MONGO_DBNAME, ADMIN_USERNAME, ADMIN_PASSWORD, CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET, SENDGRID_API_KEY, MAIL_DEFAULT_SENDER, RC_SITE_KEY, RC_SECRET_KEY.
   5. Go to **Deploy** tab and under the **Deployment method** click on the **Github** icon.
   6. Right under this section, type the `dev.pi` and search for the forked repository into your GitHub account. Select the right repository and click **Connect**.
   7. Under the **Automatic deploys** section, click **Enable Automatic Deploys**. The deployment will be now automatic with every github `push` command.
