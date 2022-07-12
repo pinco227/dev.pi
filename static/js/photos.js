@@ -116,7 +116,8 @@ const handleFiles = (files) => {
             } else if ((!allowedFileExtensions.includes(fileExtension)) || (file.type.split("/")[0] != "image")) {
                 alertToast("File <strong>" + file.name + "</strong> type (" + fileExtension + ") is not allowed!");
             } else {
-                getSignedRequest(file);
+                // getSignedRequest(file);
+                uploadFile(file);
             }
         });
     } else {
@@ -135,7 +136,8 @@ const handleFiles = (files) => {
                     return;
                 }
             }
-            getSignedRequest(files[0]);
+            // getSignedRequest(files[0]);
+            uploadFile(files[0]);
         }
     }
 }
@@ -165,26 +167,26 @@ const deleteFile = (el) => {
     });
 }
 
-/** 
-* Sends request to python route to get signed request that is then passed through upladFile function
-* @param {obj} file - file to be uploaded
-*/
-const getSignedRequest = (file) => {
-    const fileExt = file.name.split('.').pop().toLowerCase();
-    const date = new Date();
-    const newFileName = collection + String(date.getDate()) + String(date.getMonth() + 1) + Math.floor(Math.random() * 999) + '.' + fileExt;
-    const renamedFile = new File([file], newFileName, { type: file.type });
-    const url = urlForSignS3 + "?file_name=" + renamedFile.name + "&file_type=" + renamedFile.type;
+// /** 
+// * Sends request to python route to get signed request that is then passed through upladFile function
+// * @param {obj} file - file to be uploaded
+// */
+// const getSignedRequest = (file) => {
+//     const fileExt = file.name.split('.').pop().toLowerCase();
+//     const date = new Date();
+//     const newFileName = collection + String(date.getDate()) + String(date.getMonth() + 1) + Math.floor(Math.random() * 999) + '.' + fileExt;
+//     const renamedFile = new File([file], newFileName, { type: file.type });
+//     const url = urlForSignS3 + "?file_name=" + renamedFile.name + "&file_type=" + renamedFile.type;
 
-    apiRequest("GET", url, (response, status) => {
-        if (status === 200) {
-            uploadFile(renamedFile, response.data, response.url);
-        }
-        else {
-            alertToast("Could not get signed URL.");
-        }
-    });
-}
+//     apiRequest("GET", url, (response, status) => {
+//         if (status === 200) {
+//             uploadFile(renamedFile, response.data, response.url);
+//         }
+//         else {
+//             alertToast("Could not get signed URL.");
+//         }
+//     });
+// }
 
 /** 
 * Send request to AWS S3 server to upload file
@@ -195,15 +197,24 @@ const getSignedRequest = (file) => {
 * @param {string} url - File url from signed request
 * @return {ReturnValueDataTypeHere} Brief description of the returning value here.
 */
-const uploadFile = (file, s3Data, url) => {
+// const uploadFile = (file, s3Data, url) => {
+const uploadFile = (file) => {
+    const fileExt = file.name.split('.').pop().toLowerCase();
+    const date = new Date();
+    const newFileName = collection + String(date.getDate()) + String(date.getMonth() + 1) + Math.floor(Math.random() * 999) + '.' + fileExt;
+    const renamedFile = new File([file], newFileName, { type: file.type });
     const postData = new FormData();
-    for (key in s3Data.fields) {
-        postData.append(key, s3Data.fields[key]);
-    }
-    postData.append('file', file);
+    console.log(file);
+    console.log(renamedFile);
+    // for (key in s3Data.fields) {
+    //     postData.append(key, s3Data.fields[key]);
+    // }
+    postData.append('file', renamedFile);
 
-    apiRequest("POST", s3Data.url, (response, status) => {
+    apiRequest("POST", urlForUploadPhoto, (response, status) => {
         if (status === 200 || status === 204) {
+            let url = response.image_url
+            console.log(response.image_url);
             if (docId) {
                 addFileToDb(url);
             }
@@ -240,6 +251,7 @@ const addFileToDb = (photo) => {
     const url = urlForAddPhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo;
 
     apiRequest("PUT", url, (response, status) => {
+        console.log(response);
         alertToast(response.message)
     });
 }

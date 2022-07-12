@@ -32,8 +32,9 @@
     {% block styles %}{% endblock styles %}
     <script>
         // GLOBAL VARS
-        const urlForSignS3 = "{{ url_for('sign_s3') }}";
-        const urlForDeleteS3 = "{{ url_for('delete_s3') }}";
+        //const urlForSignS3 = "{# url_for('sign_s3') #}";
+        //const urlForDeleteS3 = "{# url_for('delete_s3') #}";
+        const urlForUploadPhoto = "{{ url_for('upload_photo') }}";
         const urlForAddPhoto = "{{ url_for('add_photo') }}";
         const urlForDeletePhoto = "{{ url_for('delete_photo') }}";
     </script>
@@ -147,22 +148,22 @@
                 <div class="toast-container position-fixed top-1 start-50 translate-middle-x p-3 w-75"
                     style="z-index: 100">
                     {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                                <div class="w-100 toast bg-{{ category }}" role="alert" aria-live="assertive" aria-atomic="true">
-                                    <div class="d-flex">
-                                        <span class="m-auto px-2">
-                                            <i class="bi bi-bell-fill"></i>
-                                        </span>
-                                        <div class="toast-body">
-                                            <h4>{{ message }}</h4>
-                                        </div>
-                                        <a href="" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"><i
-                                                class="bi bi-x-circle"></i></a>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="w-100 toast bg-{{ category }}" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <span class="m-auto px-2">
+                                <i class="bi bi-bell-fill"></i>
+                            </span>
+                            <div class="toast-body">
+                                <h4>{{ message }}</h4>
+                            </div>
+                            <a href="" class="me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"><i
+                                    class="bi bi-x-circle"></i></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
                     {% endwith %}
                 </div>
                 {% block content %}

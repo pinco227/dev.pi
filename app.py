@@ -1,21 +1,29 @@
-from bson.objectid import ObjectId
+import base64
+import json
+import os
+import re
 from datetime import date
-from flask import (
-    Flask, flash, render_template,
-    redirect, request, session, url_for, Markup, send_from_directory, jsonify, make_response)
+from functools import wraps
+
+import boto3
+import cloudinary
+from cloudinary.uploader import upload
+import pydf
+import pymongo
+import secure
+from bson.objectid import ObjectId
+from flask import (Flask, Markup, flash, jsonify, make_response, redirect,
+                   render_template, request, send_from_directory, session,
+                   url_for)
 from flask_breadcrumbs import Breadcrumbs, register_breadcrumb
 from flask_mail import Mail, Message
 from flask_pymongo import PyMongo
-from forms import *
-from functools import wraps
 from html5lib_truncation import truncate_html
-import boto3
-import json
-import pydf
-import pymongo
-import re
-import os
-import secure
+
+from forms import (AddBlogForm, AddLinkForm, AddProjectForm, AddSkillForm,
+                   ContactForm, EditBlogForm, EditProjectForm, EducationForm,
+                   ExperienceForm, LoginForm, SettingsForm, UpdateForm,
+                   WriteTestimonialForm)
 
 if os.path.exists('env.py'):
     import env
@@ -30,8 +38,8 @@ config = {
     'SECRET_KEY': os.environ.get('SECRET_KEY'),
     'RECAPTCHA_PUBLIC_KEY': os.environ.get('RC_SITE_KEY'),
     'RECAPTCHA_PRIVATE_KEY': os.environ.get('RC_SECRET_KEY'),
-    'DB_COLLECTIONS': ["blogs", "testimonials", "links",
-                                "settings", "experience", "education", "projects", "skills"],
+    'DB_COLLECTIONS': ["blogs", "testimonials", "links", "settings",
+                       "experience", "education", "projects", "skills"],
 
 }
 app.config.update(config)
@@ -45,6 +53,12 @@ mail_settings = {
     'MAIL_DEFAULT_SENDER': os.environ.get('MAIL_DEFAULT_SENDER')
 }
 app.config.update(mail_settings)
+
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_NAME'),
+    api_key=os.environ.get('CLOUDINARY_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_SECRET')
+)
 
 # Initializations / Global vars
 Breadcrumbs(app=app)
@@ -64,13 +78,16 @@ def check_installed():
     """
 
     created = mongo.db.list_collection_names()
-    if set(created) != set(app.config.get('DB_COLLECTIONS')) or not mongo.db.settings.find_one({'_id': "1"}):
+    if set(created) != (
+            set(app.config.get('DB_COLLECTIONS'))
+            or not mongo.db.settings.find_one({'_id': "1"})):
         install_app()
         return redirect(url_for('get_settings'))
 
 
 def install_app():
-    """Creates missing database collections and inserts the settings document with id 1"""
+    """Creates missing database collections and inserts the settings
+    document with id 1"""
 
     # List of existing collections
     created = mongo.db.list_collection_names()
@@ -188,11 +205,13 @@ def get_cv():
     ))
     testimonials = list(mongo.db.testimonials.find(
         {'approved': True}).limit(5))
-    html = render_template('cv.html', jobs=jobs,
-                           schools=schools, skills=skills, projects=projects, testimonials=testimonials, root=root)
+    html = render_template('cv.html', jobs=jobs, schools=schools,
+                           skills=skills, projects=projects,
+                           testimonials=testimonials, root=root)
     filename = settings['name'].replace(' ', '-').lower()
     pdf = pydf.generate_pdf(html, page_size='A4', margin_bottom='0.75in',
-                            margin_top='0.75in', margin_left='0.5in', margin_right='0.5in', image_dpi='300')
+                            margin_top='0.75in', margin_left='0.5in',
+                            margin_right='0.5in', image_dpi='300')
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename=' + \
@@ -213,7 +232,8 @@ def home():
     experience = list(mongo.db.experience.find().sort('order', 1))
     testimonials = list(mongo.db.testimonials.find({'approved': True}))
 
-    return render_template('landing.html', skills=skills, education=education, experience=experience, testimonials=testimonials)
+    return render_template('landing.html', skills=skills, education=education,
+                           experience=experience, testimonials=testimonials)
 
 
 @app.route('/write-testimonial', methods=['GET', 'POST'])
@@ -285,7 +305,8 @@ def view_project_dlc(*args, **kwargs):
 
 
 @app.route('/portfolio/<project>')
-@register_breadcrumb(app, '.portfolio.project', '', dynamic_list_constructor=view_project_dlc)
+@register_breadcrumb(app, '.portfolio.project', '',
+                     dynamic_list_constructor=view_project_dlc)
 def get_project(project):
     """Project page route"""
 
@@ -326,7 +347,8 @@ def view_blog_dlc(*args, **kwargs):
 
 
 @app.route('/blog/<post>')
-@register_breadcrumb(app, '.blog.post', '', dynamic_list_constructor=view_blog_dlc)
+@register_breadcrumb(app, '.blog.post', '',
+                     dynamic_list_constructor=view_blog_dlc)
 def get_post(post):
     """Blog post page route"""
 
@@ -349,15 +371,18 @@ def contact():
             msg.body = (form.name.data +
                         '(' + form.email.data + '): ' + form.message.data)
             msg.html = (render_template(
-                'mail.html', subject=form.subject.data, name=form.name.data, message=form.message.data))
+                'mail.html', subject=form.subject.data, name=form.name.data,
+                message=form.message.data))
             try:
                 mail.send(msg)
-            except:
+            except Exception:
                 flash(
                     'Error sending email!', 'danger')
             else:
                 flash(
-                    'Thank you for your message! I will get back to you shortly.', 'success')
+                    'Thank you for your message! I will get back to you \
+                        shortly.',
+                    'success')
             return redirect(url_for('contact'))
         else:
             for fieldName, errorMessages in form.errors.items():
@@ -372,7 +397,8 @@ def login_required(flash_message=False):
     """Function decorator to check for login
 
     Args:
-        flash_message (bool, optional): Message to be sent via Flash. If left empty then no message is sent. Defaults to False.
+        flash_message (bool, optional): Message to be sent via Flash. If left
+        empty then no message is sent. Defaults to False.
     """
 
     def inner_function(f):
@@ -398,10 +424,38 @@ def login_required(flash_message=False):
     return inner_function
 
 
+@app.route('/admin/upload_photo', methods=['POST'])
+@login_required()
+def upload_photo():
+    upload_result = None
+    image_url = None
+
+    file_to_upload = request.files['file']
+
+    if file_to_upload:
+        try:
+            upload_result = upload(file_to_upload)
+            image_url = upload_result['url']
+
+        except Exception:
+            return make_response(
+                jsonify({
+                    'message': 'Error uploading file',
+                    'result': upload_result}), 500)
+        else:
+            return make_response(
+                jsonify({
+                    'message': 'Photo was successfully added to database',
+                    'image_url': image_url}), 200)
+    else:
+        return make_response(jsonify({'message': 'Bad request'}), 400)
+
+
 @app.route('/admin/add_photo', methods=["PUT"])
 @login_required()
 def add_photo():
-    """Route to be called (API call with PUT method) for adding photo to database"""
+    """Route to be called (API call with PUT method) for adding photo to
+    database"""
 
     collection = request.args.get('coll')
     document_id = request.args.get('docid')
@@ -413,14 +467,18 @@ def add_photo():
         id = ObjectId(document_id)
 
     try:
-        mongo.db[collection].update(
+        mongo.db[collection].update_one(
             {'_id': id},
             {'$push': {'photos': photo}}
         )
-    except:
-        return make_response(jsonify({'message': 'Error updating database'}), 500)
+    except Exception as e:
+        print(e)
+        return make_response(
+            jsonify({'message': 'Error updating database'}), 500)
     else:
-        return make_response(jsonify({'message': 'Photo was successfully added to database'}), 200)
+        return make_response(
+            jsonify({'message': 'Photo was successfully added to database'}),
+            200)
 
 
 @app.route('/admin/delete_photo')
@@ -442,37 +500,41 @@ def delete_photo():
             {'_id': id},
             {'$pull': {'photos': photo}}
         )
-    except:
-        return make_response(jsonify({'message': 'Error updating database'}), 500)
+    except Exception:
+        return make_response(
+            jsonify({'message': 'Error updating database'}), 500)
     else:
-        return make_response(jsonify({'message': 'Photo was successfully removed from database'}), 200)
+        return make_response(
+            jsonify({
+                'message': 'Photo was successfully removed from database'
+            }), 200)
 
 
-@app.route('/admin/sign_s3')
-@login_required()
-def sign_s3():
-    """Route to be called (API call) for getting a signed S3 post"""
+# @app.route('/admin/sign_s3')
+# @login_required()
+# def sign_s3():
+#     """Route to be called (API call) for getting a signed S3 post"""
 
-    S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
-    file_name = request.args.get('file_name')
-    file_type = request.args.get('file_type')
-    s3 = boto3.client('s3')
+#     S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
+#     file_name = request.args.get('file_name')
+#     file_type = request.args.get('file_type')
+#     s3 = boto3.client('s3')
 
-    presigned_post = s3.generate_presigned_post(
-        Bucket=S3_BUCKET,
-        Key=file_name,
-        Fields={"acl": "public-read", "Content-Type": file_type},
-        Conditions=[
-            {"acl": "public-read"},
-            {"Content-Type": file_type}
-        ],
-        ExpiresIn=3600
-    )
+#     presigned_post = s3.generate_presigned_post(
+#         Bucket=S3_BUCKET,
+#         Key=file_name,
+#         Fields={"acl": "public-read", "Content-Type": file_type},
+#         Conditions=[
+#             {"acl": "public-read"},
+#             {"Content-Type": file_type}
+#         ],
+#         ExpiresIn=3600
+#     )
 
-    return json.dumps({
-        'data': presigned_post,
-        'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
-    })
+#     return json.dumps({
+#         'data': presigned_post,
+#         'url': 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET, file_name)
+#     })
 
 
 def s3_delete_call(file_name):
@@ -498,14 +560,14 @@ def s3_delete_call(file_name):
     })
 
 
-@app.route('/admin/delete_s3')
-@login_required()
-def delete_s3():
-    """Route to be called (API call) for deleting photo from S3"""
+# @app.route('/admin/delete_s3')
+# @login_required()
+# def delete_s3():
+#     """Route to be called (API call) for deleting photo from S3"""
 
-    file_name = request.args.get('file_name')
+#     file_name = request.args.get('file_name')
 
-    return s3_delete_call(file_name)
+#     return s3_delete_call(file_name)
 
 
 @app.route('/admin/')
@@ -521,9 +583,14 @@ def admin():
     education = mongo.db.education.count_documents({})
     experience = mongo.db.experience.count_documents({})
     unapproved_testimonials = mongo.db.testimonials.count_documents({
-                                                                    'approved': False})
+                                                                    'approved':
+                                                                        False})
 
-    return render_template('admin/dashboard.html', blogs=blogs, projects=projects, skills=skills, education=education, experience=experience, testimonials=testimonials, unapproved_testimonials=unapproved_testimonials)
+    return render_template('admin/dashboard.html', blogs=blogs,
+                           projects=projects, skills=skills,
+                           education=education, experience=experience,
+                           testimonials=testimonials,
+                           unapproved_testimonials=unapproved_testimonials)
 
 
 @app.route('/admin/testimonials', methods=['GET', 'POST'])
@@ -541,8 +608,9 @@ def get_testimonials():
                     is_approved = True
                 else:
                     is_approved = False
-                mongo.db.testimonials.update({'_id': ObjectId(testimonial['_id'])}, {
-                    '$set': {'approved': is_approved}})
+                mongo.db.testimonials.update(
+                    {'_id': ObjectId(testimonial['_id'])},
+                    {'$set': {'approved': is_approved}})
             flash('Testimonials were successfully updated!', 'success')
 
             # Redirect to avoid re-submission
@@ -553,7 +621,8 @@ def get_testimonials():
     approved = list(mongo.db.testimonials.find({'approved': True}))
     unapproved = list(mongo.db.testimonials.find({'approved': False}))
 
-    return render_template('admin/testimonials.html', approved=approved, unapproved=unapproved, form=form)
+    return render_template('admin/testimonials.html', approved=approved,
+                           unapproved=unapproved, form=form)
 
 
 @app.route('/admin/delete_testimonial/<id>')
@@ -603,7 +672,8 @@ def add_blog():
             }
             mongo.db.blogs.insert_one(blog)
             flash(Markup(
-                f"Blog <strong>{blog['title']}</strong> was successfully Added!"), 'success')
+                f"Blog <strong>{blog['title']}</strong> was successfully \
+                    Added!"), 'success')
 
             return redirect(url_for('get_blogs'))
         else:
@@ -636,7 +706,8 @@ def edit_blog(id):
                 'body': form.body.data
             }
             flash(Markup(
-                f"Blog <strong>{updated['title']}</strong> was successfully edited!"), 'success')
+                f"Blog <strong>{updated['title']}</strong> was successfully \
+                    edited!"), 'success')
 
             mongo.db.blogs.update({'_id': ObjectId(id)}, {
                 '$set': updated})
@@ -664,7 +735,7 @@ def delete_blog(id):
         file_name = photo.split('/').pop()
         try:
             s3_delete_call(file_name)
-        except:
+        except Exception:
             flash(f"Photo {file_name} couldn't be deleted from server!")
         else:
             flash(f"Photo {file_name} was successfully deleted from server!")
@@ -688,7 +759,8 @@ def get_skills():
             for skill in skills:
                 updated = {
                     'name': request.form.get(f"name[{skill['_id']}]"),
-                    'percentage': int(request.form.get(f"percentage[{skill['_id']}]"))
+                    'percentage': int(
+                        request.form.get(f"percentage[{skill['_id']}]"))
                 }
                 mongo.db.skills.update({'_id': ObjectId(skill['_id'])}, {
                     '$set': updated})
@@ -730,7 +802,8 @@ def add_skill():
             }
             mongo.db.skills.insert_one(skill)
             flash(Markup(
-                f"Skill <strong>{skill['name']}</strong> was successfully Added!"), 'success')
+                f"Skill <strong>{skill['name']}</strong> was successfully \
+                    Added!"), 'success')
 
             return redirect(url_for('get_skills'))
         else:
@@ -756,11 +829,12 @@ def get_education():
             for school in education:
                 order = request.form.get(f"order[{school['_id']}]")
                 if order and (isinstance(order, int) or order.isdigit()):
-                    mongo.db.education.update({'_id': ObjectId(school['_id'])}, {
-                        '$set': {'order': int(order)}})
+                    mongo.db.education.update({'_id': ObjectId(school['_id'])},
+                                              {'$set': {'order': int(order)}})
                 else:
                     flash(Markup(
-                        f"School <strong>{school['school']}</strong>: Invalid Order!"), 'danger')
+                        f"School <strong>{school['school']}</strong>: Invalid \
+                            Order!"), 'danger')
 
             flash('Education successfully updated!', 'success')
 
@@ -769,7 +843,8 @@ def get_education():
         else:
             flash('Error submitting the changes!', 'danger')
 
-    return render_template('admin/education.html', education=education, form=form)
+    return render_template('admin/education.html', education=education,
+                           form=form)
 
 
 @ app.route('/admin/add_education', methods=['GET', 'POST'])
@@ -790,7 +865,8 @@ def add_education():
             }
             mongo.db.education.insert_one(school)
             flash(Markup(
-                f"School <strong>{school['school']}</strong> was successfully Added!"), 'success')
+                f"School <strong>{school['school']}</strong> was successfully \
+                    Added!"), 'success')
 
             return redirect(url_for('get_education'))
         else:
@@ -800,7 +876,8 @@ def add_education():
 
     if mongo.db.education.find_one(sort=[('order', pymongo.DESCENDING)]):
         form.order.data = str(
-            mongo.db.education.find_one(sort=[('order', pymongo.DESCENDING)])['order'] + 1)
+            mongo.db.education.find_one(
+                sort=[('order', pymongo.DESCENDING)])['order'] + 1)
     form.submit.label.text = 'Add'
 
     return render_template('admin/add_education.html', form=form)
@@ -827,10 +904,11 @@ def edit_education(id):
                 'description': form.description.data,
                 'order': int(form.order.data)
             }
-            mongo.db.education.update({'_id': ObjectId(id)}, {
-                '$set': updated})
+            mongo.db.education.update({'_id': ObjectId(id)},
+                                      {'$set': updated})
             flash(Markup(
-                f"School <strong>{updated['school']}</strong> was successfully edited!"), 'success')
+                f"School <strong>{updated['school']}</strong> was successfully \
+                    edited!"), 'success')
 
             # Redirect to avoid re-submission
             return redirect(url_for('get_education'))
@@ -842,7 +920,8 @@ def edit_education(id):
     form.description.data = school.get('description') if school else ""
     form.submit.label.text = 'Edit'
 
-    return render_template('admin/edit_education.html', school=school, form=form)
+    return render_template('admin/edit_education.html', school=school,
+                           form=form)
 
 
 @ app.route('/admin/delete_education/<id>')
@@ -873,7 +952,8 @@ def get_experience():
                         '$set': {'order': int(order)}})
                 else:
                     flash(Markup(
-                        f"Job at <strong>{job['company']}</strong>: Invalid Order"), 'danger')
+                        f"Job at <strong>{job['company']}</strong>: Invalid \
+                            Order"), 'danger')
 
             flash('Work Experience successfully updated!', 'success')
 
@@ -882,7 +962,8 @@ def get_experience():
         else:
             flash('Error submitting the changes!', 'danger')
 
-    return render_template('admin/experience.html', experience=experience, form=form)
+    return render_template('admin/experience.html', experience=experience,
+                           form=form)
 
 
 @ app.route('/admin/add_experience', methods=['GET', 'POST'])
@@ -903,7 +984,8 @@ def add_experience():
             }
             mongo.db.experience.insert_one(job)
             flash(Markup(
-                f"Job at <strong>{job['company']}</strong> was successfully Added!"), 'success')
+                f"Job at <strong>{job['company']}</strong> was successfully \
+                    Added!"), 'success')
 
             return redirect(url_for('get_experience'))
         else:
@@ -913,7 +995,8 @@ def add_experience():
 
     if mongo.db.experience.find_one(sort=[('order', pymongo.DESCENDING)]):
         form.order.data = str(
-            mongo.db.experience.find_one(sort=[('order', pymongo.DESCENDING)])['order'] + 1)
+            mongo.db.experience.find_one(
+                sort=[('order', pymongo.DESCENDING)])['order'] + 1)
     form.submit.label.text = 'Add'
 
     return render_template('admin/add_experience.html', form=form)
@@ -942,7 +1025,8 @@ def edit_experience(id):
             mongo.db.experience.update({'_id': ObjectId(id)}, {
                 '$set': updated})
             flash(Markup(
-                f"Job at <strong>{updated['company']}</strong> was successfully edited!"), 'success')
+                f"Job at <strong>{updated['company']}</strong> was \
+                    successfully edited!"), 'success')
 
             # Redirect to avoid re-submission
             return redirect(url_for('get_experience'))
@@ -1025,7 +1109,8 @@ def add_project():
             }
             mongo.db.projects.insert_one(project)
             flash(Markup(
-                f"Project <strong>{project['title']}</strong> was successfully Added!"), 'success')
+                f"Project <strong>{project['title']}</strong> was \
+                    successfully Added!"), 'success')
 
             return redirect(url_for('get_projects'))
         else:
@@ -1065,7 +1150,8 @@ def edit_project(id):
             mongo.db.projects.update({'_id': ObjectId(id)}, {
                 '$set': updated})
             flash(Markup(
-                f"Project <strong>{updated['title']}</strong> was successfully edited!"), 'success')
+                f"Project <strong>{updated['title']}</strong> was \
+                    successfully edited!"), 'success')
 
             # Redirect to avoid re-submission
             return redirect(url_for('get_projects'))
@@ -1079,7 +1165,8 @@ def edit_project(id):
         form.brief.data = project.get('brief')
         form.featured.data = project.get('featured')
 
-    return render_template('admin/edit_project.html', project=project, form=form)
+    return render_template('admin/edit_project.html', project=project,
+                           form=form)
 
 
 @ app.route('/admin/delete_project/<id>')
@@ -1093,7 +1180,7 @@ def delete_project(id):
         file_name = photo.split('/').pop()
         try:
             s3_delete_call(file_name)
-        except:
+        except Exception:
             flash(f"Photo {file_name} couldn't be deleted from server!")
         else:
             flash(f"Photo {file_name} was successfully deleted from server!")
@@ -1136,16 +1223,20 @@ def get_links():
                 else:
                     if not name:
                         flash(Markup(
-                            f"Link <strong>{link['name']}</strong>: Name required"), 'danger')
+                            f"Link <strong>{link['name']}</strong>: Name \
+                                required"), 'danger')
                     if not icon:
                         flash(Markup(
-                            f"Link <strong>{link['name']}</strong>: Icon required"), 'danger')
+                            f"Link <strong>{link['name']}</strong>: Icon \
+                                required"), 'danger')
                     if not url:
                         flash(Markup(
-                            f"Link <strong>{link['name']}</strong>: URL required"), 'danger')
+                            f"Link <strong>{link['name']}</strong>: URL \
+                                required"), 'danger')
                     if not re.search(url_regex, url):
                         flash(Markup(
-                            f"Link <strong>{link['name']}</strong>: Invalid URL"), 'danger')
+                            f"Link <strong>{link['name']}</strong>: Invalid \
+                                RL"), 'danger')
 
             flash('Links were successfully updated!', 'success')
 
@@ -1184,7 +1275,8 @@ def add_link():
             }
             mongo.db.links.insert_one(link)
             flash(Markup(
-                f"Link <strong>{link['name']}</strong> was successfully Added!"), 'success')
+                f"Link <strong>{link['name']}</strong> was successfully \
+                    Added!"), 'success')
 
             return redirect(url_for('get_links'))
         else:
@@ -1249,7 +1341,9 @@ def login(path):
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            if form.username.data.lower() == os.environ.get('ADMIN_USERNAME').lower() and form.password.data == os.environ.get('ADMIN_PASSWORD'):
+            if (form.username.data.lower() == os.environ.get(
+                'ADMIN_USERNAME').lower() and
+                    form.password.data == os.environ.get('ADMIN_PASSWORD')):
                 session['user'] = form.username.data.lower()
                 flash(f"Welcome, {form.username.data}")
 
