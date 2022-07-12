@@ -1,13 +1,13 @@
-import base64
 import json
 import os
 import re
 from datetime import date
 from functools import wraps
 
-import boto3
+# import boto3
 import cloudinary
 from cloudinary.uploader import upload
+from cloudinary.uploader import destroy
 import pydf
 import pymongo
 import secure
@@ -480,6 +480,31 @@ def save_photo():
             200)
 
 
+@app.route('/admin/delete_from_cloud')
+@login_required()
+def delete_from_cloud():
+    """Route to be called (API call) for removing photo from database"""
+
+    file_id = request.args.get('file_id')
+
+    if file_id:
+        try:
+            destroy_result = destroy(file_id)
+
+        except Exception:
+            return make_response(
+                jsonify({
+                    'message': 'Error uploading file',
+                    'result': destroy_result}), 500)
+        else:
+            return make_response(
+                jsonify({
+                    'message': 'Photo was successfully added to database',
+                    'result': destroy_result}), 200)
+    else:
+        return make_response(jsonify({'message': 'Bad request'}), 400)
+
+
 @app.route('/admin/delete_photo')
 @login_required()
 def delete_photo():
@@ -487,7 +512,7 @@ def delete_photo():
 
     collection = request.args.get('coll')
     document_id = request.args.get('docid')
-    photo = request.args.get('photo')
+    file_id = request.args.get('file_id')
 
     if collection == "settings":
         id = "1"
@@ -495,9 +520,9 @@ def delete_photo():
         id = ObjectId(document_id)
 
     try:
-        mongo.db[collection].update(
+        mongo.db[collection].update_one(
             {'_id': id},
-            {'$pull': {'photos': photo}}
+            {'$pull': {'photos': {'public_id': file_id}}}
         )
     except Exception:
         return make_response(
@@ -536,27 +561,27 @@ def delete_photo():
 #     })
 
 
-def s3_delete_call(file_name):
-    """Function to delete file from S3
+# def s3_delete_call(file_name):
+#     """Function to delete file from S3
 
-    Args:
-        file_name (string): Name of file to be deleted
+#     Args:
+#         file_name (string): Name of file to be deleted
 
-    Returns:
-        obj: Response in json format
-    """
+#     Returns:
+#         obj: Response in json format
+#     """
 
-    S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
-    s3 = boto3.client('s3')
+#     S3_BUCKET = os.environ.get('S3_BUCKET_NAME')
+#     s3 = boto3.client('s3')
 
-    response = s3.delete_object(
-        Bucket=S3_BUCKET,
-        Key=file_name
-    )
+#     response = s3.delete_object(
+#         Bucket=S3_BUCKET,
+#         Key=file_name
+#     )
 
-    return json.dumps({
-        'data': response
-    })
+#     return json.dumps({
+#         'data': response
+#     })
 
 
 # @app.route('/admin/delete_s3')
@@ -607,7 +632,7 @@ def get_testimonials():
                     is_approved = True
                 else:
                     is_approved = False
-                mongo.db.testimonials.update(
+                mongo.db.testimonials.update_one(
                     {'_id': ObjectId(testimonial['_id'])},
                     {'$set': {'approved': is_approved}})
             flash('Testimonials were successfully updated!', 'success')
@@ -708,7 +733,7 @@ def edit_blog(id):
                 f"Blog <strong>{updated['title']}</strong> was successfully \
                     edited!"), 'success')
 
-            mongo.db.blogs.update({'_id': ObjectId(id)}, {
+            mongo.db.blogs.update_one({'_id': ObjectId(id)}, {
                 '$set': updated})
 
             # Redirect to avoid re-submission
@@ -731,13 +756,14 @@ def delete_blog(id):
     post = mongo.db.blogs.find_one({'_id': ObjectId(id)})
 
     for photo in post['photos']:
-        file_name = photo.split('/').pop()
+        # file_name = photo.split('/').pop()
+        file_id = photo['public_id']
         try:
-            s3_delete_call(file_name)
+            delete_from_cloud(file_id)
         except Exception:
-            flash(f"Photo {file_name} couldn't be deleted from server!")
+            flash(f"Photo {file_id} couldn't be deleted from server!")
         else:
-            flash(f"Photo {file_name} was successfully deleted from server!")
+            flash(f"Photo {file_id} was successfully deleted from server!")
 
     mongo.db.blogs.remove({'_id': ObjectId(id)})
     flash('Blog was successfully deleted', 'warning')
@@ -761,7 +787,7 @@ def get_skills():
                     'percentage': int(
                         request.form.get(f"percentage[{skill['_id']}]"))
                 }
-                mongo.db.skills.update({'_id': ObjectId(skill['_id'])}, {
+                mongo.db.skills.update_one({'_id': ObjectId(skill['_id'])}, {
                     '$set': updated})
 
             flash('Skills were successfully updated!', 'success')
@@ -828,8 +854,8 @@ def get_education():
             for school in education:
                 order = request.form.get(f"order[{school['_id']}]")
                 if order and (isinstance(order, int) or order.isdigit()):
-                    mongo.db.education.update({'_id': ObjectId(school['_id'])},
-                                              {'$set': {'order': int(order)}})
+                    mongo.db.education.update_one({'_id': ObjectId(school['_id'])},
+                                                  {'$set': {'order': int(order)}})
                 else:
                     flash(Markup(
                         f"School <strong>{school['school']}</strong>: Invalid \
@@ -903,8 +929,8 @@ def edit_education(id):
                 'description': form.description.data,
                 'order': int(form.order.data)
             }
-            mongo.db.education.update({'_id': ObjectId(id)},
-                                      {'$set': updated})
+            mongo.db.education.update_one({'_id': ObjectId(id)},
+                                          {'$set': updated})
             flash(Markup(
                 f"School <strong>{updated['school']}</strong> was successfully \
                     edited!"), 'success')
@@ -947,7 +973,7 @@ def get_experience():
             for job in experience:
                 order = request.form.get(f"order[{job['_id']}]")
                 if order and (isinstance(order, int) or order.isdigit()):
-                    mongo.db.experience.update({'_id': ObjectId(job['_id'])}, {
+                    mongo.db.experience.update_one({'_id': ObjectId(job['_id'])}, {
                         '$set': {'order': int(order)}})
                 else:
                     flash(Markup(
@@ -1021,7 +1047,7 @@ def edit_experience(id):
                 'description': form.description.data,
                 'order': int(form.order.data)
             }
-            mongo.db.experience.update({'_id': ObjectId(id)}, {
+            mongo.db.experience.update_one({'_id': ObjectId(id)}, {
                 '$set': updated})
             flash(Markup(
                 f"Job at <strong>{updated['company']}</strong> was \
@@ -1176,13 +1202,14 @@ def delete_project(id):
     project = mongo.db.projects.find_one({'_id': ObjectId(id)})
 
     for photo in project['photos']:
-        file_name = photo.split('/').pop()
+        # file_name = photo.split('/').pop()
+        file_id = photo['public_id']
         try:
-            s3_delete_call(file_name)
+            delete_from_cloud(file_id)
         except Exception:
-            flash(f"Photo {file_name} couldn't be deleted from server!")
+            flash(f"Photo {file_id} couldn't be deleted from server!")
         else:
-            flash(f"Photo {file_name} was successfully deleted from server!")
+            flash(f"Photo {file_id} was successfully deleted from server!")
 
     mongo.db.projects.remove({'_id': ObjectId(id)})
     flash('Project was successfully deleted', 'warning')
@@ -1217,7 +1244,7 @@ def get_links():
                         'icon': icon,
                         'url': url
                     }
-                    mongo.db.links.update({'_id': ObjectId(link['_id'])}, {
+                    mongo.db.links.update_one({'_id': ObjectId(link['_id'])}, {
                         '$set': updated})
                 else:
                     if not name:
@@ -1309,7 +1336,7 @@ def get_settings():
                 'meta_desc': form.meta_desc.data,
                 'meta_keys': form.meta_keys.data
             }
-            mongo.db.settings.update({'_id': "1"}, {
+            mongo.db.settings.update_one({'_id': "1"}, {
                 '$set': updated})
             flash('Settings were successfully updated!', 'success')
 

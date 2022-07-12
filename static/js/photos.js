@@ -149,18 +149,18 @@ const handleFiles = (files) => {
 * @param {obj} el - DOM el that contains file metadata and that has to be removed.
 */
 const deleteFile = (el) => {
-    const fileName = el.dataset.src.split('/').pop();
-    // const url = urlForDeleteS3 + "?file_name=" + fileName;
-    const url = "?file_name=" + fileName;
+    const file_id = el.dataset.fileid;
+    // const fileName = el.dataset.src.split('/').pop();
+    const url = urlForDeleteCloud + "?file_id=" + file_id;
 
     apiRequest("GET", url, (response, status) => {
         if (status === 200) {
             if (docId) {
-                deleteFileFromDb(el.dataset.src);
+                deleteFileFromDb(file_id);
             }
             el.remove();
             fileListUpdate();
-            alertToast("Image '" + fileName + "' was successfully deleted!");
+            alertToast("Image '" + file_id + "' was successfully deleted!");
         }
         else {
             alertToast("Could not delete.");
@@ -215,6 +215,7 @@ const uploadFile = (file) => {
         if (status === 200 || status === 204) {
             let photo_data = response.data
             let url = photo_data.url
+            let fileid = photo_data.public_id
 
             if (docId) {
                 addFileToDb(JSON.stringify(photo_data));
@@ -233,6 +234,7 @@ const uploadFile = (file) => {
                                     </a>`
                 });
                 newEl.dataset.src = url;
+                newEl.dataset.fileid = fileid;
                 containerEl.appendChild(newEl);
                 alertToast("Image '" + file.name + "' was successfully uploaded!");
             }
@@ -265,8 +267,8 @@ const addFileToDb = (photo_data) => {
 * Sends request to python route to delete file from database
 * @param {string} photo - Full url of the photo
 */
-const deleteFileFromDb = (photo) => {
-    const url = urlForDeletePhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo;
+const deleteFileFromDb = (file_id) => {
+    const url = urlForDeletePhoto + "?coll=" + collection + "&docid=" + docId + "&file_id=" + file_id;
 
     apiRequest("GET", url, (response, status) => {
         if (status === 500) {
@@ -311,7 +313,13 @@ document.getElementById('gallery').addEventListener('click', (e) => {
     if (e.target.classList.contains('delete-photo') || e.target.classList.contains('bi-trash-fill')) {
         preventDefaults(e);
         if (confirm('Are you sure?\r\n This will delete file and remove it from the database!')) {
-            deleteFile(e.target.parentElement);
+            let delete_target;
+            if (e.target.classList.contains('delete-photo')) {
+                delete_target = e.target.parentElement;
+            } else {
+                delete_target = e.target.parentElement.parentElement;
+            }
+            deleteFile(delete_target);
         }
     }
 });
