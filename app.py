@@ -428,14 +428,13 @@ def login_required(flash_message=False):
 @login_required()
 def upload_photo():
     upload_result = None
-    image_url = None
 
     file_to_upload = request.files['file']
 
     if file_to_upload:
         try:
-            upload_result = upload(file_to_upload)
-            image_url = upload_result['url']
+            upload_result = upload(file_to_upload,
+                                   folder="dev-pi/")
 
         except Exception:
             return make_response(
@@ -446,20 +445,20 @@ def upload_photo():
             return make_response(
                 jsonify({
                     'message': 'Photo was successfully added to database',
-                    'image_url': image_url}), 200)
+                    'data': upload_result}), 200)
     else:
         return make_response(jsonify({'message': 'Bad request'}), 400)
 
 
-@app.route('/admin/add_photo', methods=["PUT"])
+@app.route('/admin/save_photo', methods=["PUT"])
 @login_required()
-def add_photo():
+def save_photo():
     """Route to be called (API call with PUT method) for adding photo to
     database"""
 
-    collection = request.args.get('coll')
-    document_id = request.args.get('docid')
-    photo = request.args.get('photo')
+    collection = request.form.get('coll')
+    document_id = request.form.get('docid')
+    photo = json.loads(request.form.get('photo_data'))
 
     if collection == "settings":
         id = "1"

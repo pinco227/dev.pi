@@ -86,9 +86,9 @@
                     <div class="mb-2">Current Photo</div>
                     <div id="gallery" class="row">
                         {% if settings.photos|length %}
-                        <div class="photo-container col-sm-4 col-md-6 col-lg-4" data-src="{{ settings.photos[0] }}">
-                            <a href="{{ settings.photos[0] }}" class="settings-gallery">
-                                <img class="img-thumbnail gallery-item" src="{{ settings.photos[0] }}"
+                        <div class="photo-container col-sm-4 col-md-6 col-lg-4" data-src="{{ settings.photos[0].url }}">
+                            <a href="{{ settings.photos[0].url }}" class="settings-gallery">
+                                <img class="img-thumbnail gallery-item" src="{{ settings.photos[0].url }}"
                                     alt="Profile Photo">
                             </a>
                             <a class="delete-photo btn btn-danger" data-photo-key="0">

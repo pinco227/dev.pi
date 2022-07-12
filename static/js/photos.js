@@ -124,7 +124,7 @@ const handleFiles = (files) => {
         const fileExtension = files[0].name.split(".").pop().toLowerCase();
         if (files[0].size > maxFileSize) {
             alertToast("File <strong>" + files[0].name + "</strong> is too large. Maximum allowed is <strong> " + formatBytes(maxFileSize) + " </strong>");
-        } else if ((!allowedFileExtensions.includes(fileExtension)) || (file.type.split("/")[0] != "image")) {
+        } else if ((!allowedFileExtensions.includes(fileExtension)) || (files[0].type.split("/")[0] != "image")) {
             alertToast("File <strong>" + files[0].name + "</strong> type (" + fileExtension + ") is not allowed!");
         } else {
             // check if there is a current file
@@ -150,7 +150,8 @@ const handleFiles = (files) => {
 */
 const deleteFile = (el) => {
     const fileName = el.dataset.src.split('/').pop();
-    const url = urlForDeleteS3 + "?file_name=" + fileName;
+    // const url = urlForDeleteS3 + "?file_name=" + fileName;
+    const url = "?file_name=" + fileName;
 
     apiRequest("GET", url, (response, status) => {
         if (status === 200) {
@@ -204,8 +205,7 @@ const uploadFile = (file) => {
     const newFileName = collection + String(date.getDate()) + String(date.getMonth() + 1) + Math.floor(Math.random() * 999) + '.' + fileExt;
     const renamedFile = new File([file], newFileName, { type: file.type });
     const postData = new FormData();
-    console.log(file);
-    console.log(renamedFile);
+
     // for (key in s3Data.fields) {
     //     postData.append(key, s3Data.fields[key]);
     // }
@@ -213,10 +213,11 @@ const uploadFile = (file) => {
 
     apiRequest("POST", urlForUploadPhoto, (response, status) => {
         if (status === 200 || status === 204) {
-            let url = response.image_url
-            console.log(response.image_url);
+            let photo_data = response.data
+            let url = photo_data.url
+
             if (docId) {
-                addFileToDb(url);
+                addFileToDb(JSON.stringify(photo_data));
             }
             if (document.getElementById('gallery')) {
                 const containerEl = document.getElementById('gallery');
@@ -247,13 +248,17 @@ const uploadFile = (file) => {
 * Sends request to python route to add file to db into specified collection and document
 * @param {string} photo - Full url of the photo
 */
-const addFileToDb = (photo) => {
-    const url = urlForAddPhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo;
+const addFileToDb = (photo_data) => {
+    // const url = urlForSavePhoto + "?coll=" + collection + "&docid=" + docId + "&photo=" + photo;
 
-    apiRequest("PUT", url, (response, status) => {
-        console.log(response);
+    const postData = new FormData();
+    postData.append('coll', collection);
+    postData.append('docid', docId);
+    postData.append('photo_data', photo_data);
+
+    apiRequest("PUT", urlForSavePhoto, (response, status) => {
         alertToast(response.message)
-    });
+    }, postData);
 }
 
 /**

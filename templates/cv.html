@@ -125,7 +125,7 @@
             width: 200px;
             height:200px;
             {% if settings.photos|length %}
-                background: url('{{ settings.photos[0] }}');
+                background: url('{{ settings.photos[0].url }}');
             {% endif %}
             background-size: cover;
             border-radius: 50%;
@@ -218,7 +218,7 @@
             <p>{{ project.brief }}</p>
             {% if project.photos|length %}
                 {% for photo in project.photos[:5] %}
-                    <img src="{{ photo }}" alt="Photo {{ loop.index }}" class="gallery">
+                    <img src="{{ photo.url }}" alt="Photo {{ loop.index }}" class="gallery">
                 {% endfor %}
             {% endif %}
         </div>
