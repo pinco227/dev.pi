@@ -23,9 +23,9 @@
 
 ## Demo
 
-### [Live website](https://dev-pi.herokuapp.com/)
+### [Live website](https://dev-pi.adaptable.app/)
 
-[![Screenshot](https://github.com/pinco227/dev.pi/blob/main/docs/screenshot.jpg)](https://dev-pi.herokuapp.com/)
+[![Screenshot](https://github.com/pinco227/dev.pi/blob/main/docs/screenshot.jpg)](https://dev-pi.adaptable.app/)
 
 ## UX
 
